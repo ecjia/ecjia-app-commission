@@ -27,7 +27,7 @@ class admin extends ecjia_admin {
 		RC_Script::enqueue_script('smoke');
 // 		RC_Script::enqueue_script('jquery-chosen');
 // 		RC_Style::enqueue_style('chosen');
-		
+		RC_Style::enqueue_style('hint_css', RC_Uri::admin_url('statics/lib/hint_css/hint.min.css'), array(), false, false);
 		/* 编辑页 js/css */	
 // 		RC_Style::enqueue_style('uniform-aristo');
 // 		RC_Script::enqueue_script('jquery-uniform');
@@ -73,6 +73,7 @@ class admin extends ecjia_admin {
 	    /* 检查权限 */
 	    // 		$this->admin_priv('bill_view');
 	    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('商家结算'), RC_Uri::url('commission/admin/init')));
+	    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('账单列表'),  RC_Uri::url('commission/admin/init')));
 	    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('账单详情')));
 	    $this->assign('action_link', array('href' => RC_Uri::url('commission/admin/init'), 'text' => '账单列表'));
 	    
@@ -85,6 +86,7 @@ class admin extends ecjia_admin {
 	    if (empty($bill_info)) {
 	        $this->showmessage('没有数据', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 	    }
+	    $bill_info['merchants_name'] = RC_Model::model('commission/store_franchisee_model')->get_merchants_name($bill_info['store_id']);
 	    
 	    $this->assign('ur_here', $bill_info['bill_month'].'账单详情');
 	    $this->assign('bill_info', $bill_info);
@@ -93,7 +95,7 @@ class admin extends ecjia_admin {
 	    $filter['start_date'] = RC_Time::local_strtotime($bill_info['bill_month']);
 	    $filter['end_date'] = RC_Time::local_strtotime(RC_Time::local_date('Y-m-d', strtotime('+1 month', $filter['start_date']))) - 1;
 	    
-	    $record_list = $this->db_store_bill_detail->get_bill_record($bill_info['store_id'], $_GET['page'], 1, $filter);
+	    $record_list = $this->db_store_bill_detail->get_bill_record($bill_info['store_id'], $_GET['page'], 30, $filter);
 	    $this->assign('lang_os', RC_Lang::get('orders::order.os'));
 	    $this->assign('lang_ps', RC_Lang::get('orders::order.ps'));
 	    $this->assign('lang_ss', RC_Lang::get('orders::order.ss'));

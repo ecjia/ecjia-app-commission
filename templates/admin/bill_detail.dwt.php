@@ -26,7 +26,7 @@ ecjia.admin.bill.init()
     				<tbody class="first-td-no-leftbd">
     					<tr>
     						<td align="right" width="30%"><div align="right"><strong>账单编号：</strong></div></td>
-    						<td width="20%">{$bill_info.bill_sn}</td>
+    						<td width="20%">{$bill_info.bill_sn} <a href='{url path="store/admin/preview" args="store_id={$bill_info.store_id}"}' class="ecjiafc-red m_l10">{$bill_info.merchants_name}</a></td>
     						<td align="right" width="30%"><div align="right"><strong>月份：</strong></div></td>
     						<td width="20%">{$bill_info.bill_month}</td>
     					</tr>
@@ -40,7 +40,7 @@ ecjia.admin.bill.init()
     						<td align="right"><div align="right"><strong>退款订单数：</strong></div></td>
     						<td>{$bill_info.refund_count}</td>
     						<td align="right"><div align="right"><strong>退款总金额：</strong></div></td>
-    						<td>￥{$bill_info.refund_amount}</td>
+    						<td class="ecjiafc-red">￥{$bill_info.refund_amount}</td>
     					</tr>
     					<tr>
     						<td align="right"><div align="right"><strong>有效分成金额：</strong></div></td>
@@ -50,14 +50,23 @@ ecjia.admin.bill.init()
     					</tr>
     					<tr>
     						<td align="right"><h4 align="right">本月账单金额：</h4></td>
-    						<td colspan="3"><b class="ecjiaf-fs3">￥{$bill_info.bill_amount}</b><span class="m_l10 m_r10">= {$bill_info.available_amount} * {$bill_info.percent_value}%</span>
+    						<td colspan="1"><b class="ecjiaf-fs3">￥{$bill_info.bill_amount}</b><span class="m_l10 m_r10">= {$bill_info.available_amount} * {$bill_info.percent_value}%</span>
+    						</td><td align="right"><div align="right"><strong>打款状态：</strong></div></td>
+    						<td>
     						 {if $bill_info.pay_status eq 1}
         					<a class="label btn-warning">未打款</a>
+        					<a class="ecjiaf-tdn m_l10" target="_blank" href='{url path="commission/admin/pay" args="bill_id={$bill_info.bill_id}"}'>
+								<button class="btn" type="button">去打款</button>
+							</a>
         					{else if $bill_info.pay_status eq 2}
-        					<a class="label btn-info tooltip_ecjia" rel="popover" data-placement="bottom" title="打款时间" data-content="{$bill_info.pay_time_formate}">第一笔打款</a>
+        					<a class="label btn-info hint--top" data-hint="打款时间:{$bill_info.pay_time_formate}">第一笔打款</a>
+        					<a class="ecjiaf-tdn m_l10" target="_blank" href='{url path="commission/admin/pay" args="bill_id={$bill_info.bill_id}"}'>
+								<button class="btn" type="button">去打款</button>
+							</a>
         					{else if $bill_info.pay_status eq 3}
-        					<a class="label btn-success tooltip_ecjia" rel="popover" data-placement="bottom" title="打款时间" data-content="{$bill_info.pay_time_formate}">已打款</a>
+        					<a class="label btn-success hint--top" data-hint="打款时间:{$bill_info.pay_time_formate}">已打款</a>
         					{/if}
+        					<!-- <a class="label btn-success hint--top" data-hint="打款时间:2015-25-65 14:12{$bill_info.pay_time_formate}">已打款</a> -->
     						 </td>
     					</tr>
     				</tbody>

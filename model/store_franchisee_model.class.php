@@ -26,6 +26,15 @@ class store_franchisee_model extends Component_Model_Model {
         return $rs['percent_value'];
 	}
 	
+	public function get_merchants_name($store_id) {
+	     
+	    if (! $store_id) {
+	        return false;
+	    }
+	     
+	    $rs = RC_DB::table('store_franchisee')->select('merchants_name')->where('store_id', $store_id)->first();
+	    return $rs['merchants_name'];
+	}
 	
 }
 
