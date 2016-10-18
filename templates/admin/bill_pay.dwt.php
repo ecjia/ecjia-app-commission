@@ -60,9 +60,6 @@ ecjia.admin.bill_pay.init();
         					<a class="label btn-warning">未打款</a>
         					{else if $bill_info.pay_status eq 2}
         					<a class="label btn-info hint--top" data-hint="打款时间:{$bill_info.pay_time_formate}">第{$log_list.filter.count_all}笔打款</a>
-        					<a class="ecjiaf-tdn m_l10" target="_blank" href='{url path="commission/admin/pay" args="bill_id={$bill_info.bill_id}"}'>
-								<button class="btn" type="button">去打款</button>
-							</a>
         					{else if $bill_info.pay_status eq 3}
         					<a class="label btn-success hint--top" data-hint="打款时间:{$bill_info.pay_time_formate}">已打款</a>&nbsp;(共{$log_list.filter.count_all}笔)
         					{/if}
@@ -167,7 +164,7 @@ ecjia.admin.bill_pay.init();
 							<td><div align="right"><strong>当前可执行操作：</strong></div></td>
 							<td colspan="3">
 							    <input name="bill_id" type="hidden" value="{$bill_info.bill_id}">	
-								<button class="btn operatesubmit f_l" type="submit" name="after_service">保存打款记录</button><p class="help-block f_l m_t5 m_l15">打款后请及时保存打款记录</p>
+								<button class="btn btn-gebo operatesubmit f_l" type="submit" name="after_service">保存打款记录</button><p class="help-block f_l m_t5 m_l15">打款后请及时保存打款记录</p>
 							</td>
 						</tr>
 					</tbody>

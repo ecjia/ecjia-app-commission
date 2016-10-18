@@ -63,7 +63,7 @@ class admin extends ecjia_admin {
 		$filter['end_date'] = empty($_GET['end_date']) ? null : RC_Time::local_date('Y-m', RC_Time::local_strtotime($_GET['end_date']));
 		$filter['type'] = $_GET['type'];
 		
-		$bill_list = $this->db_store_bill->get_bill_list(null, $_GET['page'], 15, $filter);
+		$bill_list = $this->db_store_bill->get_bill_list(null, $_GET['page'], 20, $filter);
 		$this->assign('bill_list', $bill_list);
 		
 		$this->display('bill_list.dwt');
