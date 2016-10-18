@@ -17,12 +17,14 @@ class store_bill_paylog_model extends Component_Model_Model {
 	 * @param integer $store_id
 	 * @param array $filter
 	 */
-	public function get_bill_paylog_list ($store_id, $page = 1, $page_size = 15, $filter = array()) {
+	public function get_bill_paylog_list ($bill_id, $page = 1, $page_size = 15, $filter = array()) {
 	    
 	    $db_store_bill_paylog = RC_DB::table('store_bill_paylog as b');
 	    
-	    if ($store_id) {
-	        $db_store_bill_paylog->whereRaw('b.store_id=' . $store_id);
+	    if ($bill_id) {
+	        $db_store_bill_paylog->whereRaw('b.bill_id=' . $bill_id);
+	    } else {
+	        return false;
 	    }
 	    
 	    if (!empty($filter['start_date']) && !empty($filter['end_date'])) {
