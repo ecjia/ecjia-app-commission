@@ -14,22 +14,22 @@
 
 <ul class="nav nav-pills">
     <li class="{if !$smarty.get.type}active{/if}">
-		<a class="data-pjax" href="{RC_Uri::url('commission/admin/init')}">全部
+		<a class="data-pjax" href='{RC_Uri::url("commission/admin/init", "{if $smarty.get.store_id}&store_id={$smarty.get.store_id}{/if}")}'>全部
 			<span class="badge badge-info">{$bill_list.filter.count_all}</span>
 		</a>
 	</li>
 	<li class="{if $smarty.get.type eq 1}active{/if}">
-		<a class="data-pjax" href="{RC_Uri::url('commission/admin/init', 'type=1')}">未结算 
+		<a class="data-pjax" href='{RC_Uri::url("commission/admin/init", "type=1{if $smarty.get.store_id}&store_id={$smarty.get.store_id}{/if}")}'>未结算 
 			<span class="badge badge-info">{$bill_list.filter.count_unpay}</span>
 		</a>
 	</li>
 	<li class="{if $smarty.get.type eq 2}active{/if}">
-		<a class="data-pjax" href="{RC_Uri::url('commission/admin/init', 'type=2')}">部分结算 
+		<a class="data-pjax" href='{RC_Uri::url("commission/admin/init", "type=2{if $smarty.get.store_id}&store_id={$smarty.get.store_id}{/if}")}'>部分结算 
 			<span class="badge badge-info">{$bill_list.filter.count_paying}</span>
 		</a>
 	</li>
 	<li class="{if $smarty.get.type eq 3}active{/if}">
-		<a class="data-pjax" href='{RC_Uri::url("commission/admin/init", "type=3")}'>已结算
+		<a class="data-pjax" href='{RC_Uri::url("commission/admin/init", "type=3{if $smarty.get.store_id}&store_id={$smarty.get.store_id}{/if}")}'>已结算
 			<span class="badge badge-info use-plugins-num">{$bill_list.filter.count_payed}</span>
 		</a>
 	</li>
