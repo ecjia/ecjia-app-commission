@@ -5,11 +5,17 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * @author royalwang
  *
  */
-class orders_admin_purview_api extends Component_Event_Api {
+class commission_admin_purview_api extends Component_Event_Api {
     
     public function call(&$options) {
         $purviews = array(
-//             array('action_name' => __('编辑发货状态'), 'action_code' => 'order_ss_edit', 'relevance'   => ''),
+            
+            //结算权限
+            array('action_name' => __('账单列表'), 'action_code' => 'commission_manage', 'relevance'   => ''),
+            array('action_name' => __('账单详情'), 'action_code' => 'commission_detail', 'relevance'   => ''),
+            array('action_name' => __('打款'), 'action_code' => 'commission_pay', 'relevance'   => ''),
+            array('action_name' => __('打款流水'), 'action_code' => 'commission_paylog', 'relevance'   => ''),
+            array('action_name' => __('订单分成'), 'action_code' => 'commission_order', 'relevance'   => ''),
         );
         
         return $purviews;
