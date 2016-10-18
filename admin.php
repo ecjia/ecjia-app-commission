@@ -43,6 +43,7 @@ class admin extends ecjia_admin {
         /*自定义js*/
 //         RC_Script::enqueue_script('bill-init', RC_App::apps_url('statics/js/bill.js',__FILE__));
         RC_Script::enqueue_script('bill-pay', RC_App::apps_url('statics/js/bill_pay.js',__FILE__));
+        RC_Script::enqueue_script('bill-order', RC_App::apps_url('statics/js/order.js',__FILE__));
 		
 	}
 	
@@ -269,10 +270,11 @@ class admin extends ecjia_admin {
 	    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('订单分成')));
 	    
 	    $this->assign('ur_here', '订单分成列表');
-	    $this->assign('search_action', RC_Uri::url('commission/admin/init'));
+	    $this->assign('search_action', RC_Uri::url('commission/admin/order'));
 	    //明细
 // 	    $filter['start_date'] = RC_Time::local_strtotime($bill_info['bill_month']);
 // 	    $filter['end_date'] = RC_Time::local_strtotime(RC_Time::local_date('Y-m-d', strtotime('+1 month', $filter['start_date']))) - 1;
+	    $filter['order_sn'] = !empty($_GET['order_sn']) ? trim($_GET['order_sn']) : null;
 	     
 	    $record_list = $this->db_store_bill_detail->get_bill_record(null, $_GET['page'], 20, $filter);
 	    $this->assign('lang_os', RC_Lang::get('orders::order.os'));

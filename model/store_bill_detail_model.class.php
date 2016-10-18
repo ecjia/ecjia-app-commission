@@ -131,7 +131,10 @@ class store_bill_detail_model extends Component_Model_Model {
 	    if ($store_id) {
 	        $db_bill_detail->whereRaw('bd.store_id ='.$store_id);
 	    }
-	     
+	    
+	    if (!empty($filter['order_sn'])) {
+	        $db_bill_detail->whereRaw('oi.order_sn ='.$filter['order_sn']);
+	    }
 	    if (!empty($filter['start_date']) && !empty($filter['end_date'])) {
 	        $db_bill_detail->whereRaw("bd.add_time BETWEEN ".$filter['start_date']." AND ".$filter['end_date']);
 	    } else {
@@ -142,6 +145,7 @@ class store_bill_detail_model extends Component_Model_Model {
 	            $db_bill_detail->whereRaw('bd.add_time <='.$filter['end_date']);
 	        }
 	    }
+	    $db_bill_detail->leftJoin('order_info as oi', RC_DB::raw('bd.order_id'), '=', RC_DB::raw('oi.order_id'));
 	    $count = $db_bill_detail->count('detail_id');
 	    $page = new ecjia_page($count, $page_size, 6);
 	    
@@ -151,7 +155,6 @@ class store_bill_detail_model extends Component_Model_Model {
 	    $fields .= " IFNULL(u.user_name, '" . RC_Lang::get('store::store.anonymous'). "') AS buyer ";
 	    
 	    $row = $db_bill_detail
-	    ->leftJoin('order_info as oi', RC_DB::raw('bd.order_id'), '=', RC_DB::raw('oi.order_id'))
 	    ->leftJoin('users as u', RC_DB::raw('u.user_id'), '=', RC_DB::raw('oi.user_id'))
 	    ->leftJoin('store_franchisee as s', RC_DB::raw('s.store_id'), '=', RC_DB::raw('bd.store_id'))
 	    ->select(RC_DB::raw($fields))

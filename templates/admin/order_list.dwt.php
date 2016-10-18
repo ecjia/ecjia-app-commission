@@ -2,7 +2,7 @@
 <!-- {extends file="ecjia.dwt.php"} -->
 <!-- {block name="footer"} -->
 <script type="text/javascript">
-
+ ecjia.admin.order.init();
 </script>
 <!-- {/block} -->
 <!-- {block name="main_content"} -->
@@ -12,6 +12,14 @@
 	</h3>
 </div>
 
+<div class="row-fluid batch">
+	<form method="post" action="{$search_action}" name="searchForm">
+		<div class="choose_list f_r">
+			<input type="text" name="order_sn" value="" placeholder="请输入订单号">
+			<button class="btn screen-btn" type="button">搜索</button>
+		</div>
+	</form>
+</div>
 
 <div class="row-fluid list-page">
 	<div class="span12">
