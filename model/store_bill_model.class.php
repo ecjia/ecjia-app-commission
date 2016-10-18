@@ -42,7 +42,7 @@ class store_bill_model extends Component_Model_Model {
 	        RC_DB::raw('SUM(pay_status = 2) as count_paying'),
 	        RC_DB::raw('SUM(pay_status = 3) as count_payed'))
 	        ->first();
-	    $filter ['count_all'] 	= $filter_count['count_all'] > 0 ? $filter_count['count_all'] : 0;;
+	    $filter ['count_all'] 	= $filter_count['count_all'] > 0 ? $filter_count['count_all'] : 0;
 	    $filter ['count_unpay'] = $filter_count['count_unpay'] > 0 ? $filter_count['count_unpay'] : 0;
 	    $filter ['count_paying'] 	= $filter_count['count_paying'] > 0 ? $filter_count['count_paying'] : 0;
 	    $filter ['count_payed'] 	= $filter_count['count_payed'] > 0 ? $filter_count['count_payed'] : 0;
@@ -79,8 +79,12 @@ class store_bill_model extends Component_Model_Model {
 	        $db_store_bill->where('store_id', $store_id);
 	    }
 	    
-	    return $db_store_bill->where('bill_id', $bill_id)
+	    $info = $db_store_bill->where('bill_id', $bill_id)
 	    ->first();
+	    if ($info['pay_time']) {
+	        $info['pay_time_formate'] = RC_Time::local_date('Y-m-d H:i:s', $val['pay_time']);
+	    }
+	    return $info;
 	}
 }
 

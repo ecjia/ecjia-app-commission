@@ -1,8 +1,5 @@
 <!-- {extends file="ecjia.dwt.php"} -->
 <!-- {block name="footer"} -->
-<script type="text/javascript">
-ecjia.admin.bill.init()
-</script>
 <!-- {/block} -->
 <!-- {block name="main_content"} -->
 <div>

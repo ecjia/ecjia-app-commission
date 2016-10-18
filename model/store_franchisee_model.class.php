@@ -36,6 +36,14 @@ class store_franchisee_model extends Component_Model_Model {
 	    return $rs['merchants_name'];
 	}
 	
+	public function get_merchants_info($store_id) {
+	    if (! $store_id) {
+	        return false;
+	    }
+	    
+	    $rs = RC_DB::table('store_franchisee')->where('store_id', $store_id)->first();
+	    return $rs;
+	}
 }
 
 // end
