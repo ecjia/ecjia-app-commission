@@ -261,8 +261,26 @@ class admin extends ecjia_admin {
 	}
 	
 	//订单分成列表
-	public function commission_list() {
+	public function order() {
 	    
+	    /* 检查权限 */
+	    // 		$this->admin_priv('bill_view');
+	    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('商家结算'), RC_Uri::url('commission/admin/init')));
+	    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('订单分成')));
+	    
+	    $this->assign('ur_here', '订单分成列表');
+	    $this->assign('search_action', RC_Uri::url('commission/admin/init'));
+	    //明细
+// 	    $filter['start_date'] = RC_Time::local_strtotime($bill_info['bill_month']);
+// 	    $filter['end_date'] = RC_Time::local_strtotime(RC_Time::local_date('Y-m-d', strtotime('+1 month', $filter['start_date']))) - 1;
+	     
+	    $record_list = $this->db_store_bill_detail->get_bill_record(null, $_GET['page'], 20, $filter);
+	    $this->assign('lang_os', RC_Lang::get('orders::order.os'));
+	    $this->assign('lang_ps', RC_Lang::get('orders::order.ps'));
+	    $this->assign('lang_ss', RC_Lang::get('orders::order.ss'));
+	    $this->assign('record_list', $record_list);
+	     
+	    $this->display('order_list.dwt');
 	}
 	
 	

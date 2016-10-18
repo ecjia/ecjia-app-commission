@@ -82,7 +82,8 @@
       								<a data-toggle="ajaxremove" class="ajaxremove ecjiafc-red" data-msg="{t}您确定要删除吗？{/t}" href='{RC_Uri::url("store/admin_commission/remove","id={$commission.id}")}' title="删除">{t}删除{/t}</a>
 								</div> -->
 							</td>
-						    <td class="ecjiafc-red">{$commission.merchants_name}</td>
+						    <td> {assign var=store_url value=RC_Uri::url('store/admin/preview',"store_id={$commission.store_id}")}
+        					     <a href="{$store_url}" target="_blank" class="ecjiafc-red">{$commission.merchants_name}</a></td>
 						    <td>￥{$commission.order_amount}</td>
 						    <td>￥{$commission.refund_amount}</td>
 						    <!-- {if $commission.percent_value} -->

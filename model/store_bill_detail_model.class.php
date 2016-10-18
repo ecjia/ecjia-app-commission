@@ -147,12 +147,13 @@ class store_bill_detail_model extends Component_Model_Model {
 	    
 	    $fields = " oi.store_id, oi.order_id, oi.order_sn, oi.add_time as order_add_time, oi.order_status, oi.shipping_status, oi.order_amount, oi.money_paid, oi.is_delete,";
 	    $fields .= " oi.shipping_time, oi.auto_delivery_time, oi.pay_status,";
-	    $fields .= " bd.*,";
+	    $fields .= " bd.*,s.merchants_name,";
 	    $fields .= " IFNULL(u.user_name, '" . RC_Lang::get('store::store.anonymous'). "') AS buyer ";
 	    
 	    $row = $db_bill_detail
 	    ->leftJoin('order_info as oi', RC_DB::raw('bd.order_id'), '=', RC_DB::raw('oi.order_id'))
 	    ->leftJoin('users as u', RC_DB::raw('u.user_id'), '=', RC_DB::raw('oi.user_id'))
+	    ->leftJoin('store_franchisee as s', RC_DB::raw('s.store_id'), '=', RC_DB::raw('bd.store_id'))
 	    ->select(RC_DB::raw($fields))
 	    ->take($page_size)
 	    ->orderBy(RC_DB::raw('bd.add_time'), 'desc')
