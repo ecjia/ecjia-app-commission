@@ -1,8 +1,10 @@
 <!-- {extends file="ecjia.dwt.php"} -->
 <!-- {block name="footer"} -->
 <script type="text/javascript">
+{if $action != 'pay_log'}
 var MAX_AMOUNT = {$merchants_info.pay_amount};
 ecjia.admin.bill_pay.init();
+{/if}
 </script>
 <!-- {/block} -->
 <!-- {block name="main_content"} -->
@@ -58,10 +60,12 @@ ecjia.admin.bill_pay.init();
         					<a class="label btn-warning">未打款</a>
         					{else if $bill_info.pay_status eq 2}
         					<a class="label btn-info hint--top" data-hint="打款时间:{$bill_info.pay_time_formate}">第{$log_list.filter.count_all}笔打款</a>
+        					<a class="ecjiaf-tdn m_l10" target="_blank" href='{url path="commission/admin/pay" args="bill_id={$bill_info.bill_id}"}'>
+								<button class="btn" type="button">去打款</button>
+							</a>
         					{else if $bill_info.pay_status eq 3}
         					<a class="label btn-success hint--top" data-hint="打款时间:{$bill_info.pay_time_formate}">已打款</a>&nbsp;(共{$log_list.filter.count_all}笔)
         					{/if}
-        					<!-- <a class="label btn-success hint--top" data-hint="打款时间:2015-25-65 14:12{$bill_info.pay_time_formate}">已打款</a> -->
     						 </td>
     					</tr>
     				</tbody>
@@ -108,6 +112,7 @@ ecjia.admin.bill_pay.init();
         		</table>
     		</div>
         </div>
+        {if $action != 'pay_log'}
         {if $bill_info.pay_status neq 3}
         <!-- 打款操作 -->
         <div class="accordion-group">
@@ -170,6 +175,7 @@ ecjia.admin.bill_pay.init();
 			</form>
 			</div>
 		</div>
+		{/if}
 		{/if}
 </div>
   

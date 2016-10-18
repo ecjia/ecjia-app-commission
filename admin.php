@@ -136,6 +136,7 @@ class admin extends ecjia_admin {
 	    //打款流水
 	    $log_list = RC_Model::model('commission/store_bill_paylog_model')->get_bill_paylog_list($bill_info['bill_id'], 1, 100);
 	    $this->assign('log_list', $log_list);
+	    
 	    //打款信息
 	    //根据状态和打款流水和判断是否已经全部打款
 	    if ($bill_info['pay_status'] == 3 && $log_list['filter']['count_bill_amount'] != $bill_info['bill_amount']) {
@@ -219,6 +220,44 @@ class admin extends ecjia_admin {
 	       $this->showmessage('打款记录保存成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('commission/admin/pay', array('bill_id' => $bill_id))));
 	    }
 	    
+	}
+	
+	//打款日志
+	public function pay_log() {
+
+	    /* 检查权限 */
+	    // 		$this->admin_priv('bill_view');
+	    $bill_id = empty($_GET['bill_id']) ? null : intval($_GET['bill_id']);
+	    if (empty($bill_id)) {
+	        $this->showmessage('参数异常', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+	    }
+	    $this->assign('action_link', array('href' => RC_Uri::url('commission/admin/detail', 'id='.$bill_id), 'text' => '账单详情'));
+	     
+	    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('商家结算'), RC_Uri::url('commission/admin/init')));
+	    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('账单列表'), RC_Uri::url('commission/admin/init')));
+	    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('账单详情'), RC_Uri::url('commission/admin/detail', 'id='.$bill_id)));
+	    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('打款流水')));
+	    $this->assign('ur_here', '打款流水');
+	     
+	    $this->bill_and_log($bill_id);
+	    
+	    $this->assign('action', 'pay_log');
+	    $this->display('bill_pay.dwt');
+	}
+	
+	private function bill_and_log($bill_id) {
+	    //账单信息
+	    $bill_info = $this->db_store_bill->get_bill($bill_id);
+	    if (empty($bill_info)) {
+	        $this->showmessage('没有数据', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+	    }
+	    $bill_info['merchants_name'] = RC_Model::model('commission/store_franchisee_model')->get_merchants_name($bill_info['store_id']);
+	     
+	    $this->assign('bill_info', $bill_info);
+	    
+	    //打款流水
+	    $log_list = RC_Model::model('commission/store_bill_paylog_model')->get_bill_paylog_list($bill_info['bill_id'], 1, 100);
+	    $this->assign('log_list', $log_list);
 	}
 	
 	//订单分成列表

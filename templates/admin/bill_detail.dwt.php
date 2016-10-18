@@ -56,12 +56,12 @@
 								<button class="btn" type="button">去打款</button>
 							</a>
         					{else if $bill_info.pay_status eq 2}
-        					<a class="label btn-info hint--top" data-hint="打款时间:{$bill_info.pay_time_formate}">第一笔打款</a>
+        					<a class="label btn-info hint--top" href='{url path="commission/admin/pay_log" args="bill_id={$bill_info.bill_id}"}' data-hint="打款时间:{$bill_info.pay_time_formate}">第一笔打款</a>
         					<a class="ecjiaf-tdn m_l10" target="_blank" href='{url path="commission/admin/pay" args="bill_id={$bill_info.bill_id}"}'>
 								<button class="btn" type="button">去打款</button>
 							</a>
         					{else if $bill_info.pay_status eq 3}
-        					<a class="label btn-success hint--top" data-hint="打款时间:{$bill_info.pay_time_formate}">已打款</a>
+        					<a class="label btn-success hint--top" href='{url path="commission/admin/pay_log" args="bill_id={$bill_info.bill_id}"}' data-hint="打款时间:{$bill_info.pay_time_formate}">已打款</a>
         					{/if}
         					<!-- <a class="label btn-success hint--top" data-hint="打款时间:2015-25-65 14:12{$bill_info.pay_time_formate}">已打款</a> -->
     						 </td>
