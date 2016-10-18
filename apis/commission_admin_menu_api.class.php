@@ -9,7 +9,7 @@ class commission_admin_menu_api extends Component_Event_Api {
 	
 	public function call(&$options) {
 	
-		$menus 		= ecjia_admin::make_admin_menu('07_commission', __('商家结算'), '', 4);
+		$menus 		= ecjia_admin::make_admin_menu('07_commission', __('商家结算'), '', 3);
 		
 		$submenus 	= array(
 			ecjia_admin::make_admin_menu('01_commission_list', __('账单列表'), RC_Uri::url('commission/admin/init'), 1)->add_purview(), //order_view
