@@ -95,7 +95,7 @@
         			<!-- {foreach from=$record_list.item key=key item=list} -->
         				<tr>
             				<td>
-        						{if $list.order_type eq 1}收入{/if}{if $list.order_type eq 2}支出{/if}
+        						{if $list.order_type eq 1}订单{/if}{if $list.order_type eq 2}<span class="ecjiafc-red">退款</span>{/if}
         					</td>
         					<td>
         						{assign var=order_url value=RC_Uri::url('orders/admin/info',"order_id={$list.order_id}")}
@@ -105,7 +105,10 @@
         					<td>￥{$list.order_amount}</td>
         					<td>{$lang_os[$list.order_status]},{$lang_ps[$list.pay_status]},{$lang_ss[$list.shipping_status]}</td>
         					<td>{$list.percent_value}%</td>
-        					<td>￥{$list.brokerage_amount}</td>
+        					<td>
+        					{if $list.order_type eq 1}￥{$list.brokerage_amount}{/if}
+        					{if $list.order_type eq 2}<span class="ecjiafc-red">￥{$list.brokerage_amount}</span>{/if}
+        					</td>
         					<td>{$list.add_time_formate}</td>
         				</tr>
         			<!-- {foreachelse} -->
