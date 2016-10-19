@@ -36,6 +36,7 @@ class store_bill_detail_model extends Component_Model_Model {
         }
         
         $data['add_time'] = RC_Time::gmtime();
+        RC_Logger::getLogger('bill_order')->info($data);
         unset($data['order_amount']);
 	    return RC_DB::table('store_bill_detail')->insertGetId($data);
 	}
