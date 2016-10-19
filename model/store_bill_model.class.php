@@ -79,8 +79,7 @@ class store_bill_model extends Component_Model_Model {
 	        $db_store_bill->where('store_id', $store_id);
 	    }
 	    
-	    $info = $db_store_bill->where('bill_id', $bill_id)
-	    ->first();
+	    $info = $db_store_bill->where('bill_id', $bill_id)->first();
 	    if ($info['pay_time']) {
 	        $info['pay_time_formate'] = RC_Time::local_date('Y-m-d H:i:s', $val['pay_time']);
 	    }

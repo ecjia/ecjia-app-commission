@@ -93,6 +93,7 @@ class admin extends ecjia_admin {
 	    if (empty($bill_info)) {
 	        $this->showmessage('没有数据', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 	    }
+	    $bill_info['pay_count'] = RC_Model::model('commission/store_bill_paylog_model')->get_paylog_count($bill_info['bill_id']);
 	    $bill_info['merchants_name'] = RC_Model::model('commission/store_franchisee_model')->get_merchants_name($bill_info['store_id']);
 	    
 	    $this->assign('ur_here', $bill_info['bill_month'].'账单详情');

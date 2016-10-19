@@ -64,17 +64,8 @@ class store_bill_paylog_model extends Component_Model_Model {
 	    return array('item' => $row, 'filter' => $filter, 'page' => $page->show(3), 'desc' => $page->page_desc());
 	}
 	
-	public function get_bill($bill_id, $store_id) {
-	    if (empty($bill_id)) {
-	        return false;
-	    }
-	    $db_store_bill_paylog = RC_DB::table('store_bill_paylog');
-	    if ($store_id) {
-	        $db_store_bill_paylog->where('store_id', $store_id);
-	    }
-	    
-	    return $db_store_bill_paylog->where('bill_id', $bill_id)
-	    ->first();
+    public function get_paylog_count($bill_id) {
+	    return RC_DB::table('store_bill_paylog')->where('bill_id', $bill_id)->count();
 	}
 }
 
