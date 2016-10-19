@@ -17,6 +17,8 @@ class commission_add_bill_detail_api extends Component_Event_Api {
      * order_amount 金额
      */
     public function call(&$options) {
+        return 1;
+        exit;
         if (!is_array($options) || !isset($options['order_type']) || !in_array($options['order_type'], array(1,2))
             || !isset($options['order_id']) ) {
             return new ecjia_error('invalid_parameter', '参数无效');

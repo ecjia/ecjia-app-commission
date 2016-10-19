@@ -29,14 +29,14 @@
 							message : "查询的开始时间不能为空！",
 							state : "error",
 					};
-					ecjia.admin.showmessage(data);
+					ecjia.merchant.showmessage(data);
 					return false;
 				} else if(end_date == '') {
 					var data = {
 							message : "查询的结束时间不能为空！",
 							state : "error",
 					};
-					ecjia.admin.showmessage(data);
+					ecjia.merchant.showmessage(data);
 					return false;
 				};
 				
@@ -45,7 +45,7 @@
 							message : "查询的开始时间不能大于结束时间！",
 							state : "error",
 					};
-					ecjia.admin.showmessage(data);
+					ecjia.merchant.showmessage(data);
 					return false;
 				}else{
 					ecjia.pjax(url + '&start_date=' + start_date + '&end_date=' +end_date);
@@ -70,14 +70,14 @@
 							message : "查询的开始时间不能为空！",
 							state : "error",
 					};
-					ecjia.admin.showmessage(data);
+					ecjia.merchant.showmessage(data);
 					return false;
 				} else if(end_date == '') {
 					var data = {
 							message : "查询的结束时间不能为空！",
 							state : "error",
 					};
-					ecjia.admin.showmessage(data);
+					ecjia.merchant.showmessage(data);
 					return false;
 				};
 				
@@ -86,7 +86,7 @@
 							message : "查询的开始时间不能大于结束时间！",
 							state : "error",
 					};
-					ecjia.admin.showmessage(data);
+					ecjia.merchant.showmessage(data);
 					return false;
 				}else{
 					ecjia.pjax(url + '&start_date=' + start_date + '&end_date=' +end_date);
@@ -94,5 +94,5 @@
 			});
 		}
 	};
-})(ecjia.admin, jQuery);
+})(ecjia.merchant, jQuery);
 // end

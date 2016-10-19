@@ -48,7 +48,11 @@ class store_bill_day_model extends Component_Model_Model {
 	        }
 	    }
 	    $count = $db_bill_day->count();
-	    $page = new ecjia_page($count, $page_size, 6);
+	    if (ROUTE_M == 'admin') {
+	        $page = new ecjia_page($count, $page_size, 6);
+	    } else {
+	        $page = new ecjia_merchant_page($count, $page_size, 6);
+	    }
 	     
 	    $row = $db_bill_day
 	    ->take($page_size)

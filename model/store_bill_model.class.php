@@ -70,6 +70,49 @@ class store_bill_model extends Component_Model_Model {
 	    return array('item' => $row, 'filter' => $filter, 'page' => $page->show(3), 'desc' => $page->page_desc());
 	}
 	
+	/**
+	 * 获取账单列表
+	 * @param integer $store_id
+	 * @param array $filter
+	 */
+	public function get_bill_list_merchant ($store_id, $page = 1, $page_size = 15, $filter = array()) {
+	     
+	    $db_store_bill = RC_DB::table('store_bill');
+	     
+	    if ($store_id) {
+	        $db_store_bill->where('store_id', $store_id);
+	    }
+	     
+	    if (!empty($filter['start_date']) && !empty($filter['end_date'])) {
+	        $db_store_bill->whereBetween('bill_month', array($filter['start_date'], $filter['end_date']));
+	    } else {
+	        if (!empty($filter['start_date']) && empty($filter['end_date'])) {
+	            $db_store_bill->where('bill_month', '>=', $filter['start_date']);
+	        }
+	        if (empty($filter['start_date']) && !empty($filter['end_date'])) {
+	            $db_store_bill->where('bill_month', '<=', $filter['end_date']);
+	        }
+	    }
+	     
+	    $count = $db_store_bill->count();
+	    $page = new ecjia_merchant_page($count, $page_size, 6);
+	     
+	    $row = $db_store_bill
+	    ->take($page_size)
+	    ->orderBy('bill_month', 'desc')
+	    ->skip($page->start_id-1)
+	    ->get();
+	     
+	    if ($row) {
+	        foreach ($row as $key => &$val) {
+	            $val['pay_time_formate'] = RC_Time::local_date('Y-m-d H:i', $val['pay_time']);
+	            $val['add_time_formate'] = RC_Time::local_date('Y-m-d H:i', $val['add_time']);
+	        }
+	    }
+	     
+	    return array('item' => $row, 'filter' => $filter, 'page' => $page->show(3), 'desc' => $page->page_desc());
+	}
+	
 	public function get_bill($bill_id, $store_id) {
 	    if (empty($bill_id)) {
 	        return false;
