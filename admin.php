@@ -189,12 +189,14 @@ class admin extends ecjia_admin {
 	    if ($pay_amount　< 0) {
 	        $this->showmessage('打款金额不正确', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 	    }
-	    if ($pay_amount-$bill_unpayed < 0) {
+
+	    if ($pay_amount-$bill_unpayed > 0) {
 	        $this->showmessage('打款金额超出未付金额', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 	    }
 	    if ($bill_info['pay_status'] == 3 || $bill_unpayed == 0) {
 	        $this->showmessage('账单已付清', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 	    }
+	    
 	    $add_time = RC_Time::gmtime();
 	    $data = array(
 	        'bill_id' => $bill_id,
@@ -219,7 +221,9 @@ class admin extends ecjia_admin {
 	       }
 	       
 	       RC_DB::table('store_bill')->where('bill_id', $bill_id)->update(array('pay_status' => $pay_status, 'pay_time' => $add_time));
-// 	    ecjia_admin::admin_log('商家名是 '.$merchants_name.'，'.'佣金比例是 '.$percent.'%', 'edit', 'store_commission');
+           //编辑账单列表，打款，账单编号是201603000015236，打款金额
+	       ecjia_admin_log::instance()->add_object('commission', '商家结算');
+	       ecjia_admin::admin_log('打款，账单编号 '.$bill_info['bill_sn'].'，'.'打款金额 '.$pay_amount, 'edit', 'commission');
 	    
 	       $this->showmessage('打款记录保存成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('commission/admin/pay', array('bill_id' => $bill_id))));
 	    }
