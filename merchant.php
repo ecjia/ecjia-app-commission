@@ -44,6 +44,8 @@ class merchant extends ecjia_merchant {
         
         /*自定义js*/
         RC_Script::enqueue_script('bill-init', RC_App::apps_url('statics/js/bill.js',__FILE__), array('ecjia-merchant'), false, 1);
+        
+        ecjia_merchant_screen::get_current_screen()->set_parentage('commission');
 		
 	}
 	
