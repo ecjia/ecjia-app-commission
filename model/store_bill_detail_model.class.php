@@ -37,6 +37,9 @@ class store_bill_detail_model extends Component_Model_Model {
         }
         if ($data['order_type'] == 1) {
             $data['percent_value'] = RC_Model::model('commission/store_franchisee_model')->get_store_commission_percent($data['store_id']);
+            if (empty($data['percent_value'])) {
+                $data['percent_value'] = 100; //未设置分成比例，默认100
+            }
             $data['brokerage_amount'] = $data['order_amount'] * $data['percent_value'] / 100;
         } else if ($data['order_type'] == 2) {
             //退货时 结算比例使用当时入账比例
