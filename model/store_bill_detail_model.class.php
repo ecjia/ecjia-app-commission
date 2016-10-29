@@ -44,6 +44,11 @@ class store_bill_detail_model extends Component_Model_Model {
         } else if ($data['order_type'] == 2) {
             //退货时 结算比例使用当时入账比例
             $data['percent_value'] = $this->get_bill_percent($data['order_id']);
+            if (!$data['percent_value']) {
+                RC_Logger::getLogger('bill_order')->error('退货未找到原入账订单，订单号：'.$data['order_id']);
+                RC_Logger::getLogger('bill_order')->error($data);
+                return false;
+            }
             if (($data['brokerage_amount'] = $data['order_amount'] * $data['percent_value'] / 100) > 0) {
                 $data['brokerage_amount'] *= -1;
             }
