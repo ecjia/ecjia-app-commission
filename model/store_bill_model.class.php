@@ -67,7 +67,7 @@ class store_bill_model extends Component_Model_Model {
 	        }
 	    }
 // 	    _dump($row,1);
-	    return array('item' => $row, 'filter' => $filter, 'page' => $page->show(3), 'desc' => $page->page_desc());
+	    return array('item' => $row, 'filter' => $filter, 'page' => $page->show(2), 'desc' => $page->page_desc());
 	}
 	
 	/**
@@ -110,7 +110,7 @@ class store_bill_model extends Component_Model_Model {
 	        }
 	    }
 	     
-	    return array('item' => $row, 'filter' => $filter, 'page' => $page->show(3), 'desc' => $page->page_desc());
+	    return array('item' => $row, 'filter' => $filter, 'page' => $page->show(2), 'desc' => $page->page_desc());
 	}
 	
 	public function get_bill($bill_id, $store_id) {

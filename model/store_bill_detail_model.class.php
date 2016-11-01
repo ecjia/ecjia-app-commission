@@ -192,7 +192,7 @@ class store_bill_detail_model extends Component_Model_Model {
 	        }
 	    }
 // 	    _dump($row,1);
-	    return array('item' => $row, 'filter' => $filter, 'page' => $page->show(3), 'desc' => $page->page_desc());
+	    return array('item' => $row, 'filter' => $filter, 'page' => $page->show(2), 'desc' => $page->page_desc());
 	}
 }
 
