@@ -53,10 +53,7 @@ class admin extends ecjia_admin {
 	public function init() {
 		/* 检查权限 */
 		$this->admin_priv('commission_manage');
-	    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('商家结算'), RC_Uri::url('commission/admin/init')));
-		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('账单列表')));
-		
-		$this->assign('ur_here', '账单列表');
+	    
 		$this->assign('search_action', RC_Uri::url('commission/admin/init'));
 		
 // 		/* 时间参数 */
@@ -65,6 +62,18 @@ class admin extends ecjia_admin {
 		$filter['type'] = $_GET['type'];
 		
 		$store_id = empty($_GET['store_id']) ? null :$_GET['store_id'];
+		
+		if ($_GET['refer'] == 'store') {
+		    RC_loader::load_app_func('global', 'store');
+		    $menu = set_store_menu($store_id, 'bill');
+		    $this->assign('menu', $menu);
+		    $merchants_name = RC_DB::table('store_franchisee')->where('store_id', $store_id)->pluck('merchants_name');
+		    $this->assign('ur_here', $merchants_name.' - 账单列表');
+		    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('入驻商'), RC_Uri::url('store/admin/init')));
+		} else {
+		    $this->assign('ur_here', '账单列表');
+		}
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('账单列表')));
 		
 		$bill_list = $this->db_store_bill->get_bill_list($store_id, $_GET['page'], 20, $filter);
 		$this->assign('bill_list', $bill_list);
@@ -82,7 +91,12 @@ class admin extends ecjia_admin {
 	    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('商家结算'), RC_Uri::url('commission/admin/init')));
 	    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('账单列表'),  RC_Uri::url('commission/admin/init')));
 	    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('账单详情')));
-	    $this->assign('action_link', array('href' => RC_Uri::url('commission/admin/init'), 'text' => '账单列表'));
+	    if ($_GET['store_id']) {
+	        $action_link_href = RC_Uri::url('commission/admin/init', array('store_id' => $_GET['store_id']));
+	    } else {
+	        $action_link_href = RC_Uri::url('commission/admin/init');
+	    }
+	    $this->assign('action_link', array('href' => $action_link_href, 'text' => '账单列表'));
 	    
 	    $bill_id = empty($_GET['id']) ? null : intval($_GET['id']);
 	    if (empty($bill_id)) {
