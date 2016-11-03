@@ -2,7 +2,7 @@
 <!-- {extends file="ecjia.dwt.php"} -->
 <!-- {block name="footer"} -->
 <script type="text/javascript">
-
+ecjia.admin.bill_list.init();
 </script>
 <!-- {/block} -->
 <!-- {block name="main_content"} -->
@@ -14,36 +14,44 @@
 {if $smarty.get.refer neq 'store'}
 <ul class="nav nav-pills">
     <li class="{if !$smarty.get.type}active{/if}">
-		<a class="data-pjax" href='{RC_Uri::url("commission/admin/init", "{if $smarty.get.store_id}&store_id={$smarty.get.store_id}{/if}")}'>全部
+		<a class="data-pjax" href='{RC_Uri::url("commission/admin/init", "{if $smarty.get.store_id}&store_id={$smarty.get.store_id}{/if}{if $smarty.get.keywords}&keywords={$smarty.get.keywords}{/if}{if $smarty.get.merchant_keywords}&merchant_keywords={$smarty.get.merchant_keywords}{/if}")}'>全部
 			<span class="badge badge-info">{$bill_list.filter.count_all}</span>
 		</a>
 	</li>
 	<li class="{if $smarty.get.type eq 1}active{/if}">
-		<a class="data-pjax" href='{RC_Uri::url("commission/admin/init", "type=1{if $smarty.get.store_id}&store_id={$smarty.get.store_id}{/if}")}'>未结算 
+		<a class="data-pjax" href='{RC_Uri::url("commission/admin/init", "type=1{if $smarty.get.store_id}&store_id={$smarty.get.store_id}{/if}{if $smarty.get.keywords}&keywords={$smarty.get.keywords}{/if}{if $smarty.get.merchant_keywords}&merchant_keywords={$smarty.get.merchant_keywords}{/if}")}'>未结算 
 			<span class="badge badge-info">{$bill_list.filter.count_unpay}</span>
 		</a>
 	</li>
 	<li class="{if $smarty.get.type eq 2}active{/if}">
-		<a class="data-pjax" href='{RC_Uri::url("commission/admin/init", "type=2{if $smarty.get.store_id}&store_id={$smarty.get.store_id}{/if}")}'>部分结算 
+		<a class="data-pjax" href='{RC_Uri::url("commission/admin/init", "type=2{if $smarty.get.store_id}&store_id={$smarty.get.store_id}{/if}")}{if $smarty.get.keywords}&keywords={$smarty.get.keywords}{/if}{if $smarty.get.merchant_keywords}&merchant_keywords={$smarty.get.merchant_keywords}{/if}'>部分结算 
 			<span class="badge badge-info">{$bill_list.filter.count_paying}</span>
 		</a>
 	</li>
 	<li class="{if $smarty.get.type eq 3}active{/if}">
-		<a class="data-pjax" href='{RC_Uri::url("commission/admin/init", "type=3{if $smarty.get.store_id}&store_id={$smarty.get.store_id}{/if}")}'>已结算
+		<a class="data-pjax" href='{RC_Uri::url("commission/admin/init", "type=3{if $smarty.get.store_id}&store_id={$smarty.get.store_id}{/if}")}{if $smarty.get.keywords}&keywords={$smarty.get.keywords}{/if}{if $smarty.get.merchant_keywords}&merchant_keywords={$smarty.get.merchant_keywords}{/if}'>已结算
 			<span class="badge badge-info use-plugins-num">{$bill_list.filter.count_payed}</span>
 		</a>
 	</li>
+	<form class="f_r form-inline" action='{RC_Uri::url("commission/admin/init")}{if $smarty.get.type}&type={$smarty.get.type}{/if}' method="post" name="searchForm">
+		<!-- 关键字 -->
+		<input type="text" name="merchant_keywords" value="{$smarty.get.merchant_keywords}" placeholder="{lang key='goods::goods.enter_merchant_keywords'}" size="15" />
+		<input type="text" name="keywords" value="{$smarty.get.keywords}" placeholder="账单编号" size="15" />
+		<button class="btn screen-btn" type="submit">{lang key='system::system.button_search'}</button>
+	</form>
 </ul>
 {/if}
 
 <div class="row-fluid list-page">
 	<div class="span12">
 	   <div class="tabbable tabs-left">
+			{if $menu}
 			<ul class="nav nav-tabs tab_merchants_nav">
                 <!-- {foreach from=$menu item=val} -->
                 <li {if $val.active}class="active"{/if}><a href="{$val.url}" {if $val.active}data-toggle="tab"{/if}>{$val.menu}</a></li>
                 <!-- {/foreach} -->
 			</ul>
+			{/if}
     		<div class="tab-content">
     		{if $smarty.get.refer eq 'store'}
 <ul class="nav nav-pills">

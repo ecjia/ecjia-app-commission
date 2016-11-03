@@ -42,6 +42,7 @@ class admin extends ecjia_admin {
         
         /*自定义js*/
 //         RC_Script::enqueue_script('bill-init', RC_App::apps_url('statics/js/bill.js',__FILE__));
+        RC_Script::enqueue_script('bill-admin', RC_App::apps_url('statics/js/bill_admin.js',__FILE__));
         RC_Script::enqueue_script('bill-pay', RC_App::apps_url('statics/js/bill_pay.js',__FILE__));
         RC_Script::enqueue_script('bill-order', RC_App::apps_url('statics/js/order.js',__FILE__));
 		
@@ -58,8 +59,10 @@ class admin extends ecjia_admin {
 		
 // 		/* 时间参数 */
 		$filter['start_date'] = empty($_GET['start_date']) ? null : RC_Time::local_date('Y-m', RC_Time::local_strtotime($_GET['start_date']));
-		$filter['end_date'] = empty($_GET['end_date']) ? null : RC_Time::local_date('Y-m', RC_Time::local_strtotime($_GET['end_date']));
-		$filter['type'] = $_GET['type'];
+		$filter['end_date']   = empty($_GET['end_date']) ? null : RC_Time::local_date('Y-m', RC_Time::local_strtotime($_GET['end_date']));
+		$filter['type']       = $_GET['type'];
+		$filter['keywords'] 		 = empty ($_GET['keywords']) 		  ? '' : trim($_GET['keywords']);
+		$filter['merchant_keywords'] = empty ($_GET['merchant_keywords']) ? '' : trim($_GET['merchant_keywords']);
 		
 		$store_id = empty($_GET['store_id']) ? null :$_GET['store_id'];
 		

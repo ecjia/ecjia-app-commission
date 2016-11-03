@@ -19,7 +19,7 @@ class store_bill_model extends Component_Model_Model {
 	 */
 	public function get_bill_list ($store_id, $page = 1, $page_size = 15, $filter = array()) {
 	    
-	    $db_store_bill = RC_DB::table('store_bill as b');
+	    $db_store_bill = RC_DB::table('store_bill as b')->leftJoin('store_franchisee as s', RC_DB::raw('s.store_id'), '=', RC_DB::raw('b.store_id'));
 	    
 	    if ($store_id) {
 	        $db_store_bill->whereRaw('b.store_id=' . $store_id);
@@ -35,6 +35,12 @@ class store_bill_model extends Component_Model_Model {
 	            $db_store_bill->where('bill_month', '<=', $filter['end_date']);
 	        }
 	    }
+	    if (!empty($filter['keywords'])) {
+	        $db_store_bill->whereRaw('b.bill_sn=' . $filter['keywords']);
+	    }
+	    if (!empty($filter['merchant_keywords'])) {
+	        $db_store_bill->whereRaw("s.merchants_name LIKE '%". $filter['merchant_keywords']."%'");
+	    }
 	    
 	    $filter_count = $db_store_bill
 	    ->select(RC_DB::raw('count(*) as count_all'),
@@ -49,11 +55,11 @@ class store_bill_model extends Component_Model_Model {
 	    
 	    if (!empty($filter['type'])) {
 	        $db_store_bill->whereRaw('b.pay_status=' . intval($filter['type']));
-	    }  
+	    }
+	   
 	    $page = new ecjia_page($filter_count['count_all'], $page_size, 6);
 	    
 	    $row = $db_store_bill
-	    ->leftJoin('store_franchisee as s', RC_DB::raw('s.store_id'), '=', RC_DB::raw('b.store_id'))
 	    ->select(RC_DB::raw('b.*, s.merchants_name '))
 	    ->take($page_size)
 	    ->orderBy('bill_month', 'desc')
