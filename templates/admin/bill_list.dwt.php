@@ -76,7 +76,7 @@
     						<tr >
     							<th class="table_checkbox"><input type="checkbox" name="select_rows" data-toggle="selectall" data-children=".checkbox"/></th>
     						    <th>{t}账单编号{/t}</th>
-    						    <th>{t}商家名称{/t}</th>
+    						    {if $smarty.get.refer neq 'store'}<th>{t}商家名称{/t}</th>{/if}
     						    <th>{t}订单有效总金额{/t}</th>
     						    <th>{t}订单退款总金额{/t}</th>
     						    <th>{t}佣金比例{/t}</th>
@@ -97,8 +97,10 @@
           								<a data-toggle="ajaxremove" class="ajaxremove ecjiafc-red" data-msg="{t}您确定要删除吗？{/t}" href='{RC_Uri::url("store/admin_commission/remove","id={$commission.id}")}' title="删除">{t}删除{/t}</a>
     								</div> -->
     							</td>
+    						    {if $smarty.get.refer neq 'store'}
     						    <td> {assign var=store_url value=RC_Uri::url('store/admin/preview',"store_id={$commission.store_id}")}
             					     <a href="{$store_url}" target="_blank" class="ecjiafc-red">{$commission.merchants_name}</a></td>
+        					    {/if}
     						    <td>￥{$commission.order_amount}</td>
     						    <td>￥{$commission.refund_amount}</td>
     						    <!-- {if $commission.percent_value} -->
