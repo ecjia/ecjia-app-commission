@@ -9,7 +9,7 @@ class store_bill_detail_model extends Component_Model_Model {
 	public function __construct() {
 		$this->table_name = 'store_bill_detail';
 		parent::__construct();
-		
+
 	}
 	/*
 	 * brokerage_amount 订单入账时需校验金额是否和订单一致，退货为负数须校验该订单总退货次数所有金额是否超过订单金额
@@ -17,13 +17,13 @@ class store_bill_detail_model extends Component_Model_Model {
 	 * TODO：订单入账时需校验金额是否和订单一致，退货为负数须校验该订单总退货次数所有金额是否超过订单金额
 	 * TODO：异常处理，记录
 	 */
-	
+
 	public function add_bill_detail($data) {
         if (!is_array($data) || !isset($data['order_type']) || !isset($data['order_id']) ) {
             RC_Logger::getLogger('bill_order')->error($data);
             return false;
         }
-        
+
         $order_info = RC_DB::table('order_info')->where('order_id', $data['order_id'])->first();
         if (empty($order_info)) {
             RC_Logger::getLogger('bill_order')->error($data);
@@ -53,13 +53,13 @@ class store_bill_detail_model extends Component_Model_Model {
                 $data['brokerage_amount'] *= -1;
             }
         }
-        
+
         $data['add_time'] = RC_Time::gmtime();
         RC_Logger::getLogger('bill_order')->info($data);
         unset($data['order_amount']);
 	    return RC_DB::table('store_bill_detail')->insertGetId($data);
 	}
-	
+
 	//计算日账单,分批处理数据
 	public function count_bill_day($options) {
 	    $table = RC_DB::table('store_bill_detail')->groupBy('store_id');
@@ -73,18 +73,18 @@ class store_bill_detail_model extends Component_Model_Model {
 	    }
 	    $table->whereBetween('add_time', array($day_time, $day_time + 86399));
 	    //group by store_id, order_type = 1, order_type = 2,
-	    
-	    $rs_order = RC_DB::table('store_bill_detail')->groupBy('store_id')->select("store_id", DB::raw("'".$options['day']."' as day"), DB::raw('COUNT(store_id) as order_count'), DB::raw('SUM(brokerage_amount) as order_amount'), 
+
+	    $rs_order = RC_DB::table('store_bill_detail')->groupBy('store_id')->select("store_id", DB::raw("'".$options['day']."' as day"), DB::raw('COUNT(store_id) as order_count'), DB::raw('SUM(brokerage_amount) as order_amount'),
 	        DB::raw('0 as refund_count'), DB::raw('0.00 as refund_amount'), DB::raw('NUll as percent_value'), DB::raw('0.00 as brokerage_amount'))
 	    ->whereBetween('add_time', array($day_time, $day_time + 86399))->where('order_type', 1)->get();
-	    
+
 	    $rs_refund = RC_DB::table('store_bill_detail')->groupBy('store_id')->select("store_id", DB::raw("'".$options['day']."' as day"),DB::raw('COUNT(store_id) as refund_count'), DB::raw('SUM(brokerage_amount) as refund_amount'))
 	    ->whereBetween('add_time', array($day_time, $day_time + 86399))->where('order_type', 2)->get();
 // 	    _dump($rs_order);
 
 	    //获取结算店铺列表
 // 	    $store_list = RC_DB::table('store_franchisee')->where('status', 1)->lists('store_id');
-// 	    _dump($store_list);    
+// 	    _dump($store_list);
 	    if ($rs_order) {
 	        foreach ($rs_order as $key => &$val) {
 	            if ($rs_refund) {
@@ -103,12 +103,12 @@ class store_bill_detail_model extends Component_Model_Model {
 // 	                $val['brokerage_amount'] = $val['order_amount'];
 // 	            }
 	        }
-	        
+
 	    }
 // 	    foreach ($store_list as $store_id) {
-// 	        if 
+// 	        if
 // 	    }
-// 	    _dump($rs_refund);	    
+// 	    _dump($rs_refund);
 // 	    _dump($rs_order,1);
 
         return $rs_order;
@@ -119,14 +119,14 @@ class store_bill_detail_model extends Component_Model_Model {
 	count(store_id) AS order_count,
 	SUM(brokerage_amount)  AS order_amount
 	FROM
-	`ecjia_store_bill_detail`  
+	`ecjia_store_bill_detail`
 	WHERE
 	`add_time` BETWEEN 1476172800
 	AND 1476172800 + 86399
 	AND order_type = 1
 	GROUP BY
 	`store_id`;
-	
+
 	SELECT
 	store_id,
 	'2016-05-01' AS DAY,
@@ -144,15 +144,15 @@ class store_bill_detail_model extends Component_Model_Model {
 	    $rs = RC_DB::table('store_bill_detail')->where('order_id', $order_id)->where('order_type', 1)->first();
 	    return $rs['percent_value'];
 	}
-	
+
 	public function get_bill_record($store_id, $page = 1, $page_size = 15, $filter) {
 	    $db_bill_detail = RC_DB::table('store_bill_detail as bd')
 	    ->leftJoin('store_franchisee as s', RC_DB::raw('s.store_id'), '=', RC_DB::raw('bd.store_id'));
-	     
+
 	    if ($store_id) {
 	        $db_bill_detail->whereRaw('bd.store_id ='.$store_id);
 	    }
-	    
+
 	    if (!empty($filter['order_sn'])) {
 	        $db_bill_detail->whereRaw('oi.order_sn ='.$filter['order_sn']);
 	    }
@@ -171,13 +171,13 @@ class store_bill_detail_model extends Component_Model_Model {
 	    }
 	    $db_bill_detail->leftJoin('order_info as oi', RC_DB::raw('bd.order_id'), '=', RC_DB::raw('oi.order_id'));
 	    $count = $db_bill_detail->count('detail_id');
-	    $page = new ecjia_page($count, $page_size, 6);
-	    
+	    $page = new ecjia_merchant_page($count, $page_size, 3);
+
 	    $fields = " oi.store_id, oi.order_id, oi.order_sn, oi.add_time as order_add_time, oi.order_status, oi.shipping_status, oi.order_amount, oi.money_paid, oi.is_delete,";
 	    $fields .= " oi.shipping_time, oi.auto_delivery_time, oi.pay_status,";
 	    $fields .= " bd.*,s.merchants_name,";
 	    $fields .= " IFNULL(u.user_name, '" . RC_Lang::get('store::store.anonymous'). "') AS buyer ";
-	    
+
 	    $row = $db_bill_detail
 	    ->leftJoin('users as u', RC_DB::raw('u.user_id'), '=', RC_DB::raw('oi.user_id'))
 	    ->select(RC_DB::raw($fields))
@@ -185,7 +185,7 @@ class store_bill_detail_model extends Component_Model_Model {
 	    ->orderBy(RC_DB::raw('bd.add_time'), 'desc')
 	    ->skip($page->start_id-1)
 	    ->get();
-	    
+
 // 	    _dump($row,1);
 	    if ($row) {
 	        foreach ($row as $key => &$val) {
