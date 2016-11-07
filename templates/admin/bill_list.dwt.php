@@ -9,6 +9,7 @@ ecjia.admin.bill_list.init();
 <div>
 	<h3 class="heading">
 		<!-- {if $ur_here}{$ur_here}{/if} -->
+		<!-- {if $smarty.get.store_id && $smarty.get.refer neq 'store'} --><a class="btn plus_or_reply" href='{RC_Uri::url("commission/admin/init", "{$url_args}")}'><i class="fontello-icon-reply"></i>{t}返回全部{/t}</a><!-- {/if} -->
 	</h3>
 </div>
 {if $smarty.get.refer neq 'store'}
@@ -107,10 +108,12 @@ ecjia.admin.bill_list.init();
     							</td>
     						    {if $smarty.get.refer neq 'store'}
     						    <td> {assign var=store_url value=RC_Uri::url('store/admin/preview',"store_id={$commission.store_id}")}
-            					     <a href="{$store_url}" target="_blank" class="ecjiafc-red">{$commission.merchants_name}</a></td>
+            					     <a href='{RC_Uri::url("commission/admin/init", "store_id={$commission.store_id}")}' title="查看此商家账单">{$commission.merchants_name}</a>
+            					     <a href='{$store_url}' title="查看店铺资料" target="_blank"><i class="fontello-icon-info-circled"></i></a>
+        					    </td>
         					    {/if}
     						    <td>￥{$commission.order_amount}</td>
-    						    <td>￥{$commission.refund_amount}</td>
+    						    <td class="ecjiafc-red">￥{$commission.refund_amount}</td>
     						    <!-- {if $commission.percent_value} -->
     						    <td>{$commission.percent_value}%</td>
     						    <!-- {else} -->
