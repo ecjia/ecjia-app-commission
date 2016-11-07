@@ -109,10 +109,10 @@ ecjia.admin.bill_list.init();
     						    {if $smarty.get.refer neq 'store'}
     						    <td> {assign var=store_url value=RC_Uri::url('store/admin/preview',"store_id={$commission.store_id}")}
             					     <a href='{RC_Uri::url("commission/admin/init", "store_id={$commission.store_id}")}' title="查看此商家账单">{$commission.merchants_name}</a>
-            					     <a href='{$store_url}' title="查看店铺资料" target="_blank"><i class="fontello-icon-info-circled"></i></a>
+            					     <a href='{$store_url}' title="查看商家资料" target="_blank"><i class="fontello-icon-info-circled"></i></a>
         					    </td>
         					    {/if}
-    						    <td>￥{$commission.order_amount}</td>
+    						    <td class="ecjiaf-tar">￥{$commission.order_amount}</td>
     						    <td class="ecjiafc-red">￥{$commission.refund_amount}</td>
     						    <!-- {if $commission.percent_value} -->
     						    <td>{$commission.percent_value}%</td>

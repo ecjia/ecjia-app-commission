@@ -9,13 +9,15 @@
 <div>
 	<h3 class="heading">
 		<!-- {if $ur_here}{$ur_here}{/if} -->
+		<!-- {if $smarty.get.store_id && $smarty.get.refer neq 'store'} --><a class="btn plus_or_reply" href='{RC_Uri::url("commission/admin/init", "{$url_args}")}'><i class="fontello-icon-reply"></i>{t}返回全部{/t}</a><!-- {/if} -->
 	</h3>
 </div>
 
 <div class="row-fluid batch">
 	<form method="post" action="{$search_action}" name="searchForm">
 		<div class="choose_list f_r">
-			<input type="text" name="order_sn" value="" placeholder="请输入订单号">
+		    <input type="text" name="merchant_keywords" value="{$smarty.get.merchant_keywords}" placeholder="{lang key='goods::goods.enter_merchant_keywords'}" size="15" />
+			<input type="text" name="order_sn" value="{$smarty.get.order_sn}" placeholder="请输入订单号">
 			<button class="btn screen-btn" type="button">搜索</button>
 		</div>
 	</form>
@@ -49,7 +51,8 @@
 							</td>
 						    <td>
 						         {assign var=store_url value=RC_Uri::url('store/admin/preview',"store_id={$list.store_id}")}
-        					     <a href="{$store_url}" target="_blank" class="ecjiafc-red">{$list.merchants_name}</a>
+        					     <a href='{RC_Uri::url("commission/admin/order","store_id={$list.store_id}")}' title="查看此商家订单分成">{$list.merchants_name}</a>
+        					     <a href='{$store_url}' title="查看商家资料" target="_blank"><i class="fontello-icon-info-circled"></i></a>
 						    </td>
 						    <td>{$list.order_add_time_formate}</td>
 						    <td>￥{$list.order_amount}</td>

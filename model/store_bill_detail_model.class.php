@@ -146,7 +146,8 @@ class store_bill_detail_model extends Component_Model_Model {
 	}
 	
 	public function get_bill_record($store_id, $page = 1, $page_size = 15, $filter) {
-	    $db_bill_detail = RC_DB::table('store_bill_detail as bd');
+	    $db_bill_detail = RC_DB::table('store_bill_detail as bd')
+	    ->leftJoin('store_franchisee as s', RC_DB::raw('s.store_id'), '=', RC_DB::raw('bd.store_id'));
 	     
 	    if ($store_id) {
 	        $db_bill_detail->whereRaw('bd.store_id ='.$store_id);
@@ -154,6 +155,9 @@ class store_bill_detail_model extends Component_Model_Model {
 	    
 	    if (!empty($filter['order_sn'])) {
 	        $db_bill_detail->whereRaw('oi.order_sn ='.$filter['order_sn']);
+	    }
+	    if (!empty($filter['merchant_keywords'])) {
+	        $db_bill_detail->whereRaw("s.merchants_name like'%".$filter['merchant_keywords']."%'");
 	    }
 	    if (!empty($filter['start_date']) && !empty($filter['end_date'])) {
 	        $db_bill_detail->whereRaw("bd.add_time BETWEEN ".$filter['start_date']." AND ".$filter['end_date']);
@@ -176,7 +180,6 @@ class store_bill_detail_model extends Component_Model_Model {
 	    
 	    $row = $db_bill_detail
 	    ->leftJoin('users as u', RC_DB::raw('u.user_id'), '=', RC_DB::raw('oi.user_id'))
-	    ->leftJoin('store_franchisee as s', RC_DB::raw('s.store_id'), '=', RC_DB::raw('bd.store_id'))
 	    ->select(RC_DB::raw($fields))
 	    ->take($page_size)
 	    ->orderBy(RC_DB::raw('bd.add_time'), 'desc')

@@ -14,10 +14,12 @@
 				//var start_date		= $("input[name='start_date']").val(); 		//开始时间
 				//var end_date		= $("input[name='end_date']").val(); 		//结束时间
 				var order_sn		= $("input[name='order_sn']").val();
+				var merchant_keywords = $("input[name='merchant_keywords']").val();
 				var url				= $("form[name='searchForm']").attr('action'); //请求链接
 				//if(start_date       == 'undefind')start_date='';
 				//if(end_date       	== 'undefind')end_date='';
 				if(order_sn        	== 'undefind')order_sn='';
+				if(merchant_keywords == 'undefind')merchant_keywords='';
 				if(url        		== 'undefind')url='';
 
 				/*if (start_date == '') {
@@ -47,6 +49,9 @@
 				var parmars = '';
 				if (order_sn) {
 					parmars += '&order_sn=' + order_sn;
+				}
+				if (merchant_keywords) {
+					parmars += '&merchant_keywords=' + merchant_keywords;
 				}
 				
 				ecjia.pjax(url + parmars/*'&start_date=' + start_date + '&end_date=' +end_date*/);

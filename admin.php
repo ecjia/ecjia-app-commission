@@ -56,6 +56,7 @@ class admin extends ecjia_admin {
 		$this->admin_priv('commission_manage');
 	    
 		$this->assign('search_action', RC_Uri::url('commission/admin/init'));
+		$this->assign('ur_here', '账单列表');
 		
 // 		/* 时间参数 */
 		$filter['start_date'] = empty($_GET['start_date']) ? null : RC_Time::local_date('Y-m', RC_Time::local_strtotime($_GET['start_date']));
@@ -66,16 +67,18 @@ class admin extends ecjia_admin {
 		
 		$store_id = empty($_GET['store_id']) ? null :$_GET['store_id'];
 		
+		
 		if ($_GET['refer'] == 'store') {
 		    RC_loader::load_app_func('global', 'store');
 		    $menu = set_store_menu($store_id, 'bill');
 		    $this->assign('menu', $menu);
+		    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('入驻商'), RC_Uri::url('store/admin/init')));
+		}
+		if ($store_id) {
 		    $merchants_name = RC_DB::table('store_franchisee')->where('store_id', $store_id)->pluck('merchants_name');
 		    $this->assign('ur_here', $merchants_name.' - 账单列表');
-		    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('入驻商'), RC_Uri::url('store/admin/init')));
-		} else {
-		    $this->assign('ur_here', '账单列表');
 		}
+		
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('账单列表')));
 		
 		$bill_list = $this->db_store_bill->get_bill_list($store_id, $_GET['page'], 20, $filter);
@@ -299,8 +302,15 @@ class admin extends ecjia_admin {
 // 	    $filter['start_date'] = RC_Time::local_strtotime($bill_info['bill_month']);
 // 	    $filter['end_date'] = RC_Time::local_strtotime(RC_Time::local_date('Y-m-d', strtotime('+1 month', $filter['start_date']))) - 1;
 	    $filter['order_sn'] = !empty($_GET['order_sn']) ? trim($_GET['order_sn']) : null;
+	    $filter['merchant_keywords'] = !empty($_GET['merchant_keywords']) ? trim($_GET['merchant_keywords']) : null;
+	    $store_id = !empty($_GET['store_id']) ? intval($_GET['store_id']) : null;
+	    
+	    if ($store_id) {
+	        $merchants_name = RC_DB::table('store_franchisee')->where('store_id', $store_id)->pluck('merchants_name');
+	        $this->assign('ur_here', $merchants_name.' - 订单分成列表');
+	    }
 	     
-	    $record_list = $this->db_store_bill_detail->get_bill_record(null, $_GET['page'], 20, $filter);
+	    $record_list = $this->db_store_bill_detail->get_bill_record($store_id, $_GET['page'], 20, $filter);
 	    $this->assign('lang_os', RC_Lang::get('orders::order.os'));
 	    $this->assign('lang_ps', RC_Lang::get('orders::order.ps'));
 	    $this->assign('lang_ss', RC_Lang::get('orders::order.ss'));
