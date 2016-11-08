@@ -70,6 +70,11 @@ class store_bill_day_model extends Component_Model_Model {
 	    
 	}
 	
+	public function count_bill_month($options) {
+	    
+	    
+	}
+	
 	
 }
 

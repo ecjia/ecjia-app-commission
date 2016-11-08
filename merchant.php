@@ -84,6 +84,8 @@ class merchant extends ecjia_merchant {
 // 	    $data = RC_Model::model('commission/store_bill_detail_model')->count_bill_day(array('day'=>'2016-10-12'));
 // 	    _dump($data,1);
 	    
+// 	    RC_Loader::load_app_class('store_bill','commission');
+// 	    store_bill::bill_day(array('day'=>'2016-10-12'));
 // 	    RC_Api::api('commission', 'bill_day_api', array('day'=>'2016-10-12'));
 // 	    RC_Model::model('commission/store_bill_day_model')->add_bill_day(array('day'=>'2016-10-12'));
 	    

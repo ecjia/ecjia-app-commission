@@ -68,23 +68,22 @@ class store_bill_detail_model extends Component_Model_Model {
 
 	//计算日账单,分批处理数据
 	public function count_bill_day($options) {
+	    
 	    $table = RC_DB::table('store_bill_detail')->groupBy('store_id');
 	    if (isset($options['store_id'])) {
 	        $table->having('store_id', $options['store_id']);
 	    }
-	    if (isset($options['day'])) {
-	        $day_time = RC_Time::local_strtotime($options['day']);
-	    } else {
-	        $day_time = RC_Time::local_strtotime(RC_Time::local_date('Y-m-d',RC_Time::gmtime())) - 86400;
-	    }
-	    $table->whereBetween('add_time', array($day_time, $day_time + 86399));
+        $day_time = RC_Time::local_strtotime($options['day']);
+        
+	    $table->whereBetween('add_time', array($options['day'], $options['day'] + 86399));
 	    //group by store_id, order_type = 1, order_type = 2,
 
-	    $rs_order = RC_DB::table('store_bill_detail')->groupBy('store_id')->select("store_id", DB::raw("'".$options['day']."' as day"), DB::raw('COUNT(store_id) as order_count'), DB::raw('SUM(brokerage_amount) as order_amount'),
-	        DB::raw('0 as refund_count'), DB::raw('0.00 as refund_amount'), DB::raw('NUll as percent_value'), DB::raw('0.00 as brokerage_amount'))
+	    $rs_order = RC_DB::table('store_bill_detail')->groupBy('store_id')->select("store_id", RC_DB::raw("'".$options['day']."' as day"), RC_DB::raw('COUNT(store_id) as order_count'), RC_DB::raw('SUM(brokerage_amount) as order_amount'),
+	        RC_DB::raw('0 as refund_count'), RC_DB::raw('0.00 as refund_amount'), 'percent_value')
 	    ->whereBetween('add_time', array($day_time, $day_time + 86399))->where('order_type', 1)->get();
 
-	    $rs_refund = RC_DB::table('store_bill_detail')->groupBy('store_id')->select("store_id", DB::raw("'".$options['day']."' as day"),DB::raw('COUNT(store_id) as refund_count'), DB::raw('SUM(brokerage_amount) as refund_amount'))
+	    $rs_refund = RC_DB::table('store_bill_detail')->groupBy('store_id')->select("store_id", RC_DB::raw("'".$options['day']."' as day"),RC_DB::raw('COUNT(store_id) as refund_count'), RC_DB::raw('SUM(brokerage_amount) as refund_amount'),
+	        RC_DB::raw('0 as order_count'), RC_DB::raw('0.00 as order_amount'), 'percent_value')
 	    ->whereBetween('add_time', array($day_time, $day_time + 86399))->where('order_type', 2)->get();
 // 	    _dump($rs_order);
 
