@@ -19,16 +19,22 @@ class store_bill_detail_model extends Component_Model_Model {
 	 */
 
 	public function add_bill_detail($data) {
-        if (!is_array($data) || !isset($data['order_type']) || !isset($data['order_id']) ) {
-            RC_Logger::getLogger('bill_order')->error($data);
+        if (!is_array($data) || !isset($data['order_type']) || empty($data['order_id']) ) {
+            RC_Logger::getLogger('bill_order_error')->error($data);
             return false;
         }
 
         $order_info = RC_DB::table('order_info')->where('order_id', $data['order_id'])->first();
         if (empty($order_info)) {
-            RC_Logger::getLogger('bill_order')->error($data);
+            RC_Logger::getLogger('bill_order_error')->error($data);
             return false;
         }
+        if ($data['order_type'] == 1 && RC_DB::table('store_bill_detail')->where('order_id', $data['order_id'])->where('order_type', 1)->count()) {
+            RC_Logger::getLogger('bill_order_error')->error('重复入账');
+            RC_Logger::getLogger('bill_order_error')->error($data);
+            return false;
+        }
+        
         if(!isset($data['store_id'])) {
             $data['store_id'] = $order_info['store_id'];
         }
