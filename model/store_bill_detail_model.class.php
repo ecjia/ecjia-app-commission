@@ -145,7 +145,7 @@ class store_bill_detail_model extends Component_Model_Model {
 	    return $rs['percent_value'];
 	}
 
-	public function get_bill_record($store_id, $page = 1, $page_size = 15, $filter) {
+	public function get_bill_record($store_id, $page = 1, $page_size = 15, $filter, $is_admin = 0) {
 	    $db_bill_detail = RC_DB::table('store_bill_detail as bd')
 	    ->leftJoin('store_franchisee as s', RC_DB::raw('s.store_id'), '=', RC_DB::raw('bd.store_id'));
 
@@ -171,7 +171,12 @@ class store_bill_detail_model extends Component_Model_Model {
 	    }
 	    $db_bill_detail->leftJoin('order_info as oi', RC_DB::raw('bd.order_id'), '=', RC_DB::raw('oi.order_id'));
 	    $count = $db_bill_detail->count('detail_id');
-	    $page = new ecjia_merchant_page($count, $page_size, 3);
+	    if($is_admin) {
+	        $page = new ecjia_page($count, $page_size, 3);
+	    } else {
+	        $page = new ecjia_merchant_page($count, $page_size, 3);
+	    }
+	    
 
 	    $fields = " oi.store_id, oi.order_id, oi.order_sn, oi.add_time as order_add_time, oi.order_status, oi.shipping_status, oi.order_amount, oi.money_paid, oi.is_delete,";
 	    $fields .= " oi.shipping_time, oi.auto_delivery_time, oi.pay_status,";

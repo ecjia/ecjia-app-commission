@@ -123,7 +123,7 @@ class admin extends ecjia_admin {
 	    $filter['start_date'] = RC_Time::local_strtotime($bill_info['bill_month']);
 	    $filter['end_date'] = RC_Time::local_strtotime(RC_Time::local_date('Y-m-d', strtotime('+1 month', $filter['start_date']))) - 1;
 	    
-	    $record_list = $this->db_store_bill_detail->get_bill_record($bill_info['store_id'], $_GET['page'], 30, $filter);
+	    $record_list = $this->db_store_bill_detail->get_bill_record($bill_info['store_id'], $_GET['page'], 30, $filter, 1);
 	    $this->assign('lang_os', RC_Lang::get('orders::order.os'));
 	    $this->assign('lang_ps', RC_Lang::get('orders::order.ps'));
 	    $this->assign('lang_ss', RC_Lang::get('orders::order.ss'));
@@ -310,7 +310,7 @@ class admin extends ecjia_admin {
 	        $this->assign('ur_here', $merchants_name.' - 订单分成列表');
 	    }
 	     
-	    $record_list = $this->db_store_bill_detail->get_bill_record($store_id, $_GET['page'], 20, $filter);
+	    $record_list = $this->db_store_bill_detail->get_bill_record($store_id, $_GET['page'], 20, $filter, 1);
 	    $this->assign('lang_os', RC_Lang::get('orders::order.os'));
 	    $this->assign('lang_ps', RC_Lang::get('orders::order.ps'));
 	    $this->assign('lang_ss', RC_Lang::get('orders::order.ss'));
