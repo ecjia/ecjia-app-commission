@@ -24,7 +24,8 @@ class store_bill_detail_model extends Component_Model_Model {
             return false;
         }
 
-        $order_info = RC_DB::table('order_info')->where('order_id', $data['order_id'])->first();
+        RC_Loader::load_app_func('order', 'orders');
+        $order_info = order_info($data['order_id']);
         if (empty($order_info)) {
             RC_Logger::getLogger('bill_order_error')->error($data);
             return false;
@@ -38,8 +39,8 @@ class store_bill_detail_model extends Component_Model_Model {
         if(!isset($data['store_id'])) {
             $data['store_id'] = $order_info['store_id'];
         }
-        if( !isset($data['order_amount'])) {
-            $data['order_amount'] = $order_info['order_amount'];
+        if( !isset($data['total_fee'])) {
+            $data['order_amount'] = $order_info['total_fee'];
         }
         if ($data['order_type'] == 1) {
             $data['percent_value'] = RC_Model::model('commission/store_franchisee_model')->get_store_commission_percent($data['store_id']);
