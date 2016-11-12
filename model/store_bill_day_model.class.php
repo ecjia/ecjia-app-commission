@@ -53,11 +53,13 @@ class store_bill_day_model extends Component_Model_Model {
 	    } else {
 	        $page = new ecjia_merchant_page($count, $page_size, 6);
 	    }
+	    
+	    if ($page_size) {
+	        $db_bill_day->take($page_size)->skip($page->start_id-1);
+	    }
 	     
 	    $row = $db_bill_day
-	    ->take($page_size)
 	    ->orderBy('day', 'desc')
-	    ->skip($page->start_id-1)
 	    ->get();
 	     
 	    if ($row) {
@@ -71,7 +73,44 @@ class store_bill_day_model extends Component_Model_Model {
 	}
 	
 	public function count_bill_month($options) {
+	    $filter = array();
+	    if ($options['month']) {
+	        $filter['start_date'] = $options['month'].'-01';
+	        $filter['end_date'] = $options['month'].'-31';
+	    }
 	    
+	    
+	    $db_bill_day = RC_DB::table('store_bill_day')->groupBy('store_id');
+	     
+	    if (isset($options['store_id'])) {
+	        $db_bill_day->having('store_id', $options['store_id']);
+	    }
+	     
+	    if (!empty($filter['start_date']) && !empty($filter['end_date'])) {
+	        $db_bill_day->whereRaw("day BETWEEN '".$filter['start_date']."' AND '".$filter['end_date']."'");
+	    } else {
+	        if (!empty($filter['start_date']) && empty($filter['end_date'])) {
+	            $db_bill_day->whereRaw("day >= '".$filter['start_date']."'");
+	        }
+	        if (empty($filter['start_date']) && !empty($filter['end_date'])) {
+	            $db_bill_day->whereRaw("day <= '".$filter['end_date']."'");
+	        }
+	    }
+// 	    $count = $db_bill_day->count();
+// 	    if (ROUTE_M == 'admin') {
+// 	        $page = new ecjia_page($count, $page_size, 6);
+// 	    } else {
+// 	        $page = new ecjia_merchant_page($count, $page_size, 6);
+// 	    }
+	     
+// 	    if ($page_size) {
+// 	        $db_bill_day->take($page_size)->skip($page->start_id-1);
+// 	    }
+	    
+	    $row = $db_bill_day->select("store_id", RC_DB::raw("'".$options['month']."' as bill_month"),RC_DB::raw('SUM(order_count) as order_count'),RC_DB::raw('SUM(order_amount) as order_amount'), 
+	        RC_DB::raw('SUM(refund_count) as refund_count'),RC_DB::raw('SUM(refund_amount) as refund_amount'),RC_DB::raw('SUM(brokerage_amount) as available_amount'),RC_DB::raw('SUM(brokerage_amount) as bill_amount'),
+	         'percent_value')
+	    ->get();
 	    
 	}
 	

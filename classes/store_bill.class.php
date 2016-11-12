@@ -50,12 +50,13 @@ class store_bill
         //已有账单数据
         $data = RC_Model::model('commission/store_bill_day_model')->count_bill_month($options);
         
+//                 _dump($data,1);
         //         TODO:异常重新发起
         if (! $data) {
             RC_Logger::getLogger('bill_month')->error('统计数据异常或者为空');
             return false;
         }
-        //         _dump($data,1);
+        
         return RC_DB::table('store_bill')->insert($data);
         
     }
