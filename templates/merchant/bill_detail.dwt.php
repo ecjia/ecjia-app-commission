@@ -101,7 +101,7 @@ ecjia.merchant.bill.init()
         					       <a href="{$order_url}" target="_blank">{$list.order_sn}</a>
             					</td>
             					<td>{$list.order_add_time_formate}</td>
-            					<td>￥{$list.order_amount}</td>
+            					<td>￥{$list.total_fee}</td>
             					<td>{$lang_os[$list.order_status]},{$lang_ps[$list.pay_status]},{$lang_ss[$list.shipping_status]}</td>
             					<td>{$list.percent_value}%</td>
             					<td>￥{$list.brokerage_amount}</td>

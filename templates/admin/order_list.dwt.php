@@ -55,7 +55,7 @@
         					     <a href='{$store_url}' title="查看商家资料" target="_blank"><i class="fontello-icon-info-circled"></i></a>
 						    </td>
 						    <td>{$list.order_add_time_formate}</td>
-						    <td>￥{$list.order_amount}</td>
+						    <td>￥{$list.total_fee}</td>
 						    <td>{$list.percent_value}%</td>
         					<td>
         					{if $list.order_type eq 1}￥{$list.brokerage_amount}{/if}{if $list.order_type eq 2}<span class="ecjiafc-red">￥{$list.brokerage_amount}</span>{/if}
