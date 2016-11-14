@@ -40,15 +40,10 @@
     						<td class="ecjiafc-red">￥{$bill_info.refund_amount}</td>
     					</tr>
     					<tr>
-    						<td align="right"><div align="right"><strong>有效分成金额：</strong></div></td>
-    						<td>￥{$bill_info.available_amount}</td>
-    						<td align="right"><div align="right"><strong>佣金百分比：</strong></div></td>
-    						<td>{$bill_info.percent_value}%</td>
-    					</tr>
-    					<tr>
     						<td align="right"><h4 align="right">本月账单金额：</h4></td>
-    						<td colspan="1"><b class="ecjiaf-fs3">￥{$bill_info.bill_amount}</b><span class="m_l10 m_r10">= {$bill_info.available_amount} * {$bill_info.percent_value}%</span>
-    						</td><td align="right"><div align="right"><strong>打款状态：</strong></div></td>
+    						<td><b class="ecjiaf-fs3">￥{$bill_info.bill_amount}</b><span class="m_l10 m_r10">({$bill_info.percent_value}%，以订单入账比例为准)</span>
+    						</td>
+    						<td align="right"><div align="right"><strong>打款状态：</strong></div></td>
     						<td>
     						 {if $bill_info.pay_status eq 1}
         					<a class="label btn-warning">未打款</a>

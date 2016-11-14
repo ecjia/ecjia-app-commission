@@ -45,14 +45,10 @@ ecjia.merchant.bill.init()
     							<td>￥{$bill_info.refund_amount}</td>
     						</tr>
     						<tr>
-    							<td align="right">有效分成金额：</td>
-    							<td>￥{$bill_info.available_amount}</td>
     							<td align="right">佣金百分比：</td>
-    							<td>{$bill_info.percent_value}%</td>
-    						</tr>
-    						<tr>
+    							<td>{$bill_info.percent_value}%&nbsp;<a title="以订单入账比例为准"><i class="fa fa-question-circle"></i></a></td>
     							<td align="right"><h4>本月账单金额：</h4></td>
-    							<td colspan="3"><h4><b>￥{$bill_info.bill_amount}</b>&nbsp;
+    							<td><h4 class="ecjiaf-ib"><b>￥{$bill_info.bill_amount}</b></h4>&nbsp;
     							{if $bill_info.pay_status eq 1}
             					<a class="label btn-warning">未打款</a>
             					{else if $bill_info.pay_status eq 2}
@@ -60,7 +56,7 @@ ecjia.merchant.bill.init()
             					{else if $bill_info.pay_status eq 3}
             					<a class="label btn-success tooltip_ecjia" rel="popover" data-placement="bottom" title="打款时间" data-content="{$bill_info.pay_time_formate}">已打款</a>
             					{/if}
-    							</h4> = {$bill_info.available_amount} * {$bill_info.percent_value}%</td>
+    							</td>{if 0} = {$bill_info.available_amount} * {$bill_info.percent_value}%{/if}
     						</tr>
     					</tbody>
                     </table>
