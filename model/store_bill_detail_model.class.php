@@ -39,9 +39,8 @@ class store_bill_detail_model extends Component_Model_Model {
         if(!isset($data['store_id'])) {
             $data['store_id'] = $order_info['store_id'];
         }
-        if( !isset($data['total_fee'])) {
-            $data['order_amount'] = $order_info['total_fee'];
-        }
+        //订单金额 付款+余额消耗+积分抵钱
+        $data['order_amount'] = $order_info['money_paid'] + $order_info['surplus'] + $order_info['integral_money'];
         if ($data['order_type'] == 1) {
             $data['percent_value'] = RC_Model::model('commission/store_franchisee_model')->get_store_commission_percent($data['store_id']);
             if (empty($data['percent_value'])) {
@@ -185,6 +184,8 @@ class store_bill_detail_model extends Component_Model_Model {
 	    
 
 	    $fields = " oi.store_id, oi.order_id, oi.order_sn, oi.add_time as order_add_time, oi.order_status, oi.shipping_status, oi.order_amount, oi.money_paid, oi.is_delete,";
+	    
+	    $fields .= " (money_paid + surplus + integral_money) AS total_fee, ";
 	    $fields .= " oi.shipping_time, oi.auto_delivery_time, oi.pay_status,";
 	    $fields .= " bd.*,s.merchants_name,";
 	    $fields .= " IFNULL(u.user_name, '" . RC_Lang::get('store::store.anonymous'). "') AS buyer ";
