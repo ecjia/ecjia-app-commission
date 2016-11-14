@@ -11,7 +11,7 @@ class commission_admin_purview_api extends Component_Event_Api {
         $purviews = array(
             
             //结算权限
-            array('action_name' => __('账单列表'), 'action_code' => 'commission_manage', 'relevance'   => ''),
+            array('action_name' => __('结算账单'), 'action_code' => 'commission_manage', 'relevance'   => ''),
             array('action_name' => __('账单详情'), 'action_code' => 'commission_detail', 'relevance'   => ''),
             array('action_name' => __('打款'), 'action_code' => 'commission_pay', 'relevance'   => ''),
             array('action_name' => __('打款流水'), 'action_code' => 'commission_paylog', 'relevance'   => ''),

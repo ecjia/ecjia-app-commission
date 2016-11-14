@@ -127,15 +127,15 @@ class merchant extends ecjia_merchant {
 	}
 	
 	
-	//结算记录
+	//订单分成
 	public function record() {
 	    /* 检查权限 */
 	    $this->admin_priv('commission_order',ecjia::MSGTYPE_JSON);
 	    
 	    ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('商家结算'), RC_Uri::url('commission/merchant/init')));
-	    ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('结算记录')));
+	    ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('订单分成')));
 	    
-	    $this->assign('ur_here', '结算记录');
+	    $this->assign('ur_here', '订单分成');
 	    $this->assign('search_action', RC_Uri::url('commission/merchant/record'));
 	    
 	    /* 时间参数 */
@@ -153,7 +153,7 @@ class merchant extends ecjia_merchant {
 	}
 	
 	
-	//结算记录
+	//结算统计
 	public function count() {
 	    /* 检查权限 */
 	    $this->admin_priv('commission_count',ecjia::MSGTYPE_JSON);
