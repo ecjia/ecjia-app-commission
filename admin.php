@@ -106,12 +106,12 @@ class admin extends ecjia_admin {
 	    
 	    $bill_id = empty($_GET['id']) ? null : intval($_GET['id']);
 	    if (empty($bill_id)) {
-	        $this->showmessage('参数异常', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+	        return $this->showmessage('参数异常', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 	    }
 	    
 	    $bill_info = $this->db_store_bill->get_bill($bill_id);
 	    if (empty($bill_info)) {
-	        $this->showmessage('没有数据', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+	        return $this->showmessage('没有数据', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 	    }
 	    $bill_info['pay_count'] = RC_Model::model('commission/store_bill_paylog_model')->get_paylog_count($bill_info['bill_id']);
 	    $bill_info['merchants_name'] = RC_Model::model('commission/store_franchisee_model')->get_merchants_name($bill_info['store_id']);
@@ -138,7 +138,7 @@ class admin extends ecjia_admin {
 	    $this->admin_priv('commission_pay',ecjia::MSGTYPE_JSON);
 	    $bill_id = empty($_GET['bill_id']) ? null : intval($_GET['bill_id']);
 	    if (empty($bill_id)) {
-	        $this->showmessage('参数异常', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+	        return $this->showmessage('参数异常', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 	    }
 	    $this->assign('action_link', array('href' => RC_Uri::url('commission/admin/detail', 'id='.$bill_id), 'text' => '账单详情'));
 	    
@@ -151,7 +151,7 @@ class admin extends ecjia_admin {
 	    //账单信息
 	    $bill_info = $this->db_store_bill->get_bill($bill_id);
 	    if (empty($bill_info)) {
-	        $this->showmessage('没有数据', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+	        return $this->showmessage('没有数据', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 	    }
 	    $bill_info['merchants_name'] = RC_Model::model('commission/store_franchisee_model')->get_merchants_name($bill_info['store_id']);
 	     
@@ -164,7 +164,7 @@ class admin extends ecjia_admin {
 	    //打款信息
 	    //根据状态和打款流水和判断是否已经全部打款
 	    if ($bill_info['pay_status'] == 3 && $log_list['filter']['count_bill_amount'] != $bill_info['bill_amount']) {
-	        $this->showmessage('打款流水异常，请检查', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+	        return $this->showmessage('打款流水异常，请检查', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 	    }
 	    if ($bill_info['pay_status'] != 3 && $log_list['filter']['count_bill_amount'] != $bill_info['bill_amount']) {
 	        $this->assign('form_action', RC_Uri::url('commission/admin/pay_do'));
@@ -191,12 +191,12 @@ class admin extends ecjia_admin {
 	    $mobile      	     = !empty($_POST['mobile']) ? trim($_POST['mobile']) : null;
 	    
 	    if (empty($bill_id) || empty($pay_amount) || empty($payee) || empty($bank_account_number) || empty($bank_name)) {
-	        $this->showmessage('请填写完整的数据', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+	        return $this->showmessage('请填写完整的数据', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 	    }
 	    
 	    $bill_info = $this->db_store_bill->get_bill($bill_id);
 	    if (empty($bill_info)) {
-	        $this->showmessage('非法数据', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+	        return $this->showmessage('非法数据', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 	    }
 	    
 	    //打款流水
@@ -207,14 +207,14 @@ class admin extends ecjia_admin {
 	    $bill_unpayed = (double)$bill_unpayed;
 
 	    if ($pay_amount　< 0) {
-	        $this->showmessage('打款金额不正确', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+	        return $this->showmessage('打款金额不正确', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 	    }
 
 	    if ($pay_amount-$bill_unpayed > 0) {
-	        $this->showmessage('打款金额超出未付金额', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+	        return $this->showmessage('打款金额超出未付金额', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 	    }
 	    if ($bill_info['pay_status'] == 3 || $bill_unpayed == 0) {
-	        $this->showmessage('账单已付清', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+	        return $this->showmessage('账单已付清', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 	    }
 	    
 	    $add_time = RC_Time::gmtime();
@@ -245,7 +245,7 @@ class admin extends ecjia_admin {
 	       ecjia_admin_log::instance()->add_object('commission', '商家结算');
 	       ecjia_admin::admin_log('打款，账单编号 '.$bill_info['bill_sn'].'，'.'打款金额 '.$pay_amount, 'edit', 'commission');
 	    
-	       $this->showmessage('打款记录保存成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('commission/admin/pay', array('bill_id' => $bill_id))));
+	       return $this->showmessage('打款记录保存成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('commission/admin/pay', array('bill_id' => $bill_id))));
 	    }
 	    
 	}
@@ -257,7 +257,7 @@ class admin extends ecjia_admin {
 	    $this->admin_priv('commission_paylog',ecjia::MSGTYPE_JSON);
 	    $bill_id = empty($_GET['bill_id']) ? null : intval($_GET['bill_id']);
 	    if (empty($bill_id)) {
-	        $this->showmessage('参数异常', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+	        return $this->showmessage('参数异常', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 	    }
 	    $this->assign('action_link', array('href' => RC_Uri::url('commission/admin/detail', 'id='.$bill_id), 'text' => '账单详情'));
 	     
@@ -277,7 +277,7 @@ class admin extends ecjia_admin {
 	    //账单信息
 	    $bill_info = $this->db_store_bill->get_bill($bill_id);
 	    if (empty($bill_info)) {
-	        $this->showmessage('没有数据', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+	        return $this->showmessage('没有数据', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 	    }
 	    $bill_info['merchants_name'] = RC_Model::model('commission/store_franchisee_model')->get_merchants_name($bill_info['store_id']);
 	     

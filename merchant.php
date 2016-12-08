@@ -98,12 +98,12 @@ class merchant extends ecjia_merchant {
 	    
 	    $bill_id = empty($_GET['id']) ? null : intval($_GET['id']);
 	    if (empty($bill_id)) {
-	        $this->showmessage('参数异常', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+	        return $this->showmessage('参数异常', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 	    }
 	    
 	    $bill_info = $this->db_store_bill->get_bill($bill_id, $_SESSION['store_id']);
 	    if (empty($bill_info)) {
-	        $this->showmessage('没有数据', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+	        return $this->showmessage('没有数据', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 	    }
 	    $bill_info['pay_count'] = $this->db_store_bill_paylog->get_paylog_count($bill_info['bill_id']);
 	    
