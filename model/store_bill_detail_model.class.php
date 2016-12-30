@@ -24,7 +24,7 @@ class store_bill_detail_model extends Component_Model_Model {
             return false;
         }
 
-        RC_Loader::load_app_func('order', 'orders');
+        RC_Loader::load_app_func('admin_order', 'orders');
         $order_info = order_info($data['order_id']);
         if (empty($order_info)) {
             RC_Logger::getLogger('bill_order_error')->error($data);
