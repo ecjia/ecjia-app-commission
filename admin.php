@@ -22,30 +22,19 @@ class admin extends ecjia_admin {
 		RC_Script::enqueue_script('jquery-validate');
 		RC_Script::enqueue_script('jquery-form');
 		RC_Script::enqueue_script('ecjia-region');
-		
-		/* 列表页 js/css */
 		RC_Script::enqueue_script('smoke');
-// 		RC_Script::enqueue_script('jquery-chosen');
-// 		RC_Style::enqueue_style('chosen');
 		RC_Style::enqueue_style('hint_css', RC_Uri::admin_url('statics/lib/hint_css/hint.min.css'), array(), false, false);
-		/* 编辑页 js/css */	
-// 		RC_Style::enqueue_style('uniform-aristo');
-// 		RC_Script::enqueue_script('jquery-uniform');
 		RC_Style::enqueue_style('datepicker', RC_Uri::admin_url('statics/lib/datepicker/datepicker.css'), array(), false, false);
 		RC_Script::enqueue_script('bootstrap-datepicker', RC_Uri::admin_url('statics/lib/datepicker/bootstrap-datepicker.min.js'));
-// 		RC_Style::enqueue_style('bootstrap-editable', RC_Uri::admin_url('statics/lib/x-editable/bootstrap-editable/css/bootstrap-editable.css'), array(), false, false);
-// 		RC_Script::enqueue_script('bootstrap-editable.min', RC_Uri::admin_url('statics/lib/x-editable/bootstrap-editable/js/bootstrap-editable.min.js'));
 
 		//时间控件
 		RC_Style::enqueue_style('datepicker', RC_Uri::admin_url('statics/lib/datepicker/datepicker.css'), array('ecjia-merchant'), false, 1);
         RC_Script::enqueue_script('bootstrap-datepicker', RC_Uri::admin_url('statics/lib/datepicker/bootstrap-datepicker.min.js'), array('ecjia-merchant'), false, 1);
         
         /*自定义js*/
-//         RC_Script::enqueue_script('bill-init', RC_App::apps_url('statics/js/bill.js',__FILE__));
-        RC_Script::enqueue_script('bill-admin', RC_App::apps_url('statics/js/bill_admin.js',__FILE__));
-        RC_Script::enqueue_script('bill-pay', RC_App::apps_url('statics/js/bill_pay.js',__FILE__));
-        RC_Script::enqueue_script('bill-order', RC_App::apps_url('statics/js/order.js',__FILE__));
-		
+        RC_Script::enqueue_script('bill-admin', RC_App::apps_url('statics/js/bill_admin.js', __FILE__));
+        RC_Script::enqueue_script('bill-pay', RC_App::apps_url('statics/js/bill_pay.js', __FILE__));
+        RC_Script::enqueue_script('bill-order', RC_App::apps_url('statics/js/order.js', __FILE__));
 	}
 	
 	/**
@@ -247,7 +236,6 @@ class admin extends ecjia_admin {
 	    
 	       return $this->showmessage('打款记录保存成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('commission/admin/pay', array('bill_id' => $bill_id))));
 	    }
-	    
 	}
 	
 	//打款日志
@@ -318,8 +306,6 @@ class admin extends ecjia_admin {
 	     
 	    $this->display('order_list.dwt');
 	}
-	
-	
 }
 
 // end
