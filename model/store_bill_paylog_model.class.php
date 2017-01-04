@@ -1,15 +1,16 @@
 <?php
+defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * 账单
  */
-defined('IN_ECJIA') or exit('No permission resources.');
+
 class store_bill_paylog_model extends Component_Model_Model {
 	public $table_name = '';
 	public $view = array();
 	public function __construct() {
 		$this->table_name = 'store_bill_paylog';
 		parent::__construct();
-		
 	}
 	
 	/**
@@ -18,7 +19,6 @@ class store_bill_paylog_model extends Component_Model_Model {
 	 * @param array $filter
 	 */
 	public function get_bill_paylog_list ($bill_id, $page = 1, $page_size = 15, $filter = array()) {
-	    
 	    $db_store_bill_paylog = RC_DB::table('store_bill_paylog as b');
 	    
 	    if ($bill_id) {
@@ -60,7 +60,6 @@ class store_bill_paylog_model extends Component_Model_Model {
 	            $val['add_time_formate'] = RC_Time::local_date('Y-m-d H:i:s', $val['add_time']);
 	        }
 	    }
-// 	    _dump($row,1);
 	    return array('item' => $row, 'filter' => $filter, 'page' => $page->show(2), 'desc' => $page->page_desc());
 	}
 	

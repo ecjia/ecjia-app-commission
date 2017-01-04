@@ -1,15 +1,16 @@
 <?php
+defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * 账单
  */
-defined('IN_ECJIA') or exit('No permission resources.');
+
 class store_bill_detail_model extends Component_Model_Model {
 	public $table_name = '';
 	public $view = array();
 	public function __construct() {
 		$this->table_name = 'store_bill_detail';
 		parent::__construct();
-
 	}
 	/*
 	 * brokerage_amount 订单入账时需校验金额是否和订单一致，退货为负数须校验该订单总退货次数所有金额是否超过订单金额
@@ -76,7 +77,6 @@ class store_bill_detail_model extends Component_Model_Model {
         $day_time = RC_Time::local_strtotime($options['day']);
         
 	    $table->whereBetween('add_time', array($options['day'], $options['day'] + 86399));
-	    //group by store_id, order_type = 1, order_type = 2,
 
 	    $rs_order = RC_DB::table('store_bill_detail')->groupBy('store_id')->select("store_id", RC_DB::raw("'".$options['day']."' as day"), RC_DB::raw('COUNT(store_id) as order_count'), RC_DB::raw('SUM(brokerage_amount) as order_amount'),
 	        RC_DB::raw('0 as refund_count'), RC_DB::raw('0.00 as refund_amount'), 'percent_value')
@@ -85,11 +85,8 @@ class store_bill_detail_model extends Component_Model_Model {
 	    $rs_refund = RC_DB::table('store_bill_detail')->groupBy('store_id')->select("store_id", RC_DB::raw("'".$options['day']."' as day"),RC_DB::raw('COUNT(store_id) as refund_count'), RC_DB::raw('SUM(brokerage_amount) as refund_amount'),
 	        RC_DB::raw('0 as order_count'), RC_DB::raw('0.00 as order_amount'), 'percent_value')
 	    ->whereBetween('add_time', array($day_time, $day_time + 86399))->where('order_type', 2)->get();
-// 	    _dump($rs_order);
 
 	    //获取结算店铺列表
-// 	    $store_list = RC_DB::table('store_franchisee')->where('status', 1)->lists('store_id');
-// 	    _dump($store_list);
 	    if ($rs_order) {
 	        foreach ($rs_order as $key => &$val) {
 	            if ($rs_refund) {
@@ -104,18 +101,9 @@ class store_bill_detail_model extends Component_Model_Model {
 	                $val['brokerage_amount'] = $val['order_amount'];
 	            }
 	            $val['add_time'] = RC_Time::gmtime();
-// 	            if (!in_array($val['store_id'], $store_list)) {
-// 	                $val['brokerage_amount'] = $val['order_amount'];
-// 	            }
 	        }
 
 	    }
-// 	    foreach ($store_list as $store_id) {
-// 	        if
-// 	    }
-// 	    _dump($rs_refund);
-// 	    _dump($rs_order,1);
-
         return $rs_order;
 	}
 	/* SELECT
@@ -182,7 +170,6 @@ class store_bill_detail_model extends Component_Model_Model {
 	        $page = new ecjia_merchant_page($count, $page_size, 3);
 	    }
 	    
-
 	    $fields = " oi.store_id, oi.order_id, oi.order_sn, oi.add_time as order_add_time, oi.order_status, oi.shipping_status, oi.order_amount, oi.money_paid, oi.is_delete,";
 	    
 	    $fields .= " (money_paid + surplus + integral_money) AS total_fee, ";
@@ -198,7 +185,6 @@ class store_bill_detail_model extends Component_Model_Model {
 	    ->skip($page->start_id-1)
 	    ->get();
 
-// 	    _dump($row,1);
 	    if ($row) {
 	        foreach ($row as $key => &$val) {
 	            $val['order_add_time_formate'] = $val['order_add_time'] ? RC_Time::local_date('Y-m-d H:i', $val['order_add_time']) : '';
@@ -206,7 +192,6 @@ class store_bill_detail_model extends Component_Model_Model {
 // 	            $val['status']			 = RC_Lang::lang('os/'.$val['order_status']) . ',' . RC_Lang::lang('ps/'.$val['pay_status']) . ',' . RC_Lang::lang('ss/'.$val['shipping_status']);
 	        }
 	    }
-// 	    _dump($row,1);
 	    return array('item' => $row, 'filter' => $filter, 'page' => $page->show(2), 'desc' => $page->page_desc());
 	}
 }

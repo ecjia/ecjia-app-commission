@@ -1,5 +1,6 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * ECJIA 结算管理
  */
@@ -55,7 +56,6 @@ class admin extends ecjia_admin {
 		$filter['merchant_keywords'] = empty ($_GET['merchant_keywords']) ? '' : trim($_GET['merchant_keywords']);
 		
 		$store_id = empty($_GET['store_id']) ? null :$_GET['store_id'];
-		
 		
 		if ($_GET['refer'] == 'store') {
 		    RC_loader::load_app_func('global', 'store');
@@ -117,7 +117,6 @@ class admin extends ecjia_admin {
 	    $this->assign('lang_ps', RC_Lang::get('orders::order.ps'));
 	    $this->assign('lang_ss', RC_Lang::get('orders::order.ss'));
 	    $this->assign('record_list', $record_list);
-	    
 	    $this->display('bill_detail.dwt');
 	}
 	
@@ -161,7 +160,6 @@ class admin extends ecjia_admin {
 	        $merchants_info['pay_amount'] = $bill_info['bill_amount'] - $log_list['filter']['count_bill_amount'];
 	        $this->assign('merchants_info', $merchants_info);
 	    }
-	     
 	    $this->display('bill_pay.dwt');
 	}
 	
@@ -233,14 +231,12 @@ class admin extends ecjia_admin {
            //编辑账单列表，打款，账单编号是201603000015236，打款金额
 	       ecjia_admin_log::instance()->add_object('commission', '商家结算');
 	       ecjia_admin::admin_log('打款，账单编号 '.$bill_info['bill_sn'].'，'.'打款金额 '.$pay_amount, 'edit', 'commission');
-	    
 	       return $this->showmessage('打款记录保存成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('commission/admin/pay', array('bill_id' => $bill_id))));
 	    }
 	}
 	
 	//打款日志
 	public function pay_log() {
-
 	    /* 检查权限 */
 	    $this->admin_priv('commission_paylog',ecjia::MSGTYPE_JSON);
 	    $bill_id = empty($_GET['bill_id']) ? null : intval($_GET['bill_id']);
@@ -248,15 +244,12 @@ class admin extends ecjia_admin {
 	        return $this->showmessage('参数异常', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 	    }
 	    $this->assign('action_link', array('href' => RC_Uri::url('commission/admin/detail', 'id='.$bill_id), 'text' => '账单详情'));
-	     
 	    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('商家结算'), RC_Uri::url('commission/admin/init')));
 	    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('账单列表'), RC_Uri::url('commission/admin/init')));
 	    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('账单详情'), RC_Uri::url('commission/admin/detail', 'id='.$bill_id)));
 	    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('打款流水')));
 	    $this->assign('ur_here', '打款流水');
-	     
 	    $this->bill_and_log($bill_id);
-	    
 	    $this->assign('action', 'pay_log');
 	    $this->display('bill_pay.dwt');
 	}
@@ -268,9 +261,7 @@ class admin extends ecjia_admin {
 	        return $this->showmessage('没有数据', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 	    }
 	    $bill_info['merchants_name'] = RC_Model::model('commission/store_franchisee_model')->get_merchants_name($bill_info['store_id']);
-	     
 	    $this->assign('bill_info', $bill_info);
-	    
 	    //打款流水
 	    $log_list = RC_Model::model('commission/store_bill_paylog_model')->get_bill_paylog_list($bill_info['bill_id'], 1, 100);
 	    $this->assign('log_list', $log_list);
@@ -278,14 +269,13 @@ class admin extends ecjia_admin {
 	
 	//订单分成列表
 	public function order() {
-	    
 	    /* 检查权限 */
 	    $this->admin_priv('commission_order',ecjia::MSGTYPE_JSON);
 	    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('商家结算'), RC_Uri::url('commission/admin/init')));
 	    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('订单分成')));
-	    
 	    $this->assign('ur_here', '订单分成列表');
 	    $this->assign('search_action', RC_Uri::url('commission/admin/order'));
+	    
 	    //明细
 // 	    $filter['start_date'] = RC_Time::local_strtotime($bill_info['bill_month']);
 // 	    $filter['end_date'] = RC_Time::local_strtotime(RC_Time::local_date('Y-m-d', strtotime('+1 month', $filter['start_date']))) - 1;
@@ -303,7 +293,6 @@ class admin extends ecjia_admin {
 	    $this->assign('lang_ps', RC_Lang::get('orders::order.ps'));
 	    $this->assign('lang_ss', RC_Lang::get('orders::order.ss'));
 	    $this->assign('record_list', $record_list);
-	     
 	    $this->display('order_list.dwt');
 	}
 }

@@ -15,7 +15,6 @@ class store_bill
      */
     public function bill_day($options) {
 //         TODO:大数据
-        
         if (!isset($options['day'])) {
             $options['day'] = RC_Time::local_date('Y-m-d', RC_Time::gmtime() - 86400) ;
         }
@@ -29,7 +28,6 @@ class store_bill
             RC_Logger::getLogger('bill_day')->error('统计数据异常或者为空');
             return false;
         }
-//         _dump($data,1);
         return RC_DB::table('store_bill_day')->insert($data);
     }
     
@@ -40,7 +38,6 @@ class store_bill
      * @param string $options month 2016-05
      */
     public function bill_month($options) {
-        
         if (!isset($options['month'])) {
             $options['month'] = RC_Time::local_date('Y-m', RC_Time::gmtime() - 86400) ;
         }
@@ -59,8 +56,8 @@ class store_bill
             $bill['bill_sn'] = str_replace('-', '', $options['month']).sprintf("%06d",$bill['store_id']).mt_rand(111, 999);
             $bill['add_time'] = RC_Time::gmtime();
         }
-        
         return RC_DB::table('store_bill')->insert($data);
     }
-    
 }
+
+// end

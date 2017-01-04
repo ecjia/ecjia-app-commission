@@ -1,5 +1,6 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * 添加账单 日统计信息
  * table store_bill_day
@@ -19,11 +20,8 @@ class commission_bill_day_api extends Component_Event_Api {
 //             || !isset($options['percent_value']) || !isset($options['brokerage_amount'])) {
 //             return new ecjia_error('invalid_parameter', '参数无效');
 //         }
-
-        
         return RC_Model::model('commission/store_bill_day_model')->add_bill_day($options);
     }
-    
 }
 
 // end

@@ -1,5 +1,6 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * ECJIA 商家结算菜单API
  * @author royalwang
@@ -17,7 +18,6 @@ class commission_merchant_menu_api extends Component_Event_Api {
 					ecjia_merchant::make_admin_menu('03_commission_count', __('结算统计'), RC_Uri::url('commission/merchant/count'), 3)->add_purview('commission_count')->add_icon('fa-bar-chart-o'), //order_os_edit
 		);
 		$menus->add_submenu($submenus);
-		
 		return $menus;
 	}
 }

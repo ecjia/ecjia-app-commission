@@ -1,5 +1,6 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * 后台权限API
  * @author royalwang
@@ -17,7 +18,6 @@ class commission_admin_purview_api extends Component_Event_Api {
             array('action_name' => __('打款流水'), 'action_code' => 'commission_paylog', 'relevance'   => ''),
             array('action_name' => __('订单分成'), 'action_code' => 'commission_order', 'relevance'   => ''),
         );
-        
         return $purviews;
     }
 }

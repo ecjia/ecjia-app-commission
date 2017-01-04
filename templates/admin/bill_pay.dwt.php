@@ -19,7 +19,6 @@ ecjia.admin.bill_pay.init();
     
 <div class="row-fluid">
     <div class="col-lg-12 foldable-list ">
-      
         <div class="accordion-group">
     		<div class="accordion-heading">
     			<a class="accordion-toggle acc-in" data-toggle="collapse" data-target="#collapseOne"><strong>账单概况</strong></a>
@@ -174,6 +173,7 @@ ecjia.admin.bill_pay.init();
 		</div>
 		{/if}
 		{/if}
+	</div>
 </div>
   
 <!-- {/block} -->

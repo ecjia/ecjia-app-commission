@@ -1,5 +1,6 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * 添加账单条目信息。入账订单/退货单
  * table store_bill_detail
@@ -7,7 +8,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
  *
  */
 class commission_add_bill_detail_api extends Component_Event_Api {
-    
     /*
      * 必填参数
      * order_type 1入账订单，2退货
@@ -24,7 +24,6 @@ class commission_add_bill_detail_api extends Component_Event_Api {
         
         return RC_Model::model('commission/store_bill_detail_model')->add_bill_detail($options);
     }
-    
 }
 
 // end

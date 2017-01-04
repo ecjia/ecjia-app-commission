@@ -28,8 +28,6 @@
 			});
 		}
     }
- 
- 
 })(ecjia.admin, jQuery);
  
 // end

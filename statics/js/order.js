@@ -58,10 +58,7 @@
 				
 			});
 		}
- 
     }
- 
- 
 })(ecjia.admin, jQuery);
  
 // end

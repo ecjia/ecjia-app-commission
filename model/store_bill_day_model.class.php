@@ -1,15 +1,16 @@
 <?php
+defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * 账单 日统计
  */
-defined('IN_ECJIA') or exit('No permission resources.');
+
 class store_bill_day_model extends Component_Model_Model {
 	public $table_name = '';
 	public $view = array();
 	public function __construct() {
 		$this->table_name = 'store_bill_day';
 		parent::__construct();
-		
 	}
 	//TODO::大数据处理
 	public function add_bill_day($options) {
@@ -26,7 +27,6 @@ class store_bill_day_model extends Component_Model_Model {
         if (! $data) {
             return false;
         }
-//         _dump($data,1);
 	    return RC_DB::table('store_bill_day')->insert($data);
 	}
 	
@@ -67,7 +67,6 @@ class store_bill_day_model extends Component_Model_Model {
 	            $val['add_time_formate'] = RC_Time::local_date('Y-m-d H:i', $val['add_time']);
 	        }
 	    }
-	    // 	    _dump($row,1);
 	    return array('item' => $row, 'filter' => $filter, 'page' => $page->show(2), 'desc' => $page->page_desc());
 	    
 	}
@@ -105,10 +104,7 @@ class store_bill_day_model extends Component_Model_Model {
 	        RC_DB::raw('SUM(refund_count) as refund_count'),RC_DB::raw('SUM(refund_amount) as refund_amount'),RC_DB::raw('SUM(brokerage_amount) as available_amount'),RC_DB::raw('SUM(brokerage_amount) as bill_amount'),
 	         'percent_value')
 	    ->get();
-	    
 	}
-	
-	
 }
 
 // end
