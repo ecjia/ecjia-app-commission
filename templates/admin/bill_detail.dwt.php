@@ -1,6 +1,5 @@
 <!-- {extends file="ecjia.dwt.php"} -->
-<!-- {block name="footer"} -->
-<!-- {/block} -->
+
 <!-- {block name="main_content"} -->
 <div>
 	<h3 class="heading">
@@ -115,5 +114,4 @@
         <!-- {$record_list.page} -->
     </div>
 </div>
-  
 <!-- {/block} -->

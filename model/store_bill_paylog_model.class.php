@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * 账单
  */
-
 class store_bill_paylog_model extends Component_Model_Model {
 	public $table_name = '';
 	public $view = array();
@@ -39,21 +38,20 @@ class store_bill_paylog_model extends Component_Model_Model {
 	    }
 	    
 	    $filter_count = $db_store_bill_paylog
-	           ->select(RC_DB::raw('count(*) as count_all'),
-	           RC_DB::raw('SUM(bill_amount) as count_bill_amount'))
-	           ->first();
-	    $filter['count_all'] 	= $filter_count['count_all'] > 0 ? $filter_count['count_all'] : 0;
-	    $filter['count_bill_amount'] 	= $filter_count['count_bill_amount'] > 0 ? $filter_count['count_bill_amount'] : 0;
+	 		->select(RC_DB::raw('count(*) as count_all'), RC_DB::raw('SUM(bill_amount) as count_bill_amount'))
+	        ->first();
+	    $filter['count_all'] 			= $filter_count['count_all'] > 0 			? $filter_count['count_all'] 			: 0;
+	    $filter['count_bill_amount'] 	= $filter_count['count_bill_amount'] > 0 	? $filter_count['count_bill_amount'] 	: 0;
 	    
 	    $page = new ecjia_page($filter_count['count_all'], $page_size, 6);
 	    
 	    $row = $db_store_bill_paylog
-	    ->leftJoin('admin_user as au', RC_DB::raw('b.admin_id'), '=', RC_DB::raw('au.user_id'))
-	    ->select(RC_DB::raw('b.*, au.user_name '))
-	    ->take($page_size)
-	    ->orderBy('add_time', 'desc')
-	    ->skip($page->start_id-1)
-	    ->get();
+		    ->leftJoin('admin_user as au', RC_DB::raw('b.admin_id'), '=', RC_DB::raw('au.user_id'))
+		    ->select(RC_DB::raw('b.*, au.user_name '))
+		    ->take($page_size)
+		    ->orderBy('add_time', 'desc')
+		    ->skip($page->start_id-1)
+		    ->get();
 	    
 	    if ($row) {
 	        foreach ($row as $key => &$val) {

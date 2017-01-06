@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * 账单
  */
-
 class store_bill_detail_model extends Component_Model_Model {
 	public $table_name = '';
 	public $view = array();
@@ -178,12 +177,12 @@ class store_bill_detail_model extends Component_Model_Model {
 	    $fields .= " IFNULL(u.user_name, '" . RC_Lang::get('store::store.anonymous'). "') AS buyer ";
 
 	    $row = $db_bill_detail
-	    ->leftJoin('users as u', RC_DB::raw('u.user_id'), '=', RC_DB::raw('oi.user_id'))
-	    ->select(RC_DB::raw($fields))
-	    ->take($page_size)
-	    ->orderBy(RC_DB::raw('bd.add_time'), 'desc')
-	    ->skip($page->start_id-1)
-	    ->get();
+		    ->leftJoin('users as u', RC_DB::raw('u.user_id'), '=', RC_DB::raw('oi.user_id'))
+		    ->select(RC_DB::raw($fields))
+		    ->take($page_size)
+		    ->orderBy(RC_DB::raw('bd.add_time'), 'desc')
+		    ->skip($page->start_id-1)
+		    ->get();
 
 	    if ($row) {
 	        foreach ($row as $key => &$val) {

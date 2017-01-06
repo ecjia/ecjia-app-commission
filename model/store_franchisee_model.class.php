@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * 账单 日统计
  */
-
 class store_franchisee_model extends Component_Model_Model {
 	public $table_name = '';
 	public $view = array();

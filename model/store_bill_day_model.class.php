@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * 账单 日统计
  */
-
 class store_bill_day_model extends Component_Model_Model {
 	public $table_name = '';
 	public $view = array();
@@ -16,11 +15,6 @@ class store_bill_day_model extends Component_Model_Model {
 	public function add_bill_day($options) {
 	    //已有账单数据
 	    $data = RC_Model::model('commission/store_bill_detail_model')->count_bill_day($options);
-	    
-//         if (!is_array($data) || !isset($data['store_id']) || !isset($data['day']) || !isset($data['order_count'])
-//             || !isset($data['order_amount']) || !isset($data['percent_value']) || !isset($data['brokerage_amount']) || !isset($data['add_time'])) {
-//             return false;
-//         }
 
 	    //获取结算店铺列表
 // 	    $store_list = RC_DB::table('store_franchisee')->select('store_id')->where('status', 1)->get();
@@ -100,8 +94,8 @@ class store_bill_day_model extends Component_Model_Model {
 // 	        $db_bill_day->take($page_size)->skip($page->start_id-1);
 // 	    }
 	    
-	    return $row = $db_bill_day->select("store_id", RC_DB::raw("'".$options['month']."' as bill_month"),RC_DB::raw('SUM(order_count) as order_count'),RC_DB::raw('SUM(order_amount) as order_amount'), 
-	        RC_DB::raw('SUM(refund_count) as refund_count'),RC_DB::raw('SUM(refund_amount) as refund_amount'),RC_DB::raw('SUM(brokerage_amount) as available_amount'),RC_DB::raw('SUM(brokerage_amount) as bill_amount'),
+	    return $row = $db_bill_day->select("store_id", RC_DB::raw("'".$options['month']."' as bill_month"), RC_DB::raw('SUM(order_count) as order_count'), RC_DB::raw('SUM(order_amount) as order_amount'), 
+	        RC_DB::raw('SUM(refund_count) as refund_count'), RC_DB::raw('SUM(refund_amount) as refund_amount'), RC_DB::raw('SUM(brokerage_amount) as available_amount'), RC_DB::raw('SUM(brokerage_amount) as bill_amount'),
 	         'percent_value')
 	    ->get();
 	}

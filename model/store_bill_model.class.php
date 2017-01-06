@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * 账单
  */
-
 class store_bill_model extends Component_Model_Model {
 	public $table_name = '';
 	public $view = array();
@@ -60,11 +59,11 @@ class store_bill_model extends Component_Model_Model {
 	    $page = new ecjia_page($filter_count['count_all'], $page_size, 6);
 	    
 	    $row = $db_store_bill
-	    ->select(RC_DB::raw('b.*, s.merchants_name '))
-	    ->take($page_size)
-	    ->orderBy('bill_month', 'desc')
-	    ->skip($page->start_id-1)
-	    ->get();
+		    ->select(RC_DB::raw('b.*, s.merchants_name '))
+		    ->take($page_size)
+		    ->orderBy('bill_month', 'desc')
+		    ->skip($page->start_id-1)
+		    ->get();
 	    
 	    if ($row) {
 	        foreach ($row as $key => &$val) {
@@ -102,10 +101,10 @@ class store_bill_model extends Component_Model_Model {
 	    $page = new ecjia_merchant_page($count, $page_size, 6);
 	     
 	    $row = $db_store_bill
-	    ->take($page_size)
-	    ->orderBy('bill_month', 'desc')
-	    ->skip($page->start_id-1)
-	    ->get();
+		    ->take($page_size)
+		    ->orderBy('bill_month', 'desc')
+		    ->skip($page->start_id-1)
+		    ->get();
 	     
 	    if ($row) {
 	        foreach ($row as $key => &$val) {

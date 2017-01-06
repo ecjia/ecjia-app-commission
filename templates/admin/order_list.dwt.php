@@ -1,10 +1,12 @@
 <?php defined('IN_ECJIA') or exit('No permission resources.');?>
 <!-- {extends file="ecjia.dwt.php"} -->
+
 <!-- {block name="footer"} -->
 <script type="text/javascript">
  ecjia.admin.order.init();
 </script>
 <!-- {/block} -->
+
 <!-- {block name="main_content"} -->
 <div>
 	<h3 class="heading">
@@ -42,28 +44,28 @@
 						 </tr>
 					</thead>
 
-   				 <!-- {foreach from=$record_list.item item=list} -->
-						<tr>
-						    <td>{if $list.order_type eq 1}订单{/if}{if $list.order_type eq 2}<span class="ecjiafc-red">退款</span>{/if}</td>
-							<td>
-							     {assign var=order_url value=RC_Uri::url('orders/admin/info',"order_id={$list.order_id}")}
-        					     <a href="{$order_url}" target="_blank">{$list.order_sn}</a>
-							</td>
-						    <td>
-						         {assign var=store_url value=RC_Uri::url('store/admin/preview',"store_id={$list.store_id}")}
-        					     <a href='{RC_Uri::url("commission/admin/order","store_id={$list.store_id}")}' title="查看此商家订单分成">{$list.merchants_name}</a>
-        					     <a href='{$store_url}' title="查看商家资料" target="_blank"><i class="fontello-icon-info-circled"></i></a>
-						    </td>
-						    <td>{$list.order_add_time_formate}</td>
-						    <td>￥{$list.total_fee}</td>
-						    <td>{$list.percent_value}%</td>
-        					<td>
-        					{if $list.order_type eq 1}￥{$list.brokerage_amount}{/if}{if $list.order_type eq 2}<span class="ecjiafc-red">￥{$list.brokerage_amount}</span>{/if}
-        					</td>
-        					<td>{$list.add_time_formate}</td>
-						</tr>
-						<!-- {foreachelse} -->
-					   <tr><td class="no-records" colspan="8">{t}没有找到任何记录{/t}</td></tr>
+   				 	<!-- {foreach from=$record_list.item item=list} -->
+					<tr>
+						<td>{if $list.order_type eq 1}订单{/if}{if $list.order_type eq 2}<span class="ecjiafc-red">退款</span>{/if}</td>
+						<td>
+							{assign var=order_url value=RC_Uri::url('orders/admin/info',"order_id={$list.order_id}")}
+						     <a href="{$order_url}" target="_blank">{$list.order_sn}</a>
+						</td>
+					    <td>
+					  		{assign var=store_url value=RC_Uri::url('store/admin/preview',"store_id={$list.store_id}")}
+					     	<a href='{RC_Uri::url("commission/admin/order","store_id={$list.store_id}")}' title="查看此商家订单分成">{$list.merchants_name}</a>
+					     	<a href='{$store_url}' title="查看商家资料" target="_blank"><i class="fontello-icon-info-circled"></i></a>
+					    </td>
+					    <td>{$list.order_add_time_formate}</td>
+					    <td>￥{$list.total_fee}</td>
+					    <td>{$list.percent_value}%</td>
+						<td>
+							{if $list.order_type eq 1}￥{$list.brokerage_amount}{/if}{if $list.order_type eq 2}<span class="ecjiafc-red">￥{$list.brokerage_amount}</span>{/if}
+						</td>
+						<td>{$list.add_time_formate}</td>
+					</tr>
+					<!-- {foreachelse} -->
+				   	<tr><td class="no-records" colspan="8">{t}没有找到任何记录{/t}</td></tr>
 					<!-- {/foreach} -->
 				</table>
 				<!-- {$record_list.page} -->

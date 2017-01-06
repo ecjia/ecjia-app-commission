@@ -1,4 +1,5 @@
 <!-- {extends file="ecjia.dwt.php"} -->
+
 <!-- {block name="footer"} -->
 <script type="text/javascript">
 {if $action != 'pay_log'}
@@ -7,6 +8,7 @@ ecjia.admin.bill_pay.init();
 {/if}
 </script>
 <!-- {/block} -->
+
 <!-- {block name="main_content"} -->
 <div>
 	<h3 class="heading">
@@ -175,5 +177,4 @@ ecjia.admin.bill_pay.init();
 		{/if}
 	</div>
 </div>
-  
 <!-- {/block} -->

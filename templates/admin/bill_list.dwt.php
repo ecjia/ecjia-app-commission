@@ -1,10 +1,12 @@
 <?php defined('IN_ECJIA') or exit('No permission resources.');?>
 <!-- {extends file="ecjia.dwt.php"} -->
+
 <!-- {block name="footer"} -->
 <script type="text/javascript">
 ecjia.admin.bill_list.init();
 </script>
 <!-- {/block} -->
+
 <!-- {block name="main_content"} -->
 <div>
 	<h3 class="heading">

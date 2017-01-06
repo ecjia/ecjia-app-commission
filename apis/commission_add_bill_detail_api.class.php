@@ -5,7 +5,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * 添加账单条目信息。入账订单/退货单
  * table store_bill_detail
  * @author hyy
- *
  */
 class commission_add_bill_detail_api extends Component_Event_Api {
     /*

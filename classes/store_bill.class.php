@@ -3,10 +3,8 @@ defined('IN_ECJIA') or exit('No permission resources.');
 
 /**
  * 账单计算类
- *        
  */
-class store_bill
-{
+class store_bill {
     /**
      * 计算店铺日账单
      * 默认计算所有店铺前一天的账单，可传参数指定店铺和日期
