@@ -49,7 +49,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * ECJIA 结算管理
  */
-
 class merchant extends ecjia_merchant {
 
 	private $db_user;

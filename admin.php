@@ -49,7 +49,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * ECJIA 结算管理
  */
-
 class admin extends ecjia_admin {
 
 	private $db_user;
