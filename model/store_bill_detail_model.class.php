@@ -233,7 +233,6 @@ class store_bill_detail_model extends Component_Model_Model {
 	        foreach ($row as $key => &$val) {
 	            $val['order_add_time_formate'] = $val['order_add_time'] ? RC_Time::local_date('Y-m-d H:i', $val['order_add_time']) : '';
 	            $val['add_time_formate'] = $val['order_add_time'] ? RC_Time::local_date('Y-m-d H:i', $val['add_time']) : '';
-// 	            $val['status']			 = RC_Lang::lang('os/'.$val['order_status']) . ',' . RC_Lang::lang('ps/'.$val['pay_status']) . ',' . RC_Lang::lang('ss/'.$val['shipping_status']);
 	        }
 	    }
 	    return array('item' => $row, 'filter' => $filter, 'page' => $page->show(2), 'desc' => $page->page_desc());
