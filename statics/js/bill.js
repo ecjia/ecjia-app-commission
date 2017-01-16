@@ -13,7 +13,8 @@
 		},
 		searchForm : function () {
 			$(".start_date,.end_date").datepicker({
-				format: "yyyy-mm"
+                format: "yyyy-mm",
+                minViewMode: 1,
 			});
 			$('.screen-btn').on('click', function(e) {
 				e.preventDefault();
@@ -26,15 +27,15 @@
 
 				if (start_date == '') {
 					var data = {
-							message : "查询的开始时间不能为空！",
-							state : "error",
+						message : "查询的开始时间不能为空！",
+						state : "error",
 					};
 					ecjia.merchant.showmessage(data);
 					return false;
 				} else if(end_date == '') {
 					var data = {
-							message : "查询的结束时间不能为空！",
-							state : "error",
+						message : "查询的结束时间不能为空！",
+						state : "error",
 					};
 					ecjia.merchant.showmessage(data);
 					return false;
@@ -42,8 +43,8 @@
 				
 				if (start_date >= end_date && (start_date != '' && end_date !='')) {
 					var data = {
-							message : "查询的开始时间不能大于结束时间！",
-							state : "error",
+						message : "查询的开始时间不能大于结束时间！",
+						state : "error",
 					};
 					ecjia.merchant.showmessage(data);
 					return false;
@@ -54,7 +55,7 @@
 		},
 		record : function () {
 			$(".start_date,.end_date").datepicker({
-				format: "yyyy-mm-dd"
+                format: "yyyy-mm-dd",
 			});
 			$('.screen-btn').on('click', function(e) {
 				e.preventDefault();

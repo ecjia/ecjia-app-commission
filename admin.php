@@ -69,12 +69,6 @@ class admin extends ecjia_admin {
 		RC_Script::enqueue_script('ecjia-region');
 		RC_Script::enqueue_script('smoke');
 		RC_Style::enqueue_style('hint_css', RC_Uri::admin_url('statics/lib/hint_css/hint.min.css'), array(), false, false);
-		RC_Style::enqueue_style('datepicker', RC_Uri::admin_url('statics/lib/datepicker/datepicker.css'), array(), false, false);
-		RC_Script::enqueue_script('bootstrap-datepicker', RC_Uri::admin_url('statics/lib/datepicker/bootstrap-datepicker.min.js'));
-
-		//时间控件
-		RC_Style::enqueue_style('datepicker', RC_Uri::admin_url('statics/lib/datepicker/datepicker.css'), array('ecjia-merchant'), false, 1);
-        RC_Script::enqueue_script('bootstrap-datepicker', RC_Uri::admin_url('statics/lib/datepicker/bootstrap-datepicker.min.js'), array('ecjia-merchant'), false, 1);
         
         /*自定义js*/
         RC_Script::enqueue_script('bill-admin', RC_App::apps_url('statics/js/bill_admin.js', __FILE__));

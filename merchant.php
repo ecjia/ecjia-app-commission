@@ -70,13 +70,11 @@ class merchant extends ecjia_merchant {
 		RC_Script::enqueue_script('jquery-form');
 		RC_Script::enqueue_script('ecjia-region');
 		RC_Script::enqueue_script('smoke');
-		RC_Style::enqueue_style('datepicker', RC_Uri::admin_url('statics/lib/datepicker/datepicker.css'), array(), false, false);
-		RC_Script::enqueue_script('bootstrap-datepicker', RC_Uri::admin_url('statics/lib/datepicker/bootstrap-datepicker.min.js'));
-
+		
 		//时间控件
-		RC_Style::enqueue_style('datepicker', RC_Uri::admin_url('statics/lib/datepicker/datepicker.css'), array('ecjia-merchant'), false, 1);
-        RC_Script::enqueue_script('bootstrap-datepicker', RC_Uri::admin_url('statics/lib/datepicker/bootstrap-datepicker.min.js'), array('ecjia-merchant'), false, 1);
-        
+		RC_Script::enqueue_script('bootstrap-datepicker', RC_Uri::admin_url('statics/lib/datepicker/bootstrap-datepicker.min.js'));
+		RC_Style::enqueue_style('datepicker', RC_Uri::admin_url('statics/lib/datepicker/datepicker.css'));
+		
         /*自定义js*/
         RC_Script::enqueue_script('bill-init', RC_App::apps_url('statics/js/bill.js',__FILE__), array('ecjia-merchant'), false, 1);
         ecjia_merchant_screen::get_current_screen()->set_parentage('commission');
