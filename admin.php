@@ -81,7 +81,7 @@ class admin extends ecjia_admin {
 	 */
 	public function init() {
 		/* 检查权限 */
-		$this->admin_priv('commission_manage',ecjia::MSGTYPE_JSON);
+		$this->admin_priv('commission_manage');
 	    
 		$this->assign('search_action', RC_Uri::url('commission/admin/init'));
 		$this->assign('ur_here', '账单列表');
@@ -119,7 +119,7 @@ class admin extends ecjia_admin {
 	//底部详单列表，可翻页，30条一页
 	public function detail() {
 	    /* 检查权限 */
-	    $this->admin_priv('commission_detail',ecjia::MSGTYPE_JSON);
+	    $this->admin_priv('commission_detail');
 	    
 	    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('商家结算'), RC_Uri::url('commission/admin/init')));
 	    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('账单列表'),  RC_Uri::url('commission/admin/init')));
@@ -161,7 +161,7 @@ class admin extends ecjia_admin {
 	//打款
 	public function pay() {
 	    /* 检查权限 */
-	    $this->admin_priv('commission_pay',ecjia::MSGTYPE_JSON);
+	    $this->admin_priv('commission_pay');
 	    $bill_id = empty($_GET['bill_id']) ? null : intval($_GET['bill_id']);
 	    if (empty($bill_id)) {
 	        return $this->showmessage('参数异常', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
@@ -205,7 +205,7 @@ class admin extends ecjia_admin {
 	//TODO:部分格式不可修改，浮点数运算需要
 	public function pay_do() {
 	    
-	    $this->admin_priv('commission_pay',ecjia::MSGTYPE_JSON);
+	    $this->admin_priv('commission_pay', ecjia::MSGTYPE_JSON);
 	    
 	    $bill_id             = !empty($_POST['bill_id']) ? intval($_POST['bill_id']) : 0;
 	    $pay_amount          = is_numeric($_POST['pay_amount']) ? (double)$_POST['pay_amount'] : 0;
@@ -276,7 +276,7 @@ class admin extends ecjia_admin {
 	//打款日志
 	public function pay_log() {
 	    /* 检查权限 */
-	    $this->admin_priv('commission_paylog',ecjia::MSGTYPE_JSON);
+	    $this->admin_priv('commission_paylog');
 	    $bill_id = empty($_GET['bill_id']) ? null : intval($_GET['bill_id']);
 	    if (empty($bill_id)) {
 	        return $this->showmessage('参数异常', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
@@ -308,7 +308,7 @@ class admin extends ecjia_admin {
 	//订单分成列表
 	public function order() {
 	    /* 检查权限 */
-	    $this->admin_priv('commission_order',ecjia::MSGTYPE_JSON);
+	    $this->admin_priv('commission_order');
 	    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('商家结算'), RC_Uri::url('commission/admin/init')));
 	    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('订单分成')));
 	    $this->assign('ur_here', '订单分成列表');

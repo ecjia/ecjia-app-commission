@@ -85,7 +85,7 @@ class merchant extends ecjia_merchant {
 	 */
 	public function init() {
 		/* 检查权限 */
-		$this->admin_priv('commission_manage',ecjia::MSGTYPE_JSON);
+		$this->admin_priv('commission_manage');
 	    ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('商家结算'), RC_Uri::url('commission/merchant/init')));
 		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('结算账单')));
 		
@@ -110,7 +110,7 @@ class merchant extends ecjia_merchant {
 	
 	public function detail() {
 	    /* 检查权限 */
-        $this->admin_priv('commission_detail',ecjia::MSGTYPE_JSON);
+        $this->admin_priv('commission_detail');
 	    ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('商家结算'), RC_Uri::url('commission/merchant/init')));
 	    ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('账单详情')));
 	    $this->assign('action_link', array('href' => RC_Uri::url('commission/merchant/init'), 'text' => '账单列表'));
@@ -149,7 +149,7 @@ class merchant extends ecjia_merchant {
 	//订单分成
 	public function record() {
 	    /* 检查权限 */
-	    $this->admin_priv('commission_order',ecjia::MSGTYPE_JSON);
+	    $this->admin_priv('commission_order');
 	    
 	    ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('商家结算'), RC_Uri::url('commission/merchant/init')));
 	    ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('订单分成')));
@@ -173,7 +173,7 @@ class merchant extends ecjia_merchant {
 	//结算统计
 	public function count() {
 	    /* 检查权限 */
-	    $this->admin_priv('commission_count',ecjia::MSGTYPE_JSON);
+	    $this->admin_priv('commission_count');
 	    
 	    ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('商家结算'), RC_Uri::url('commission/merchant/init')));
 	    ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('结算统计')));
