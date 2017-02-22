@@ -207,13 +207,13 @@ class admin extends ecjia_admin {
 	    
 	    $this->admin_priv('commission_pay', ecjia::MSGTYPE_JSON);
 	    
-	    $bill_id             = !empty($_POST['bill_id']) ? intval($_POST['bill_id']) : 0;
-	    $pay_amount          = is_numeric($_POST['pay_amount']) ? (double)$_POST['pay_amount'] : 0;
-	    $payee               = !empty($_POST['payee']) ? trim($_POST['payee']) : null;
-	    $bank_account_number = !empty($_POST['bank_account_number']) ? trim($_POST['bank_account_number']) : null;
-	    $bank_name           = !empty($_POST['bank_name']) ? trim($_POST['bank_name']) 	: null;
-	    $bank_branch_name    = !empty($_POST['bank_branch_name']) ? trim($_POST['bank_branch_name']) : null;
-	    $mobile      	     = !empty($_POST['mobile']) ? trim($_POST['mobile']) : null;
+	    $bill_id             = !empty($_POST['bill_id']) 				? intval($_POST['bill_id']) 			: 0;
+	    $pay_amount          = is_numeric($_POST['pay_amount']) 		? (double)$_POST['pay_amount'] 			: 0;
+	    $payee               = !empty($_POST['payee']) 					? trim($_POST['payee']) 				: '';
+	    $bank_account_number = !empty($_POST['bank_account_number']) 	? trim($_POST['bank_account_number']) 	: '';
+	    $bank_name           = !empty($_POST['bank_name']) 				? trim($_POST['bank_name']) 			: '';
+	    $bank_branch_name    = !empty($_POST['bank_branch_name']) 		? trim($_POST['bank_branch_name']) 		: '';
+	    $mobile      	     = !empty($_POST['mobile']) 				? trim($_POST['mobile']) 				: '';
 	    
 	    if (empty($bill_id) || empty($pay_amount) || empty($payee) || empty($bank_account_number) || empty($bank_name)) {
 	        return $this->showmessage('请填写完整的数据', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
@@ -244,15 +244,15 @@ class admin extends ecjia_admin {
 	    
 	    $add_time = RC_Time::gmtime();
 	    $data = array(
-	        'bill_id' => $bill_id,
-            'bill_amount' => $pay_amount,
-            'payee' => $payee,
-            'bank_account_number' => $bank_account_number,
-            'bank_name' => $bank_name,
-            'bank_branch_name' => $bank_branch_name,
-            'mobile' => $mobile,
-            'admin_id' => $_SESSION['admin_id'],
-            'add_time' => $add_time,
+	        'bill_id' 				=> $bill_id,
+            'bill_amount' 			=> $pay_amount,
+            'payee' 				=> $payee,
+            'bank_account_number' 	=> $bank_account_number,
+            'bank_name' 			=> $bank_name,
+            'bank_branch_name' 		=> $bank_branch_name,
+            'mobile' 				=> $mobile,
+            'admin_id' 				=> $_SESSION['admin_id'],
+            'add_time' 				=> $add_time,
 	    );
 	    
 	    $insert_id = RC_DB::table('store_bill_paylog')->insertGetId($data);
@@ -277,7 +277,7 @@ class admin extends ecjia_admin {
 	public function pay_log() {
 	    /* 检查权限 */
 	    $this->admin_priv('commission_paylog');
-	    $bill_id = empty($_GET['bill_id']) ? null : intval($_GET['bill_id']);
+	    $bill_id = empty($_GET['bill_id']) ? 0 : intval($_GET['bill_id']);
 	    if (empty($bill_id)) {
 	        return $this->showmessage('参数异常', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 	    }

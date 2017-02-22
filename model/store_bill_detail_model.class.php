@@ -81,7 +81,7 @@ class store_bill_detail_model extends Component_Model_Model {
             return false;
         }
         
-        if(!isset($data['store_id'])) {
+        if (!isset($data['store_id'])) {
             $data['store_id'] = $order_info['store_id'];
         }
         //订单金额 付款+余额消耗+积分抵钱
