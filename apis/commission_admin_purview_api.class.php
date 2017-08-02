@@ -61,6 +61,8 @@ class commission_admin_purview_api extends Component_Event_Api {
             array('action_name' => __('打款'), 'action_code' => 'commission_pay', 'relevance'   => ''),
             array('action_name' => __('打款流水'), 'action_code' => 'commission_paylog', 'relevance'   => ''),
             array('action_name' => __('订单分成'), 'action_code' => 'commission_order', 'relevance'   => ''),
+            array('action_name' => __('每日账单'), 'action_code' => 'commission_day_manage', 'relevance'   => ''),
+            
         );
         return $purviews;
     }
