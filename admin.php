@@ -147,6 +147,10 @@ class admin extends ecjia_admin {
 	    if (empty($start_date)) {
 	        return $this->showmessage('请选择时间', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 	    }
+	    
+	    if ($start_date == RC_Time::local_date('Y-m')) {
+	        return $this->showmessage('当月交易未完成，账单暂不能生成', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+	    }
 	     
 	    RC_Loader::load_app_class('store_bill', 'commission', false);
 	    $store_bill = new store_bill();
@@ -224,6 +228,9 @@ class admin extends ecjia_admin {
 	    }
 	    $seconds_end = RC_Time::local_strtotime($_POST['end_date']);
 	    $seconds_start = RC_Time::local_strtotime($_POST['start_date']);
+	    if ($_POST['end_date'] > RC_Time::local_date('Y-m-d', RC_Time::gmtime())) {
+	        $seconds_end = RC_Time::local_strtotime(RC_Time::local_date('Y-m-d', RC_Time::gmtime())) - 86400;
+	    }
 	    if ($seconds_end < $seconds_start) {
 	        return $this->showmessage('开始时间不能大于结束时间', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 	    }
@@ -236,7 +243,6 @@ class admin extends ecjia_admin {
 	        $date = RC_Time::local_date('Y-m-d', $seconds_start + $i * 86400);
 	        $store_bill->bill_day(array('day' => $date));
 	    }
-	    
 	    return $this->showmessage('更新成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
 	    
 	}
