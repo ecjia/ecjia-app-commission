@@ -8,10 +8,17 @@ ecjia.admin.bill_list.init();
 <!-- {/block} -->
 
 <!-- {block name="main_content"} -->
+<div class="alert alert-info">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="fa fa-times" data-original-title="" title=""></i></button>
+	<strong>温馨提示：</strong>{t}每月1日生成上月账单，当月账单未出请查看每日账单和订单分成{/t}
+</div>
 <div>
 	<h3 class="heading">
 		<!-- {if $ur_here}{$ur_here}{/if} -->
 		<!-- {if $smarty.get.store_id && $smarty.get.refer neq 'store'} --><a class="btn plus_or_reply" href='{RC_Uri::url("commission/admin/init", "{$url_args}")}'><i class="fontello-icon-reply"></i>{t}返回全部{/t}</a><!-- {/if} -->
+		<!-- {if $action_link} -->
+		<a class="btn plus_or_reply data-pjax" href="{$action_link.href}" ><i class="fontello-icon-plus"></i>{$action_link.text}</a>
+		<!-- {/if} -->
 	</h3>
 </div>
 {if $smarty.get.refer neq 'store'}

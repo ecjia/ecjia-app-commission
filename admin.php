@@ -64,10 +64,13 @@ class admin extends ecjia_admin {
 		$this->db_store_bill_detail = RC_Model::model('commission/store_bill_detail_model');
 		
 		/* 加载所全局 js/css */
+		RC_Script::enqueue_script('smoke');
+		RC_Script::enqueue_script('jquery-chosen');
+		RC_Style::enqueue_style('chosen');
+		RC_Script::enqueue_script('jquery-uniform');
+		RC_Style::enqueue_style('uniform-aristo');
 		RC_Script::enqueue_script('jquery-validate');
 		RC_Script::enqueue_script('jquery-form');
-		RC_Script::enqueue_script('ecjia-region');
-		RC_Script::enqueue_script('smoke');
 		RC_Style::enqueue_style('hint_css', RC_Uri::admin_url('statics/lib/hint_css/hint.min.css'), array(), false, false);
 		
 		//时间控件
@@ -78,6 +81,7 @@ class admin extends ecjia_admin {
         RC_Script::enqueue_script('bill-admin', RC_App::apps_url('statics/js/bill_admin.js', __FILE__));
         RC_Script::enqueue_script('bill-pay', RC_App::apps_url('statics/js/bill_pay.js', __FILE__));
         RC_Script::enqueue_script('bill-order', RC_App::apps_url('statics/js/order.js', __FILE__));
+        RC_Script::enqueue_script('bill-update', RC_App::apps_url('statics/js/bill_update.js', __FILE__));
 	}
 	
 	/**
@@ -89,6 +93,7 @@ class admin extends ecjia_admin {
 	    
 		$this->assign('search_action', RC_Uri::url('commission/admin/init'));
 		$this->assign('ur_here', '账单列表');
+		$this->assign('action_link',	array('text' => '账单生成', 'href' => RC_Uri::url('commission/admin/bill_update')));
 		
 // 		/* 时间参数 */
 		$filter['start_date'] = empty($_GET['start_date']) ? null : RC_Time::local_date('Y-m', RC_Time::local_strtotime($_GET['start_date']));
@@ -118,12 +123,48 @@ class admin extends ecjia_admin {
 		$this->display('bill_list.dwt');
 	}
 	
+	public function bill_update() {
+	    /* 检查权限 */
+	    $this->admin_priv('commission_update');
+	    $this->assign('ur_here', '月账单生成');
+	    $this->assign('action_link',	array('text' => '每月账单', 'href' => RC_Uri::url('commission/admin/init')));
+	     
+	    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('每月账单'), RC_Uri::url('commission/admin/init')));
+	    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('账单生成')));
+	     
+	    $this->assign('form_action', RC_Uri::url('commission/admin/bill_updata_month'));
+	     
+	    $this->display('bill_list_month_update.dwt');
+	}
+	
+	public function bill_updata_month() {
+	    /* 检查权限 */
+	    $this->admin_priv('commission_update');
+	     
+	    set_time_limit(300);
+	     
+	    $start_date = $_POST['start_date'];
+	    if (empty($start_date)) {
+	        return $this->showmessage('请选择时间', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+	    }
+	     
+	    RC_Loader::load_app_class('store_bill', 'commission', false);
+	    $store_bill = new store_bill();
+	     
+	    $store_bill->bill_month(array('month' => $start_date));
+	     
+	    return $this->showmessage('更新成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
+	     
+	}
+	
 	public function day() {
 	    /* 检查权限 */
 	    $this->admin_priv('commission_day_manage');
 	     
 	    $this->assign('search_action', RC_Uri::url('commission/admin/day'));
 	    $this->assign('ur_here', '每日账单');
+	    $this->assign('action_link',	array('text' => '账单生成', 'href' => RC_Uri::url('commission/admin/day_update')));
+	    
 	
 	    // 		/* 时间参数 */
 	    $filter['start_date'] = empty($_GET['start_date']) ? null : RC_Time::local_date('Y-m-d', RC_Time::local_strtotime($_GET['start_date']));
@@ -154,6 +195,50 @@ class admin extends ecjia_admin {
 	    $this->assign('bill_list', $bill_list);
 	
 	    $this->display('bill_list_day.dwt');
+	}
+	
+	public function day_update() {
+	    /* 检查权限 */
+	    $this->admin_priv('commission_day_update');
+	    $this->assign('ur_here', '每日账单生成');
+	    $this->assign('action_link',	array('text' => '每日账单', 'href' => RC_Uri::url('commission/admin/day')));
+	    
+	    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('每日账单'), RC_Uri::url('commission/admin/day')));
+	    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('账单生成')));
+	    
+	    $this->assign('form_action', RC_Uri::url('commission/admin/bill_updata_day'));
+	    
+	    $this->display('bill_list_day_update.dwt');
+	}
+	
+	public function bill_updata_day() {
+	    /* 检查权限 */
+	    $this->admin_priv('commission_day_update');
+	    
+	    set_time_limit(300);
+	    
+	    $start_date = $_POST['start_date'];
+	    $end_date = $_POST['end_date'];
+	    if (empty($start_date) || empty($end_date)) {
+	        return $this->showmessage('请选择时间', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+	    }
+	    $seconds_end = RC_Time::local_strtotime($_POST['end_date']);
+	    $seconds_start = RC_Time::local_strtotime($_POST['start_date']);
+	    if ($seconds_end < $seconds_start) {
+	        return $this->showmessage('开始时间不能大于结束时间', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+	    }
+	    $days = ($seconds_end-$seconds_start)/86400;
+	    
+	    RC_Loader::load_app_class('store_bill', 'commission', false);
+	    $store_bill = new store_bill();
+	    
+	    for ($i=0; $i<$days+1; $i++) {
+	        $date = RC_Time::local_date('Y-m-d', $seconds_start + $i * 86400);
+	        $store_bill->bill_day(array('day' => $date));
+	    }
+	    
+	    return $this->showmessage('更新成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
+	    
 	}
 	
 	//账单详情

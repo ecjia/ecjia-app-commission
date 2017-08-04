@@ -7,7 +7,6 @@ ecjia.merchant.bill.init()
 <!-- {/block} -->
 
 <!-- {block name="home-content"} -->
-<!--销售明细-->
 <div class="alert alert-info">
 	<button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="fa fa-times" data-original-title="" title=""></i></button>
 	<strong>温馨提示：</strong>{t}当月账单未出请查看结算记录{/t}

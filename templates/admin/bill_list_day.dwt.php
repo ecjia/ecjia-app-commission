@@ -12,6 +12,9 @@ ecjia.admin.bill_list.searchFormDay();
 	<h3 class="heading">
 		<!-- {if $ur_here}{$ur_here}{/if} -->
 		<!-- {if $smarty.get.store_id && $smarty.get.refer neq 'store'} --><a class="btn plus_or_reply" href='{RC_Uri::url("commission/admin/day", "{$url_args}")}'><i class="fontello-icon-reply"></i>{t}返回全部{/t}</a><!-- {/if} -->
+		<!-- {if $action_link} -->
+		<a class="btn plus_or_reply data-pjax" href="{$action_link.href}" ><i class="fontello-icon-plus"></i>{$action_link.text}</a>
+		<!-- {/if} -->
 	</h3>
 </div>
 {if $smarty.get.refer neq 'store'}

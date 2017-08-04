@@ -71,7 +71,18 @@ class store_bill {
             RC_Logger::getLogger('bill_day')->error('统计数据异常或者为空');
             return false;
         }
-        return RC_DB::table('store_bill_day')->insert($data);
+        
+        //过滤重复
+        $exist_stores = RC_DB::table('store_bill_day')->where('day', $options['day'])->lists('store_id');
+        foreach ($data as $key => $val) {
+            if(in_array($val['store_id'], $exist_stores)) {
+                unset($data[$key]);
+            }
+        }
+        if ($data) {
+            return RC_DB::table('store_bill_day')->insert($data);
+        }
+        return true;
     }
     
     /**
@@ -94,12 +105,24 @@ class store_bill {
             RC_Logger::getLogger('bill_month')->error('统计数据异常或者为空');
             return false;
         }
-        //201603 000015 236
-        foreach ($data as &$bill) {
-            $bill['bill_sn'] = str_replace('-', '', $options['month']).sprintf("%06d",$bill['store_id']).mt_rand(111, 999);
-            $bill['add_time'] = RC_Time::gmtime();
+        
+        //过滤重复
+        $exist_stores = RC_DB::table('store_bill')->where('bill_month', $options['month'])->lists('store_id');
+        foreach ($data as $key => $val) {
+            if(in_array($val['store_id'], $exist_stores)) {
+                unset($data[$key]);
+            }
         }
-        return RC_DB::table('store_bill')->insert($data);
+        if ($data) {
+            //201603 000015 236
+            foreach ($data as &$bill) {
+                $bill['bill_sn'] = str_replace('-', '', $options['month']).sprintf("%06d",$bill['store_id']).mt_rand(111, 999);
+                $bill['add_time'] = RC_Time::gmtime();
+            }
+            return RC_DB::table('store_bill')->insert($data);
+        }
+        
+        return true;
     }
 }
 
