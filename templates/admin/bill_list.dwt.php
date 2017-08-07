@@ -99,7 +99,6 @@ ecjia.admin.bill_list.init();
     						    <th>{t}订单退款总金额{/t}</th>
     						    <th>{t}佣金比例{/t}</th>
     						    <th>{t}商家有效佣金{/t}</th>
-    						    <th>{t}操作{/t}</th>
     						 </tr>
     					</thead>
     
@@ -130,13 +129,11 @@ ecjia.admin.bill_list.init();
     						    <td>{t}0{/t}</td>
     						    <!-- {/if} -->
     						    <td>￥{$commission.bill_amount}</td>
-    						    <td> <a href='javascript:;' class="refresh_bill" data-id="{$commission.bill_id}" title="点击重新生成账单"><i class="fontello-icon-cw"></i></a></td>
     						</tr>
     						<!-- {foreachelse} -->
     					   <tr><td class="no-records" colspan="8">{t}没有找到任何记录{/t}</td></tr>
     					<!-- {/foreach} -->
     				</table>
-    				<input type="hidden" class="refresh_bill_url" value='{RC_Uri::url("commission/admin/bill_refresh")}'>
     				<!-- {$bill_list.page} -->
     			</div>
     		</div>

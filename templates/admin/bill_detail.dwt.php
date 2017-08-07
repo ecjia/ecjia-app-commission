@@ -1,5 +1,11 @@
 <!-- {extends file="ecjia.dwt.php"} -->
 
+<!-- {block name="footer"} -->
+<script type="text/javascript">
+ecjia.admin.bill_list.init();
+</script>
+<!-- {/block} -->
+
 <!-- {block name="main_content"} -->
 <div>
 	<h3 class="heading">
@@ -59,6 +65,10 @@
         					<!-- <a class="label btn-success hint--top" data-hint="打款时间:2015-25-65 14:12{$bill_info.pay_time_formate}">已打款</a> -->
     						 </td>
     					</tr>
+    					<tr>
+    						<td align="right"><div align="right"><strong>操作：</strong></div></td>
+    						<td colspan="3">账单不对？<a href='javascript:;' class="refresh_bill" data-id="{$bill_info.bill_id}" title="点击重新生成账单">重新生成<i class="fontello-icon-cw"></i></a>
+    						<input type="hidden" class="refresh_bill_url" value='{RC_Uri::url("commission/admin/bill_refresh")}'></td>
     				</tbody>
                 </table>
     		</div>
