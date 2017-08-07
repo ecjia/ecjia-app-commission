@@ -93,13 +93,19 @@ class store_bill {
      */
     public function bill_month($options) {
         if (!isset($options['month'])) {
-            $options['month'] = RC_Time::local_date('Y-m', RC_Time::gmtime() - 86400) ;
+            $month =  RC_Time::local_date('m')-1;
+            if ($month < 10) {
+                $month = '0'.$month;
+            }
+            $month = RC_Time::local_date('Y') . '-' . $month;
+            $options['month'] = $month;
         }
         
         RC_Logger::getLogger('bill_month')->info($options);
         
         //已有账单数据
         $data = RC_Model::model('commission/store_bill_day_model')->count_bill_month($options);
+        
         //         TODO:异常重新发起
         if (! $data) {
             RC_Logger::getLogger('bill_month')->error('统计数据异常或者为空');
