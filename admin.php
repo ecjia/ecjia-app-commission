@@ -180,7 +180,7 @@ class admin extends ecjia_admin {
 	    
 	    $store_bill->bill_month_refresh(array('month' => $bill_info['bill_month'], 'store_id' => $bill_info['store_id']));
 	    
-	    return $this->showmessage('更新成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
+	    return $this->showmessage('账单生成成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
 	    
 	}
 	

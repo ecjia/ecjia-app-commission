@@ -42,6 +42,7 @@
 				}
 				$.post(url,{id:id},function(rs){
 					if(rs.state == 'success') {
+						ecjia.admin.showmessage(rs);
 						location.reload(true);
 					} else {
 					    ecjia.admin.showmessage(rs);
