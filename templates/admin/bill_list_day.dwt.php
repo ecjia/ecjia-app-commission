@@ -71,7 +71,7 @@ ecjia.admin.bill_list.searchFormDay();
     						<tr >
     						    <th>{t}账单日期{/t}</th>
     						    {if $smarty.get.refer neq 'store'}<th>{t}商家名称{/t}</th>{/if}
-    						    <th>{t}订单有效总金额{/t}</th>
+    						    <th>{t}订单分成总金额{/t}</th>
     						    <th>{t}订单退款总金额{/t}</th>
     						    <th>{t}佣金比例{/t}</th>
     						    <th>{t}商家有效佣金{/t}</th>
