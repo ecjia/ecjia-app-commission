@@ -3,7 +3,7 @@
     app.bill_list = {
         init: function () {
             app.bill_list.searchForm();
-            app.bill_list.refresh_bill();
+            app.bill_list.toggle_view();
         },
  
         searchForm : function () {
@@ -27,29 +27,39 @@
 				ecjia.pjax(url + parmars);
 			});
 		},
-		refresh_bill : function () {
-			$('.refresh_bill').on('click', function(e) {
-				e.preventDefault();
-				var id = $(this).attr('data-id');
-				var url = $(".refresh_bill_url").val(); //请求链接
-				
-				if (id == 'undefind') id = '';
-				if (url == 'undefind') url = '';
-
-				var parmars = '';
-				if (id) {
-					parmars += '&id=' + id;
-				}
-				$.post(url,{id:id},function(rs){
-					if(rs.state == 'success') {
-						ecjia.admin.showmessage(rs);
-						setTimeout(function() { location.reload(true); }, 2000);
-					} else {
-					    ecjia.admin.showmessage(rs);
-					}
-			    });
-			});
-		},
+		toggle_view: function (option) {
+            $('.toggle_view').on('click', function (e) {
+                e.preventDefault();
+                var $this = $(this);
+                var href = $this.attr('href');
+                var val = $this.attr('data-id');
+                var option = {
+                    href: href,
+                    val: val
+                };
+                var url = option.href;
+                var id = {
+                    id: option.val
+                };
+                var msg = $this.attr("data-msg");
+                if (msg) {
+                    smoke.confirm(msg, function (e) {
+                        if (e) {
+                            $.post(url, id, function (data) {
+                                ecjia.admin.showmessage(data);
+                            }, 'json');
+                        }
+                    }, {
+                        ok: '确定',
+                        cancel: '取消'
+                    });
+                } else {
+                    $.post(url, id, function (data) {
+                        ecjia.admin.showmessage(data);
+                    }, 'json');
+                }
+            });
+        },
 		searchFormDay : function () {
 			$(".date").datepicker({
 				format: "yyyy-mm-dd",

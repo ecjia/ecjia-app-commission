@@ -67,8 +67,8 @@ ecjia.admin.bill_list.init();
     					</tr>
     					<tr>
     						<td align="right"><div align="right"><strong>操作：</strong></div></td>
-    						<td colspan="3">账单不对？<a href='javascript:;' class="refresh_bill" data-id="{$bill_info.bill_id}" title="点击重新生成账单">重新生成<i class="fontello-icon-cw"></i></a>
-    						<input type="hidden" class="refresh_bill_url" value='{RC_Uri::url("commission/admin/bill_refresh")}'></td>
+    						<td colspan="3">账单不对？<a href='{RC_Uri::url("commission/admin/bill_refresh")}' class="cursor_pointer toggle_view" data-id="{$bill_info.bill_id}" data-msg="您确定要重新生成账单吗？" title="点击重新生成账单">重新生成<i class="fontello-icon-cw"></i></a>
+    						</td>
     				</tbody>
                 </table>
     		</div>
