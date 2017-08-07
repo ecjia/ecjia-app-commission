@@ -303,8 +303,8 @@ class admin extends ecjia_admin {
 	    $this->assign('bill_info', $bill_info);
 	    
 	    //明细
-	    $filter['start_date'] = RC_Time::local_strtotime($bill_info['bill_month'].'-01');
-	    $filter['end_date'] = RC_Time::local_strtotime(RC_Time::local_date('Y-m-d', RC_Time::local_strtotime('+1 month', $filter['start_date']))) - 1;
+	    $filter['start_date'] = RC_Time::local_strtotime($bill_info['bill_month']);
+	    $filter['end_date'] = RC_Time::local_strtotime(RC_Time::local_date('Y-m',$filter['start_date'] + 86400*31).'-01')-1;
 	    
 	    $record_list = $this->db_store_bill_detail->get_bill_record($bill_info['store_id'], $_GET['page'], 30, $filter, 1);
 	    $this->assign('lang_os', RC_Lang::get('orders::order.os'));
