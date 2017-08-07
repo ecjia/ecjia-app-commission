@@ -43,7 +43,7 @@
 				$.post(url,{id:id},function(rs){
 					if(rs.state == 'success') {
 						ecjia.admin.showmessage(rs);
-						location.reload(true);
+						setTimeout(function() { location.reload(true); }, 2000);
 					} else {
 					    ecjia.admin.showmessage(rs);
 					}
