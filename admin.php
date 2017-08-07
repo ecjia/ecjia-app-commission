@@ -172,6 +172,9 @@ class admin extends ecjia_admin {
 	    if (empty($bill_info)) {
 	        return $this->showmessage('账单信息不存在', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 	    }
+	    if ($bill_info['bill_month'] == RC_Time::local_date('Y-m')) {
+	        return $this->showmessage('当月交易未完成，账单暂不能生成', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+	    }
 	    
 	    //重新生成
 	    set_time_limit(300);
