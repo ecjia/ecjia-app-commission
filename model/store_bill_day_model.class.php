@@ -125,7 +125,7 @@ class store_bill_day_model extends Component_Model_Model {
 	    $db_bill_day = RC_DB::table('store_bill_day')->groupBy('store_id');
 	     
 	    if (isset($options['store_id'])) {
-	        $db_bill_day->having('store_id', $options['store_id']);
+	        $db_bill_day->having('store_id', '=', $options['store_id']);
 	    }
 	     
 	    if (!empty($filter['start_date']) && !empty($filter['end_date'])) {

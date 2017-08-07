@@ -3,6 +3,7 @@
     app.bill_list = {
         init: function () {
             app.bill_list.searchForm();
+            app.bill_list.refresh_bill();
         },
  
         searchForm : function () {
@@ -24,6 +25,28 @@
 					parmars += '&merchant_keywords=' + merchant_keywords;
 				}
 				ecjia.pjax(url + parmars);
+			});
+		},
+		refresh_bill : function () {
+			$('.refresh_bill').on('click', function(e) {
+				e.preventDefault();
+				var id = $(this).attr('data-id');
+				var url = $(".refresh_bill_url").val(); //请求链接
+				
+				if (id == 'undefind') id = '';
+				if (url == 'undefind') url = '';
+
+				var parmars = '';
+				if (id) {
+					parmars += '&id=' + id;
+				}
+				$.post(url,{id:id},function(rs){
+					if(rs.state == 'success') {
+						location.reload(true);
+					} else {
+					    ecjia.admin.showmessage(rs);
+					}
+			    });
 			});
 		},
 		searchFormDay : function () {

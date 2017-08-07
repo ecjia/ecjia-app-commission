@@ -99,12 +99,13 @@ ecjia.admin.bill_list.init();
     						    <th>{t}订单退款总金额{/t}</th>
     						    <th>{t}佣金比例{/t}</th>
     						    <th>{t}商家有效佣金{/t}</th>
+    						    <th>{t}操作{/t}</th>
     						 </tr>
     					</thead>
     
        				 <!-- {foreach from=$bill_list.item item=commission} -->
     						<tr>
-    							<td><span><input type="checkbox" name="checkboxes[]" class="checkbox" value="{$commission.id}"/></span></td>
+    							<td><span><input type="checkbox" name="checkboxes[]" class="checkbox" value="{$commission.bill_id}"/></span></td>
     							<td>
     							<a {if $smarty.get.refer eq 'store'} target="_blank"{else}class="data-pjax"{/if} href='{RC_Uri::url("commission/admin/detail","id={$commission.bill_id}{if $smarty.get.store_id}&store_id={$smarty.get.store_id}{/if}")}' title="账单详情">
     								{$commission.bill_sn}
@@ -129,11 +130,13 @@ ecjia.admin.bill_list.init();
     						    <td>{t}0{/t}</td>
     						    <!-- {/if} -->
     						    <td>￥{$commission.bill_amount}</td>
+    						    <td> <a href='javascript:;' class="refresh_bill" data-id="{$commission.bill_id}" title="点击重新生成账单"><i class="fontello-icon-cw"></i></a></td>
     						</tr>
     						<!-- {foreachelse} -->
-    					   <tr><td class="no-records" colspan="7">{t}没有找到任何记录{/t}</td></tr>
+    					   <tr><td class="no-records" colspan="8">{t}没有找到任何记录{/t}</td></tr>
     					<!-- {/foreach} -->
     				</table>
+    				<input type="hidden" class="refresh_bill_url" value='{RC_Uri::url("commission/admin/bill_refresh")}'>
     				<!-- {$bill_list.page} -->
     			</div>
     		</div>

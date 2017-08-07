@@ -161,6 +161,29 @@ class admin extends ecjia_admin {
 	     
 	}
 	
+	public function bill_refresh() {
+	    /* 检查权限 */
+	    $this->admin_priv('commission_refresh');
+	    $id = $_POST['id'];
+	    if(empty($id)) {
+	        return $this->showmessage('参数错误', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+	    }
+	    $bill_info = RC_DB::table('store_bill')->where('bill_id', $id)->first();
+	    if (empty($bill_info)) {
+	        return $this->showmessage('账单信息不存在', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+	    }
+	    
+	    //重新生成
+	    set_time_limit(300);
+	    RC_Loader::load_app_class('store_bill', 'commission', false);
+	    $store_bill = new store_bill();
+	    
+	    $store_bill->bill_month_refresh(array('month' => $bill_info['bill_month'], 'store_id' => $bill_info['store_id']));
+	    
+	    return $this->showmessage('更新成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
+	    
+	}
+	
 	public function day() {
 	    /* 检查权限 */
 	    $this->admin_priv('commission_day_manage');
@@ -280,8 +303,8 @@ class admin extends ecjia_admin {
 	    $this->assign('bill_info', $bill_info);
 	    
 	    //明细
-	    $filter['start_date'] = RC_Time::local_strtotime($bill_info['bill_month']);
-	    $filter['end_date'] = RC_Time::local_strtotime(RC_Time::local_date('Y-m-d', strtotime('+1 month', $filter['start_date']))) - 1;
+	    $filter['start_date'] = RC_Time::local_strtotime($bill_info['bill_month'].'-01');
+	    $filter['end_date'] = RC_Time::local_strtotime(RC_Time::local_date('Y-m-d', RC_Time::local_strtotime('+1 month', $filter['start_date']))) - 1;
 	    
 	    $record_list = $this->db_store_bill_detail->get_bill_record($bill_info['store_id'], $_GET['page'], 30, $filter, 1);
 	    $this->assign('lang_os', RC_Lang::get('orders::order.os'));
