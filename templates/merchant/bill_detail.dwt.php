@@ -37,7 +37,7 @@ ecjia.merchant.bill.init()
 							<tr>
 								<td align="right">入账订单数：</td>
 								<td>{$bill_info.order_count}</td>
-								<td align="right">订单总金额：</td>
+								<td align="right">入账总金额：</td>
 								<td>￥{$bill_info.order_amount}</td>
 							</tr>
 							<tr>

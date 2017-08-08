@@ -37,7 +37,7 @@ ecjia.admin.bill_pay.init();
     					<tr>
     						<td align="right"><div align="right"><strong>入账订单数：</strong></div></td>
     						<td>{$bill_info.order_count}</td>
-    						<td align="right"><div align="right"><strong>佣金总金额：</strong></div></td>
+    						<td align="right"><div align="right"><strong>入账总金额：</strong></div></td>
     						<td>￥{$bill_info.order_amount}</td>
     					</tr>
     					<tr>

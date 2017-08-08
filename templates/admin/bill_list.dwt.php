@@ -95,8 +95,8 @@ ecjia.admin.bill_list.init();
     							<th class="table_checkbox"><input type="checkbox" name="select_rows" data-toggle="selectall" data-children=".checkbox"/></th>
     						    <th>{t}账单编号{/t}</th>
     						    {if $smarty.get.refer neq 'store'}<th>{t}商家名称{/t}</th>{/if}
-    						    <th>{t}订单分成总金额{/t}</th>
-    						    <th>{t}订单退款总金额{/t}</th>
+    						    <th>{t}入账金额{/t}</th>
+    						    <th>{t}退款金额{/t}</th>
     						    <th>{t}佣金比例{/t}</th>
     						    <th>{t}商家有效佣金{/t}</th>
     						 </tr>
