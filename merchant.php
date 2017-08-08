@@ -108,6 +108,35 @@ class merchant extends ecjia_merchant {
 		$this->display('bill_list.dwt');
 	}
 	
+	
+	public function day() {
+	    /* 检查权限 */
+	    $this->admin_priv('commission_day');
+	    ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('商家结算'), RC_Uri::url('commission/merchant/init')));
+	    ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('每日账单')));
+	    
+	    $this->assign('ur_here', '每日账单');
+	    $this->assign('search_action', RC_Uri::url('commission/merchant/day'));
+	    
+	    // 		/* 时间参数 */
+	    $filter['start_date'] = empty($_GET['start_date']) ? null : RC_Time::local_date('Y-m-d', RC_Time::local_strtotime($_GET['start_date']));
+	    $filter['end_date']   = empty($_GET['end_date']) ? null : RC_Time::local_date('Y-m-d', RC_Time::local_strtotime($_GET['end_date']));
+	    $filter['type']       = $_GET['type'];
+	    $filter['keywords'] 		 = empty ($_GET['keywords']) 		  ? '' : trim($_GET['keywords']);
+	    $filter['merchant_keywords'] = empty ($_GET['merchant_keywords']) ? '' : trim($_GET['merchant_keywords']);
+	    
+	    $store_id = $_SESSION['store_id'];
+	    
+	    if ($filter['start_date'] >  $filter['end_date']) {
+	        return $this->showmessage('开始时间不能大于结束时间', ecjia::MSGTYPE_HTML | ecjia::MSGSTAT_ERROR);
+	    }
+	    
+	    $bill_list = $this->db_store_bill_day->get_billday_list($store_id, $_GET['page'], 20, $filter);
+	    $this->assign('bill_list', $bill_list);
+	    
+	    $this->display('bill_list_day.dwt');
+	}
+	
 	public function detail() {
 	    /* 检查权限 */
         $this->admin_priv('commission_detail');

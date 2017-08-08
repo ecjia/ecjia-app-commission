@@ -71,8 +71,8 @@ ecjia.admin.bill_list.searchFormDay();
     						<tr >
     						    <th>{t}账单日期{/t}</th>
     						    {if $smarty.get.refer neq 'store'}<th>{t}商家名称{/t}</th>{/if}
-    						    <th>{t}订单分成总金额{/t}</th>
-    						    <th>{t}订单退款总金额{/t}</th>
+    						    <th>{t}入账金额{/t}</th>
+    						    <th>{t}退款金额{/t}</th>
     						    <th>{t}佣金比例{/t}</th>
     						    <th>{t}商家有效佣金{/t}</th>
     						 </tr>
@@ -99,7 +99,7 @@ ecjia.admin.bill_list.searchFormDay();
     						    <!-- {if $commission.percent_value} -->
     						    <td>{$commission.percent_value}%</td>
     						    <!-- {else} -->
-    						    <td>{t}0{/t}</td>
+    						    <td>{t}100%{/t}</td>
     						    <!-- {/if} -->
     						    <td>￥{$commission.brokerage_amount}</td>
     						</tr>
