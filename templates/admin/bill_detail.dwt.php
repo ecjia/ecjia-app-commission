@@ -74,14 +74,47 @@ ecjia.admin.bill_list.init();
     		</div>
         </div>
 
-        <div class="accordion-group">
-    		<div class="accordion-heading accordion-heading-url">
-    			<div class="accordion-toggle acc-in" data-toggle="collapse" data-target="#collapseFour">
-    				<strong>账单明细</strong>
-    			</div>
-    		</div>
-    		<div class="accordion-body in collapse" id="collapseFour">
-    		     <table class="table table-striped table-advance table-hover m_b0">
+        
+        <div class="tabbable">
+			<ul class="nav nav-tabs">
+				<li class="{if !$smarty.get.page }active{/if}"><a href="#tab1" data-toggle="tab">每日账单</a></li>
+				<li class="{if $smarty.get.page }active{/if}"><a href="#tab2" data-toggle="tab">账单明细</a></li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane {if !$smarty.get.page }active{/if}" id="tab1">
+					<table class="table table-striped table-advance table-hover m_b0">
+        			<thead>
+        				<tr>
+        					<th>{t}账单日期{/t}</th>
+						    <th>{t}入账金额{/t}</th>
+						    <th>{t}退款金额{/t}</th>
+						    <th>{t}佣金比例{/t}</th>
+						    <th>{t}商家有效佣金{/t}</th>
+        				</tr>
+        			</thead>
+        			<tbody>
+        			<!-- {foreach from=$bill_list.item item=commission} -->
+    						<tr>
+    							<td>
+    							{$commission.day}
+    							</td>
+    						    <td class="ecjiaf-tar">￥{$commission.order_amount}</td>
+    						    <td class="ecjiafc-red">￥{$commission.refund_amount}</td>
+    						    <!-- {if $commission.percent_value} -->
+    						    <td>{$commission.percent_value}%</td>
+    						    <!-- {else} -->
+    						    <td>{t}100%{/t}</td>
+    						    <!-- {/if} -->
+    						    <td>￥{$commission.brokerage_amount}</td>
+    						</tr>
+    						<!-- {foreachelse} -->
+    					   <tr><td class="no-records" colspan="7">{t}没有找到任何记录{/t}</td></tr>
+    					<!-- {/foreach} -->
+        			</tbody>
+        		</table>
+				</div>
+				<div class="tab-pane {if $smarty.get.page }active{/if}" id="tab2">
+					<table class="table table-striped table-advance table-hover m_b0">
         			<thead>
         				<tr>
         					<th class="w80">{t}类型{/t}</th>
@@ -119,9 +152,11 @@ ecjia.admin.bill_list.init();
         		  	<!-- {/foreach} -->
         			</tbody>
         		</table>
-    		</div>
-        </div>
-        <!-- {$record_list.page} -->
+        		<!-- {$record_list.page} -->
+				</div>
+			</div>
+		</div>
+				
     </div>
 </div>
 <!-- {/block} -->

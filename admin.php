@@ -305,6 +305,10 @@ class admin extends ecjia_admin {
 	    $this->assign('ur_here', $bill_info['bill_month'].'账单详情');
 	    $this->assign('bill_info', $bill_info);
 	    
+	    //每日
+	    $bill_list = $this->db_store_bill_day->get_billday_list($bill_info['store_id'], 1, 40, array('start_date' => $bill_info['bill_month'].'-01', 'end_date' => $bill_info['bill_month'].'-31'));
+	    $this->assign('bill_list', $bill_list);
+	    
 	    //明细
 	    $filter['start_date'] = RC_Time::local_strtotime($bill_info['bill_month']);
 	    $filter['end_date'] = RC_Time::local_strtotime(RC_Time::local_date('Y-m',$filter['start_date'] + 86400*31).'-01')-1;
