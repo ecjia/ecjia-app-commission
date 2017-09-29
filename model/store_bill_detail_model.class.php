@@ -223,22 +223,26 @@ class store_bill_detail_model extends Component_Model_Model {
 
 	    if ($row) {
 	        foreach ($row as $key => &$val) {
-// 	        	if($val['order_type'] == 3){
-// 	        		$db_quickpay_orders = RC_DB::table('quickpay_orders as qo');
-// 	        		$db_quickpay_orders->leftJoin('users as u', RC_DB::raw('u.user_id'), '=', RC_DB::raw('qo.user_id'));
-// 	        		$fields = " qo.store_id, qo.order_id, qo.order_sn, qo.add_time as order_add_time, qo.order_status, qo.shipping_status, qo.order_amount, qo.money_paid, qo.is_delete,";
-// 	        		$fields .= " (money_paid + surplus + integral_money) AS total_fee, ";
-// 	        		$fields .= " qo.shipping_time, qo.auto_delivery_time, qo.pay_status,";
-// 	        	    $fields .= " IFNULL(u.user_name, '" . RC_Lang::get('store::store.anonymous'). "') AS buyer ";
-// 	        	} else {
-// 	        		$db_order_info = RC_DB::table('order_info as oi');
-// 	        		$db_order_info->leftJoin('users as u', RC_DB::raw('u.user_id'), '=', RC_DB::raw('oi.user_id'));
-//         			$fields = " oi.store_id, oi.order_id, oi.order_sn, oi.add_time as order_add_time, oi.order_status, oi.shipping_status, oi.order_amount, oi.money_paid, oi.is_delete,";
-//         			$fields .= " (money_paid + surplus + integral_money) AS total_fee, ";
-//         			$fields .= " oi.shipping_time, oi.auto_delivery_time, oi.pay_status,";
-//         			$fields .= " IFNULL(u.user_name, '" . RC_Lang::get('store::store.anonymous'). "') AS buyer ";
-//         			$aa = $db_order_info->first();
-// 	        	}
+	        	if($val['order_type'] == 3){
+	        	    //闪惠订单
+	        		$db_quickpay_orders = RC_DB::table('quickpay_orders as qo');
+	        		$db_quickpay_orders->leftJoin('users as u', RC_DB::raw('u.user_id'), '=', RC_DB::raw('qo.user_id'));
+	        		$fields = " qo.store_id, qo.order_id, qo.order_sn, qo.add_time as order_add_time, qo.order_status, qo.order_amount,";
+	        		$fields .= " qo.pay_status,";
+	        	    $fields .= " u.user_name AS buyer ";
+	        	    $order_info = $db_quickpay_orders->first();
+	        	    $row[$key] = array_merge($row[$key], $order_info);
+	        	} else {
+	        	    //普通订单（含退款）
+	        		$db_order_info = RC_DB::table('order_info as oi');
+	        		$db_order_info->leftJoin('users as u', RC_DB::raw('u.user_id'), '=', RC_DB::raw('oi.user_id'));
+        			$fields = " oi.store_id, oi.order_id, oi.order_sn, oi.add_time as order_add_time, oi.order_status, oi.shipping_status, oi.order_amount, oi.money_paid, oi.is_delete,";
+        			$fields .= " (money_paid + surplus + integral_money) AS total_fee, ";
+        			$fields .= " oi.shipping_time, oi.auto_delivery_time, oi.pay_status,";
+        			$fields .= " IFNULL(u.user_name, '" . RC_Lang::get('store::store.anonymous'). "') AS buyer ";
+        			$order_info = $db_order_info->first();
+        			$row[$key] = array_merge($row[$key], $order_info);
+	        	}
 	        	
 	            $val['order_add_time_formate'] = $val['order_add_time'] ? RC_Time::local_date('Y-m-d H:i', $val['order_add_time']) : '';
 	            $val['add_time_formate'] = $val['order_add_time'] ? RC_Time::local_date('Y-m-d H:i', $val['add_time']) : '';
