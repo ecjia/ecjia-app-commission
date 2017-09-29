@@ -226,8 +226,7 @@ class store_bill_detail_model extends Component_Model_Model {
 	        	if($val['order_type'] == 3){
 	        	    //闪惠订单
 	        	    $order_info = RC_DB::table('quickpay_orders')->where('order_id', $val['order_id'])->
-	        	    select('user_id','order_sn','order_amount as total_fee','add_time as order_add_time', 'order_status','pay_status','verification_status')->
-	        	    first();
+	        	    select('user_id','order_sn','order_amount as total_fee','add_time as order_add_time', 'order_status','pay_status','verification_status')->first();
 	        	    $order_info['buyer'] = RC_DB::TABLE('users')->where('user_id', $order_info['user_id'])->pluck('user_name as buyer');
 	        	    $row[$key] = array_merge($row[$key], $order_info);
 	        	} else {
@@ -243,6 +242,14 @@ class store_bill_detail_model extends Component_Model_Model {
 	        	}
 	        	$val['order_add_time'] = RC_Time::local_date('Y-m-d H:i', $val['order_add_time']);
 	        	$val['add_time'] = RC_Time::local_date('Y-m-d H:i', $val['add_time']);
+
+	        	if($val['order_type'] == Ecjia\App\Commission\Constant::ORDER_BUY) {
+	        		$val['order_type_name'] = '购物订单';
+	        	} elseif ($val['order_type'] == Ecjia\App\Commission\Constant::ORDER_REFUNDS) {
+	        		$val['order_type_name'] = '退款';
+	        	} else {
+	        		$val['order_type_name'] = '闪惠订单';
+	        	}
 	        }
 	    }
 	    return array('item' => $row, 'filter' => $filter, 'page' => $page->show(2), 'desc' => $page->page_desc());
