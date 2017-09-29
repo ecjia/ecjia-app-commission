@@ -224,7 +224,7 @@ class store_bill_detail_model extends Component_Model_Model {
 	    RC_Logger::getLogger('info')->info('store_bill_row:');
 	    RC_Logger::getLogger('info')->info($row);
 	    if ($row) {
-	        foreach ($row as $key => &$val) {
+	        foreach ($row as $key => $val) {
 	        	if($val['order_type'] == 11) {
 	        	    //闪惠订单
 	        	    $order_info = RC_DB::table('quickpay_orders')->where('order_id', $val['order_id'])->
@@ -245,17 +245,17 @@ class store_bill_detail_model extends Component_Model_Model {
 	        	    RC_Logger::getLogger('info')->info('store_bill_error:');
 	        	    RC_Logger::getLogger('info')->info($val);
 	        	}
-	        	$val['order_add_time'] = RC_Time::local_date('Y-m-d H:i', $val['order_add_time']);
-	        	$val['add_time'] = RC_Time::local_date('Y-m-d H:i', $val['add_time']);
+	        	$row[$key]['order_add_time'] = RC_Time::local_date('Y-m-d H:i', $val['order_add_time']);
+	        	$row[$key]['add_time'] = RC_Time::local_date('Y-m-d H:i', $val['add_time']);
 
 	        	if($val['order_type'] == Ecjia\App\Commission\Constant::ORDER_BUY) {
-	        		$val['order_type_name'] = '购物订单';
+	        		$row[$key]['order_type_name'] = '购物订单';
 	        	} elseif ($val['order_type'] == Ecjia\App\Commission\Constant::ORDER_REFUNDS) {
-	        		$val['order_type_name'] = '退款';
+	        		$row[$key]['order_type_name'] = '退款';
 	        	} elseif ($val['order_type'] == Ecjia\App\Commission\Constant::ORDER_QUICKYPAY){
-	        		$val['order_type_name'] = '闪惠订单';
+	        		$row[$key]['order_type_name'] = '闪惠订单';
 	        	} else {
-	        	    $val['order_type_name'] = '未知';
+	        	    $row[$key]['order_type_name'] = '未知';
 	        	}
 	        }
 	    }
