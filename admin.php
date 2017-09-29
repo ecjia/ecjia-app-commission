@@ -495,6 +495,8 @@ class admin extends ecjia_admin {
 	    }
 	     
 	    $record_list = $this->db_store_bill_detail->get_bill_record($store_id, $_GET['page'], 20, $filter, 1);
+	    RC_Logger::getLogger('info')->info('commission_error:'.$_GET['page']);
+	    RC_Logger::getLogger('info')->info($record_list);
 	    $this->assign('lang_os', RC_Lang::get('orders::order.os'));
 	    $this->assign('lang_ps', RC_Lang::get('orders::order.ps'));
 	    $this->assign('lang_ss', RC_Lang::get('orders::order.ss'));
