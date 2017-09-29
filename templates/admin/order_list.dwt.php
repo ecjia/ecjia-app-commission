@@ -46,7 +46,7 @@
 
    				 	<!-- {foreach from=$record_list.item item=list} -->
 					<tr>
-						<td>{if $list.order_type_name}</td>
+						<td>{$list.order_type_name}</td>
 						<td>
 							{assign var=order_url value=RC_Uri::url('orders/admin/info',"order_id={$list.order_id}")}
 						     <a href="{$order_url}" target="_blank">{$list.order_sn}</a>
