@@ -236,7 +236,7 @@ class store_bill_detail_model extends Component_Model_Model {
         			$fields .= " (money_paid + surplus + integral_money) AS total_fee, ";
         			$fields .= " oi.shipping_time, oi.auto_delivery_time, oi.pay_status,";
         			$fields .= " IFNULL(u.user_name, '" . RC_Lang::get('store::store.anonymous'). "') AS buyer ";
-        			$order_info = $db_order_info->where('order_id', $val['order_id'])->first();
+        			$order_info = $db_order_info->where('order_id', $val['order_id'])->select(RC_DB::raw($fields))->first();
         			$row[$key] = array_merge($row[$key], $order_info);
 	        	}
 	        	$val['order_add_time'] = RC_Time::local_date('Y-m-d H:i', $val['order_add_time']);
