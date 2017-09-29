@@ -225,7 +225,9 @@ class store_bill_detail_model extends Component_Model_Model {
 	        foreach ($row as $key => &$val) {
 	        	if($val['order_type'] == 3){
 	        	    //闪惠订单
-	        	    $order_info = RC_DB::table('quickpay_orders')->where('order_id', $val['order_id'])->select('user_id','order_sn','order_amount as total_fee','add_time as order_add_time')->first();
+	        	    $order_info = RC_DB::table('quickpay_orders')->where('order_id', $val['order_id'])->
+	        	    select('user_id','order_sn','order_amount as total_fee','add_time as order_add_time', 'order_status','pay_status','verification_status')->
+	        	    first();
 	        	    $order_info['buyer'] = RC_DB::TABLE('users')->where('user_id', $order_info['user_id'])->pluck('user_name as buyer');
 	        	    $row[$key] = array_merge($row[$key], $order_info);
 	        	} else {
