@@ -199,9 +199,9 @@ class merchant extends ecjia_merchant {
 	    $this->assign('lang_ps', RC_Lang::get('orders::order.ps'));
 	    $this->assign('lang_ss', RC_Lang::get('orders::order.ss'));
 	    
-	    $this->assign('lang_os', RC_Lang::get('quickpay::order.os'));
-	    $this->assign('lang_ps', RC_Lang::get('quickpay::order.ps'));
-	    $this->assign('lang_vs', RC_Lang::get('quickpay::order.vs'));
+	    $this->assign('lang_os_quickpay', RC_Lang::get('quickpay::order.os'));
+	    $this->assign('lang_ps_quickpay', RC_Lang::get('quickpay::order.ps'));
+	    $this->assign('lang_vs_quickpay', RC_Lang::get('quickpay::order.vs'));
 	    
 	    $this->assign('record_list', $record_list);
 	    

@@ -62,7 +62,7 @@ ecjia.merchant.bill.record()
 	        					<td>{$list.order_add_time}</td>
 	        					<td>￥{$list.total_fee}</td>
 	        					{if $list.order_type eq 3}
-	        						<td>{$lang_os[$list.order_status]},{$lang_ps[$list.pay_status]},{$lang_vs[$list.verification_status]}</td>
+	        						<td>{$lang_os_quickpay[$list.order_status]},{$lang_ps_quickpay[$list.pay_status]},{$lang_vs_quickpay[$list.verification_status]}</td>
 	        					{else}
 	        						<td>{$lang_os[$list.order_status]},{$lang_ps[$list.pay_status]},{$lang_ss[$list.shipping_status]}</td>
 	        					{/if}
