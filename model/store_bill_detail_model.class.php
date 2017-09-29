@@ -223,7 +223,7 @@ class store_bill_detail_model extends Component_Model_Model {
 	    
 	    if ($row) {
 	        foreach ($row as $key => &$val) {
-	        	if($val['order_type'] == 3){
+	        	if($val['order_type'] == 11){
 	        	    //闪惠订单
 	        	    $order_info = RC_DB::table('quickpay_orders')->where('order_id', $val['order_id'])->
 	        	    select('user_id','order_sn','order_amount as total_fee','add_time as order_add_time', 'order_status','pay_status','verification_status')->first();
