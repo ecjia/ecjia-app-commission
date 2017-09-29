@@ -54,22 +54,22 @@ class Constant
 	
     /**
      * 购物订单支付
-     * @var string
+     * @var integer
      */
-    const PAY_ORDER = '1';
+    const ORDER_BUY = 1;
     
     /**
      * 购物订单退款
-     * @var string
+     * @var integer
      */
-    const PAY_REFUNDS = '2';
+    const ORDER_REFUNDS = 2;
     
     
     /**
      * 闪惠订单
-     * @var string
+     * @var integer
      */
-    const PAY_QUICKYPAY = '11';
+    const ORDER_QUICKYPAY = 11;
     
     
     
