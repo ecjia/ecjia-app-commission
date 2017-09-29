@@ -221,8 +221,6 @@ class store_bill_detail_model extends Component_Model_Model {
 		    ->skip($page->start_id-1)
 		    ->get();
 	    
-	    RC_Logger::getLogger('info')->info('store_bill_row:');
-	    RC_Logger::getLogger('info')->info($row);
 	    if ($row) {
 	        foreach ($row as $key => $val) {
 	        	if($val['order_type'] == 11) {
