@@ -206,23 +206,15 @@ class store_bill_detail_model extends Component_Model_Model {
 	            $db_bill_detail->whereRaw('bd.add_time <='.$filter['end_date']);
 	        }
 	    }
-	    $db_bill_detail->leftJoin('order_info as oi', RC_DB::raw('bd.order_id'), '=', RC_DB::raw('oi.order_id'));
+  
 	    $count = $db_bill_detail->count('detail_id');
 	    if($is_admin) {
 	        $page = new ecjia_page($count, $page_size, 3);
 	    } else {
 	        $page = new ecjia_merchant_page($count, $page_size, 3);
 	    }
-	    
-	    $fields = " oi.store_id, oi.order_id, oi.order_sn, oi.add_time as order_add_time, oi.order_status, oi.shipping_status, oi.order_amount, oi.money_paid, oi.is_delete,";
-	    
-	    $fields .= " (money_paid + surplus + integral_money) AS total_fee, ";
-	    $fields .= " oi.shipping_time, oi.auto_delivery_time, oi.pay_status,";
-	    $fields .= " bd.*,s.merchants_name,";
-	    $fields .= " IFNULL(u.user_name, '" . RC_Lang::get('store::store.anonymous'). "') AS buyer ";
-
+	    $fields .= " bd.*,s.merchants_name";
 	    $row = $db_bill_detail
-		    ->leftJoin('users as u', RC_DB::raw('u.user_id'), '=', RC_DB::raw('oi.user_id'))
 		    ->select(RC_DB::raw($fields))
 		    ->take($page_size)
 		    ->orderBy(RC_DB::raw('bd.add_time'), 'desc')
@@ -231,6 +223,23 @@ class store_bill_detail_model extends Component_Model_Model {
 
 	    if ($row) {
 	        foreach ($row as $key => &$val) {
+// 	        	if($val['order_type'] == 3){
+// 	        		$db_quickpay_orders = RC_DB::table('quickpay_orders as qo');
+// 	        		$db_quickpay_orders->leftJoin('users as u', RC_DB::raw('u.user_id'), '=', RC_DB::raw('qo.user_id'));
+// 	        		$fields = " qo.store_id, qo.order_id, qo.order_sn, qo.add_time as order_add_time, qo.order_status, qo.shipping_status, qo.order_amount, qo.money_paid, qo.is_delete,";
+// 	        		$fields .= " (money_paid + surplus + integral_money) AS total_fee, ";
+// 	        		$fields .= " qo.shipping_time, qo.auto_delivery_time, qo.pay_status,";
+// 	        	    $fields .= " IFNULL(u.user_name, '" . RC_Lang::get('store::store.anonymous'). "') AS buyer ";
+// 	        	} else {
+// 	        		$db_order_info = RC_DB::table('order_info as oi');
+// 	        		$db_order_info->leftJoin('users as u', RC_DB::raw('u.user_id'), '=', RC_DB::raw('oi.user_id'));
+//         			$fields = " oi.store_id, oi.order_id, oi.order_sn, oi.add_time as order_add_time, oi.order_status, oi.shipping_status, oi.order_amount, oi.money_paid, oi.is_delete,";
+//         			$fields .= " (money_paid + surplus + integral_money) AS total_fee, ";
+//         			$fields .= " oi.shipping_time, oi.auto_delivery_time, oi.pay_status,";
+//         			$fields .= " IFNULL(u.user_name, '" . RC_Lang::get('store::store.anonymous'). "') AS buyer ";
+//         			$aa = $db_order_info->first();
+// 	        	}
+	        	
 	            $val['order_add_time_formate'] = $val['order_add_time'] ? RC_Time::local_date('Y-m-d H:i', $val['order_add_time']) : '';
 	            $val['add_time_formate'] = $val['order_add_time'] ? RC_Time::local_date('Y-m-d H:i', $val['add_time']) : '';
 	        }
