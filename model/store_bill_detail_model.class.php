@@ -222,7 +222,7 @@ class store_bill_detail_model extends Component_Model_Model {
 		    ->get();
 	    
 	    if ($row) {
-	        foreach ($row as $key => $val) {
+	        foreach ($row as $key => &$val) {
 	        	if($val['order_type'] == 3){
 	        	    //闪惠订单
 	        	    $order_info = RC_DB::table('quickpay_orders')->where('order_id', $val['order_id'])->select('user_id','order_sn','order_amount as total_fee','add_time as order_add_time')->first();
@@ -239,6 +239,8 @@ class store_bill_detail_model extends Component_Model_Model {
         			$order_info = $db_order_info->where('order_id', $val['order_id'])->first();
         			$row[$key] = array_merge($row[$key], $order_info);
 	        	}
+	        	$val['order_add_time'] = RC_Time::local_date('Y-m-d H:i', $val['order_add_time']);
+	        	$val['add_time'] = RC_Time::local_date('Y-m-d H:i', $val['add_time']);
 	        }
 	    }
 	    return array('item' => $row, 'filter' => $filter, 'page' => $page->show(2), 'desc' => $page->page_desc());

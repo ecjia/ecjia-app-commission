@@ -56,13 +56,13 @@
 					     	<a href='{RC_Uri::url("commission/admin/order","store_id={$list.store_id}")}' title="查看此商家订单分成">{$list.merchants_name}</a>
 					     	<a href='{$store_url}' title="查看商家资料" target="_blank"><i class="fontello-icon-info-circled"></i></a>
 					    </td>
-					    <td>{$list.order_add_time_formate}</td>
+					    <td>{$list.order_add_time}</td>
 					    <td>￥{$list.total_fee}</td>
 					    <td>{$list.percent_value}%</td>
 						<td>
 							{if $list.order_type eq 1 || $list.order_type eq 3}￥{$list.brokerage_amount}{/if}{if $list.order_type eq 2}<span class="ecjiafc-red">￥{$list.brokerage_amount}</span>{/if}
 						</td>
-						<td>{$list.add_time_formate}</td>
+						<td>{$list.add_time}</td>
 					</tr>
 					<!-- {foreachelse} -->
 				   	<tr><td class="no-records" colspan="8">{t}没有找到任何记录{/t}</td></tr>
