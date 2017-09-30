@@ -95,7 +95,7 @@ class admin extends ecjia_admin {
 		$this->assign('ur_here', '账单列表');
 		$this->assign('action_link',	array('text' => '账单生成', 'href' => RC_Uri::url('commission/admin/bill_update')));
 		
-// 		/* 时间参数 */
+ 		/* 时间参数 */
 		$filter['start_date'] = empty($_GET['start_date']) ? null : RC_Time::local_date('Y-m', RC_Time::local_strtotime($_GET['start_date']));
 		$filter['end_date']   = empty($_GET['end_date']) ? null : RC_Time::local_date('Y-m', RC_Time::local_strtotime($_GET['end_date']));
 		$filter['type']       = $_GET['type'];
