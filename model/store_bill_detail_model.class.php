@@ -242,9 +242,10 @@ class store_bill_detail_model extends Component_Model_Model {
 	        	} else {
 	        	    RC_Logger::getLogger('info')->info('store_bill_error:');
 	        	    RC_Logger::getLogger('info')->info($val);
+	        	    continue;
 	        	}
-	        	$row[$key]['order_add_time'] = RC_Time::local_date('Y-m-d H:i', $val['order_add_time']);
-	        	$row[$key]['add_time'] = RC_Time::local_date('Y-m-d H:i', $val['add_time']);
+	        	$row[$key]['order_add_time'] = RC_Time::local_date('Y-m-d H:i', $row[$key]['order_add_time']);
+	        	$row[$key]['add_time'] = RC_Time::local_date('Y-m-d H:i', $row[$key]['add_time']);
 
 	        	if($val['order_type'] == Ecjia\App\Commission\Constant::ORDER_BUY) {
 	        		$row[$key]['order_type_name'] = '购物订单';
