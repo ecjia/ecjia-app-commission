@@ -112,6 +112,7 @@ class admin extends ecjia_admin {
 		}
 		if ($store_id) {
 		    $merchants_name = RC_DB::table('store_franchisee')->where('store_id', $store_id)->pluck('merchants_name');
+		    $this->assign('merchants_name', $merchants_name);
 		    $this->assign('ur_here', $merchants_name.' - 账单列表');
 		}
 		
@@ -213,6 +214,7 @@ class admin extends ecjia_admin {
 	    }
 	    if ($store_id) {
 	        $merchants_name = RC_DB::table('store_franchisee')->where('store_id', $store_id)->pluck('merchants_name');
+	        $this->assign('merchants_name', $merchants_name);
 	        $this->assign('ur_here', $merchants_name.' - 每日账单');
 	    }
 	    if ($filter['start_date'] >  $filter['end_date']) {

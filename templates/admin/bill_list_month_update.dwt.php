@@ -22,50 +22,51 @@ ecjia.admin.bill_update.month();
 	</h3>
 </div>
 
-<div class="row-fluid list-page">
-	<div class="span12">
-	   <div class="tabbable tabs-left">
-
-			<ul class="nav nav-tabs tab_merchants_nav">
+<div class="row-fluid">
+    <div class="span3">
+        <div class="setting-group">
+            <span class="setting-group-title"><i class="fontello-icon-cog"></i>{$ur_here}</span>
+            <ul class="nav nav-list m_t10">
                 <!-- {foreach from=$menu item=val} -->
-                <li {if $val.active}class="active"{/if}><a href="{$val.url}" {if $val.active}data-toggle="tab"{/if}>{$val.menu}</a></li>
+                <li><a class="setting-group-item {if $val.active}llv-active{/if}" href="{$val.url}">{$val.menu}</a></li>
                 <!-- {/foreach} -->
             </ul>
+        </div>
+    </div>
+    <div class="span9">
+        <div class="tab-content tab_merchants">
+            <div class="tab-pane active " style="min-height:300px;">
+            <form class="form-horizontal" id="form-privilege" name="theForm" action="{$form_action}" method="post" enctype="multipart/form-data" >
+                <fieldset>
+                    <div class="control-group formSep">
+                        <label class="control-label">选择时间：</label>
+                        <div class="controls">
+                            <input class="form-control start_date" name="start_date" type="text" placeholder="选择时间" value="{$smarty.get.start_date}">
+                            <span class="input-must">{lang key='system::system.require_field'}</span>
+                        </div>
+                    </div>
+                    {if 0}<div class="control-group formSep" >
+                        <label class="control-label">商家：</label>
+                        <div class="controls">
+                            <select name="store_cat">
+                                <option value="0">全部</option>
+                                
+                            </select>
+                        </div>
+                    </div>{/if}
+                    
 
-			<div class="tab-content tab_merchants">
-				<div class="tab-pane active " style="min-height:300px;">
-				<form class="form-horizontal" id="form-privilege" name="theForm" action="{$form_action}" method="post" enctype="multipart/form-data" >
-        			<fieldset>
-        			    <div class="control-group formSep">
-        					<label class="control-label">选择时间：</label>
-        					<div class="controls">
-        						<input class="form-control start_date" name="start_date" type="text" placeholder="选择时间" value="{$smarty.get.start_date}">
-        						<span class="input-must">{lang key='system::system.require_field'}</span>
-        					</div>
-        				</div>
-        			    {if 0}<div class="control-group formSep" >
-        					<label class="control-label">商家：</label>
-        					<div class="controls">
-        						<select name="store_cat">
-        							<option value="0">全部</option>
-        							
-        						</select>
-        					</div>
-        				</div>{/if}
-        				
-
-        				<div class="control-group">
-        					<div class="controls">
-        						<input type="hidden"  name="store_id" value="{$store.store_id}" />
-        						<input type="hidden"  name="step" value="{$step}" />
-        						<button class="btn btn-gebo" type="submit">确定</button>
-        					</div>
-        				</div>
-        			</fieldset>
-        		</form>
-			    </div>
-			</div>
-		</div>
-	</div>
-</div> 
+                    <div class="control-group">
+                        <div class="controls">
+                            <input type="hidden"  name="store_id" value="{$store.store_id}" />
+                            <input type="hidden"  name="step" value="{$step}" />
+                            <button class="btn btn-gebo" type="submit">确定</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- {/block} -->
