@@ -15,18 +15,17 @@ ecjia.admin.bill_update.month();
 <div>
 	<h3 class="heading">
 		<!-- {if $ur_here}{$ur_here}{/if} -->
-		<!-- {if $smarty.get.store_id && $smarty.get.refer neq 'store'} --><a class="btn plus_or_reply" href='{RC_Uri::url("commission/admin/day", "{$url_args}")}'><i class="fontello-icon-reply"></i>{t}返回全部{/t}</a><!-- {/if} -->
+		<!-- {if $smarty.get.store_id && $smarty.get.refer neq 'store'} -->
+			<a class="btn plus_or_reply" href='{RC_Uri::url("commission/admin/day", "{$url_args}")}'><i class="fontello-icon-reply"></i>{t}返回全部{/t}</a>
+		<!-- {/if} -->
 		<!-- {if $action_link} -->
-		<a class="btn plus_or_reply data-pjax" href="{$action_link.href}" ><i class="fontello-icon-reply"></i>{$action_link.text}</a>
+		<a class="btn plus_or_reply data-pjax" href="{$action_link.href}"><i class="fontello-icon-reply"></i>{$action_link.text}</a>
 		<!-- {/if} -->
 	</h3>
 </div>
 
 <div class="row-fluid">
-    <div class="span3">
-        <!-- {ecjia:hook id=display_admin_store_menus} -->
-    </div>
-    <div class="span9">
+    <div class="span12">
         <div class="tab-content tab_merchants">
             <div class="tab-pane active " style="min-height:300px;">
             <form class="form-horizontal" id="form-privilege" name="theForm" action="{$form_action}" method="post" enctype="multipart/form-data" >

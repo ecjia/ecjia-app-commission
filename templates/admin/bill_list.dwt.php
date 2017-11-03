@@ -15,9 +15,11 @@ ecjia.admin.bill_list.init();
 <div>
 	<h3 class="heading">
 		<!-- {if $ur_here}{$ur_here}{/if} -->
-		<!-- {if $smarty.get.store_id && $smarty.get.refer neq 'store'} --><a class="btn plus_or_reply" href='{RC_Uri::url("commission/admin/init", "{$url_args}")}'><i class="fontello-icon-reply"></i>{t}返回全部{/t}</a><!-- {/if} -->
+		<!-- {if $smarty.get.store_id && $smarty.get.refer neq 'store'} -->
+			<a class="btn plus_or_reply" href='{RC_Uri::url("commission/admin/init", "{$url_args}")}'><i class="fontello-icon-reply"></i>{t}返回全部{/t}</a>
+		<!-- {/if} -->
 		<!-- {if $action_link} -->
-		<a class="btn plus_or_reply data-pjax" href="{$action_link.href}" ><i class="fontello-icon-plus"></i>{$action_link.text}</a>
+		<a class="btn plus_or_reply {if $smarty.get.refer neq 'store'}data-pjax{/if}" href="{$action_link.href}" {if $smarty.get.refer eq 'store'}target="__blank"{/if}><i class="fontello-icon-plus"></i>{$action_link.text}</a>
 		<!-- {/if} -->
 	</h3>
 </div>
