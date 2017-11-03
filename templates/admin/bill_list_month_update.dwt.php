@@ -24,14 +24,7 @@ ecjia.admin.bill_update.month();
 
 <div class="row-fluid">
     <div class="span3">
-        <div class="setting-group">
-            <span class="setting-group-title"><i class="fontello-icon-cog"></i>{$ur_here}</span>
-            <ul class="nav nav-list m_t10">
-                <!-- {foreach from=$menu item=val} -->
-                <li><a class="setting-group-item {if $val.active}llv-active{/if}" href="{$val.url}">{$val.menu}</a></li>
-                <!-- {/foreach} -->
-            </ul>
-        </div>
+        <!-- {ecjia:hook id=display_admin_store_menus} -->
     </div>
     <div class="span9">
         <div class="tab-content tab_merchants">

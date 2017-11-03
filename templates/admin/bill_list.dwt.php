@@ -25,14 +25,7 @@ ecjia.admin.bill_list.init();
 <div class="row-fluid">
 	{if $smarty.get.refer eq 'store'}
 	<div class="span3">
-		<div class="setting-group">
-			<span class="setting-group-title"><i class="fontello-icon-cog"></i>{$merchants_name}</span>
-			<ul class="nav nav-list m_t10">
-			    <!-- {foreach from=$menu item=val} -->
-            	<li><a class="setting-group-item {if $val.active}llv-active{/if}" href="{$val.url}">{$val.menu}</a></li>
-            	<!-- {/foreach} -->
-			</ul>
-		</div>
+		<!-- {ecjia:hook id=display_admin_store_menus} -->
 	</div>
 	{/if}
 	<div class="{if $smarty.get.refer eq 'store'}span9{/if}">
