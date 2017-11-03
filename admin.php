@@ -106,9 +106,13 @@ class admin extends ecjia_admin {
 		
 		if ($_GET['refer'] == 'store') {
 		    RC_loader::load_app_func('global', 'store');
-		    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('入驻商'), RC_Uri::url('store/admin/init')));
+		   
 		    $store = RC_DB::table('store_franchisee')->where('store_id', $store_id)->first();
-		    
+		    if ($store['manage_mode'] == 'self') {
+		    	ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('自营店铺'), RC_Uri::url('store/admin/init')));
+		    } else {
+		    	ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('入驻商家'), RC_Uri::url('store/admin/join')));
+		    }
 		    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here($store['merchants_name'], RC_Uri::url('store/admin/preview', array('store_id' => $store_id))));
 		    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('账单列表'));
 		    
