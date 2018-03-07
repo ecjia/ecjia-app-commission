@@ -106,6 +106,10 @@ class store_bill_detail_model extends Component_Model_Model {
                 }
             } else {
                 $datail = $this->get_bill_detail($data['order_id']);
+                if (empty($datail)) {
+                    RC_Logger::getLogger('bill_order')->info('order_id:'.$data['order_id'].'，未收货，未入账，结算无需退款');
+                    return false;
+                }
                 $data['percent_value'] = $datail['percent_value'];
                 $data['brokerage_amount'] = $datail['brokerage_amount'] * -1;
             }
