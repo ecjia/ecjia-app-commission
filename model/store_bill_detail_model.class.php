@@ -70,8 +70,13 @@ class store_bill_detail_model extends Component_Model_Model {
             return false;
         }
 
-        RC_Loader::load_app_func('admin_order', 'orders');
-        $order_info = order_info($data['order_id']);
+        if($data['order_type'] == 'quickpay') {
+            $order_info = RC_DB::table('quickpay_orders')->where('order_id', $data['order_id'])->first();
+        } else {
+            RC_Loader::load_app_func('admin_order', 'orders');
+            $order_info = order_info($data['order_id']);
+        }
+        
         if (empty($order_info)) {
             RC_Logger::getLogger('bill_order_error')->error($data);
             return false;
@@ -100,7 +105,11 @@ class store_bill_detail_model extends Component_Model_Model {
         $data['inv_tax'] = $order_info['inv_tax'];
         $data['money_paid'] = $order_info['money_paid'];
         //订单金额 付款+余额消耗+积分抵钱
-        $data['order_amount'] = $order_info['money_paid'] + $order_info['surplus'] + $order_info['integral_money'];
+        if($data['order_type'] == 'quickpay') {
+            $data['order_amount'] = $order_info['order_amount'];
+        } else {
+            $data['order_amount'] = $order_info['money_paid'] + $order_info['surplus'] + $order_info['integral_money'];
+        }
         if ($data['order_type'] == 'buy') {
             $data['percent_value'] = RC_Model::model('commission/store_franchisee_model')->get_store_commission_percent($data['store_id']);
             if (empty($data['percent_value'])) {
@@ -128,7 +137,9 @@ class store_bill_detail_model extends Component_Model_Model {
                 $data['percent_value'] = $datail['percent_value'];
                 $data['brokerage_amount'] = $datail['brokerage_amount'] * -1;
             }
-            
+        } else if ($data['order_type'] == 'quickpay') {
+            $data['percent_value'] = 100 - ecjia::config('quickpay_fee');
+            $data['brokerage_amount'] = $data['order_amount'] * $data['percent_value'] / 100;
         }
 
         $data['add_time'] = RC_Time::gmtime();
