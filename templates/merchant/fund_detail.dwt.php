@@ -26,17 +26,25 @@
 	<div class="quickpay-time-base">
 		<ul class="">
 			<li class="step-first">
-				<div class="step-done">
-					<div class="step-no">{if $data.status eq 1}{/if}</div>
+				<div class="{if $status eq 1}step-cur{/if} {if $status eq 2 || $status eq 3}step-done{/if}">
+					<div class="step-no">{if $status eq 1}1{/if}</div>
 					<div class="m_t5">提交申请</div>
 					<div class="m_t5 ecjiafc-blue">{$data.add_time}</div>
 				</div>
 			</li>
 			<li class="step-last">
-				<div class="step-cur">
-					<div class="step-no">2</div>
-					<div class="m_t5">平台审核，打款完成</div>
-					<div class="m_t5 ecjiafc-blue"></div>
+				<div class="{if $status eq 2 || $status eq 3}step-cur{/if}">
+					<div class="{if $status eq 3}step-failed{else}step-no{/if}">2</div>
+					<div class="m_t5">
+						{if $status eq 1 || $status eq 2}
+						平台审核，打款完成
+						{else if $status eq 3}
+						已拒绝
+						{/if}
+					</div>
+					{if $status eq 3}
+					<div class="m_t5 ecjiafc-blue">{$data.audit_time}</div>
+					{/if}
 				</div>
 			</li>
 		</ul>

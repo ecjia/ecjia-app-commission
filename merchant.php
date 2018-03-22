@@ -387,8 +387,10 @@ class merchant extends ecjia_merchant {
 		if (!empty($data)) {
 			$data['amount'] = price_format($data['amount']);
 			$data['add_time'] = RC_Time::local_date('Y-m-d H:i:s', $data['add_time']);
+			$data['audit_time'] = RC_Time::local_date('Y-m-d H:i:s', $data['audit_time']);
 		}
 		$this->assign('data', $data);
+		$this->assign('status', $data['status']);
 		
 		$this->display('fund_detail.dwt');
 	}
@@ -505,11 +507,14 @@ class merchant extends ecjia_merchant {
 	}
 	
 	private function update_store_money($money = 0) {
-		return RC_DB::table('store_account')->where('store_id', $_SESSION['store_id'])->decrement('money', $money);
+		RC_DB::table('store_account')->where('store_id', $_SESSION['store_id'])->increment('frozen_money', $money);
+		RC_DB::table('store_account')->where('store_id', $_SESSION['store_id'])->decrement('money', $money);
+		
+		return true;
 	}
 	
 	private function add_account_log($data = array()) {
-		return RC_DB::table('store_account_log')->insert($data);
+// 		return RC_DB::table('store_account_log')->insert($data);
 	}
 }
 

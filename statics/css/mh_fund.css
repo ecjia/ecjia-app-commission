@@ -128,3 +128,14 @@
 .quickpay-time-base .step-last .step-cur .step-no {
 	background-position: 50% -68px;
 }
+.quickpay-time-base .step-cur .step-failed {
+    background-position: 50% 0;
+}
+.quickpay-time-base .step-failed {
+    margin-top: 10px;
+    color: #fff;
+    font-size: 18px;
+    height: 34px;
+    line-height: 34px;
+    background: url(../images/order-time-base-red-admin.png) no-repeat scroll 50% -102px;
+}
