@@ -144,8 +144,16 @@ class store_bill_detail_model extends Component_Model_Model {
 
         $data['add_time'] = RC_Time::gmtime();
 //         RC_Logger::getLogger('bill_order')->info($data);
-        unset($data['order_amount']);
-	    return RC_DB::table('store_bill_detail')->insertGetId($data);
+        $datail_id = RC_DB::table('store_bill_detail')->insertGetId($data);
+	    if($datail_id) {
+	        //TODO每成功后结算一次
+	        
+	        
+	        return true;
+	    }
+	    return false;
+	     
+	    
 	}
 
 	//计算日账单,分批处理数据
