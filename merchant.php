@@ -321,12 +321,29 @@ class merchant extends ecjia_merchant {
 		);
 		/* 判断是否有足够的可用金额 */
 		$store_account = $this->get_store_account();
+		if (empty($store_account['amount_available'])) {
+			return $this->showmessage('您暂时没有可用余额，无法提现', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+		}
 		if ($amount > $store_account['amount_available']) {
 			return $this->showmessage('您要申请提现的金额超过了您的可用金额，此操作将不可进行', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		
 		$id = RC_DB::table('store_account_order')->insertGetId($data);
 		if ($id > 0) {
+			//修改用户余额
+			$this->update_store_money($amount);
+			//添加账户日志
+			$arr = array(
+				'store_id' => $_SESSION['store_id'],
+				'money_before' 	=> $store_account['money'],
+				'money'			=> $store_account['money']-$amount,
+				'frozen_money'  => $store_account['frozen_money'],
+				'points'		=> $store_account['points'],
+				'change_time'   => RC_Time::gmtime(),
+				'change_desc'	=> $staff_note,
+				'change_type'	=> 'withdraw'
+			);
+			$this->add_account_log($arr);
 			return $this->showmessage('申请成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('commission/merchant/fund_detail', array('id' => $id))));
 		}
 		return $this->showmessage('申请失败', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
@@ -411,7 +428,7 @@ class merchant extends ecjia_merchant {
 	private function get_account_order() {
 		$db = RC_DB::table('store_account_order');
 	
-		$db->where('store_id', $_SESSION['store_id']);
+		$db->where('store_id', $_SESSION['store_id'])->where('process_type', 'withdraw');
 		$count = $db->count();
 		$page = new ecjia_page($count, 10, 5);
 		$data = $db->take(10)->skip($page->start_id - 1)->orderBy('add_time', 'desc')->get();
@@ -450,6 +467,13 @@ class merchant extends ecjia_merchant {
 		return date('Ymd') . str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT);
 	}
 	
+	private function update_store_money($money = 0) {
+		return RC_DB::table('store_account')->where('store_id', $_SESSION['store_id'])->decrement('money', $money);
+	}
+	
+	private function add_account_log($data = array()) {
+		return RC_DB::table('store_account_log')->insert($data);
+	}
 }
 
 // end
