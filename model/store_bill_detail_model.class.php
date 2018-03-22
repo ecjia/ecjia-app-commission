@@ -92,18 +92,18 @@ class store_bill_detail_model extends Component_Model_Model {
         }
         $data['order_sn'] = $order_info['order_sn'];
         $data['goods_amount'] = $order_info['goods_amount'];
-        $data['shipping_fee'] = $order_info['shipping_fee'];
-        $data['insure_fee'] = $order_info['insure_fee'];
-        $data['pay_fee'] = $order_info['pay_fee'];
-        $data['pack_fee'] = $order_info['pack_fee'];
-        $data['card_fee'] = $order_info['card_fee'];
+        $data['shipping_fee'] = $order_info['shipping_fee'] ? $order_info['shipping_fee'] : 0;
+        $data['insure_fee'] = $order_info['insure_fee'] ? $order_info['insure_fee'] : 0;
+        $data['pay_fee'] = $order_info['pay_fee'] ? $order_info['pay_fee'] : 0;
+        $data['pack_fee'] = $order_info['pack_fee'] ? $order_info['pack_fee'] : 0;
+        $data['card_fee'] = $order_info['card_fee'] ? $order_info['card_fee'] : 0;
         $data['surplus'] = $order_info['surplus'];
         $data['integral'] = $order_info['integral'];
         $data['integral_money'] = $order_info['integral_money'];
         $data['bonus'] = $order_info['bonus'];
         $data['discount'] = $order_info['discount'];
-        $data['inv_tax'] = $order_info['inv_tax'];
-        $data['money_paid'] = $order_info['money_paid'];
+        $data['inv_tax'] = $order_info['tax'] ? $order_info['tax'] : 0;
+        $data['money_paid'] = $order_info['money_paid'] ? $order_info['money_paid'] : 0;
         //订单金额 付款+余额消耗+积分抵钱
         if($data['order_type'] == 'quickpay') {
             $data['order_amount'] = $order_info['order_amount'];
@@ -147,8 +147,20 @@ class store_bill_detail_model extends Component_Model_Model {
         $datail_id = RC_DB::table('store_bill_detail')->insertGetId($data);
 	    if($datail_id) {
 	        //TODO每成功后结算一次
-	        
-	        
+	        RC_Loader::load_app_class('store_account', 'commission');
+	        $account = array(
+	            'store_id' => $data['store_id'],
+	            'amount' => $data['brokerage_amount'],
+	            'bill_order_type' => $data['order_type'],
+	            'bill_order_id' => $data['order_id'],
+	            'bill_order_sn' => $data['order_sn'],
+	        );
+	        $rs_account = store_account::bill($account);
+	        if ($rs_account && !is_ecjia_error($rs_account)) {
+	            RC_DB::table('store_bill_detail')->where('detail_id', $datail_id)->update(array('bill_status' => 1, 'bill_time' => RC_Time::gmtime()));
+	            //删除队列表数据
+	            RC_DB::table('store_bill_queue')->where('order_type', $data['order_type'])->where('order_id', $data['order_id'])->delete();
+	        }
 	        return true;
 	    }
 	    return false;
