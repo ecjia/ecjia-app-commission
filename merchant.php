@@ -296,6 +296,14 @@ class merchant extends ecjia_merchant {
 			return $this->showmessage('请输入备注内容', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		
+		$bank_info = RC_DB::table('store_franchisee')
+			->where('store_id', $_SESSION['store_id'])
+			->select('bank_name', 'bank_branch_name', 'bank_account_name', 'bank_account_number','bank_address')
+			->first();
+		if (empty($bank_info)) {
+			return $this->showmessage('请先添加收款账号', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+		}
+		
 		/* 变量初始化 */
 		$data = array(
 			'store_id'     => $_SESSION['store_id'],
@@ -304,7 +312,12 @@ class merchant extends ecjia_merchant {
 			'staff_note'   => $staff_note,
 			'process_type' => 'withdraw',
 			'status'	   => 1,
-			'add_time'     => RC_Time::gmtime()
+			'account_type' => 'bank',
+			'account_name' 		=> $bank_info['bank_account_name'],
+			'account_number' 	=> $bank_info['bank_account_number'],
+			'bank_name'    		=> $bank_info['bank_name'],
+			'bank_branch_name'	=> $bank_info['bank_branch_name'],
+			'add_time'     		=> RC_Time::gmtime()
 		);
 		/* 判断是否有足够的可用金额 */
 		$store_account = $this->get_store_account();
@@ -314,7 +327,7 @@ class merchant extends ecjia_merchant {
 		
 		$id = RC_DB::table('store_account_order')->insertGetId($data);
 		if ($id > 0) {
-			return $this->showmessage('申请成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
+			return $this->showmessage('申请成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('commission/merchant/fund_detail', array('id' => $id))));
 		}
 		return $this->showmessage('申请失败', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
 	}
@@ -406,6 +419,9 @@ class merchant extends ecjia_merchant {
 			foreach ($data as $k => $v) {
 				$data[$k]['amount'] = price_format($v['amount']);
 				$data[$k]['add_time'] = RC_Time::local_date('Y-m-d H:i:s', $v['add_time']);
+				$data[$k]['bank_name'] = !empty($v['bank_name']) ? '（'.$v['bank_name'].'）' : '';
+				$bank_account_number = $this->substr_cut($v['account_number']);
+				$data[$k]['account_number'] = $bank_account_number;
 			}
 		}
 		

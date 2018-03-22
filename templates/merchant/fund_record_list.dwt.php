@@ -1,9 +1,6 @@
 <!-- {extends file="ecjia-merchant.dwt.php"} -->
 
 <!-- {block name="footer"} -->
-<script type="text/javascript">
-
-</script>
 <!-- {/block} -->
 
 <!-- {block name="home-content"} -->
@@ -45,8 +42,17 @@
 									</div>
 								</td>
 								<td>{$list.amount}</td>
-								<td></td>
-								<td></td>
+								<td>
+									{if $list.account_type eq 'bank'}
+										银行卡
+									{else if $list.account_type eq 'alipay'}
+										支付宝
+									{/if}
+								</td>
+								<td>
+									{$list.account_number}<br>
+									{$list.bank_name}
+								</td>
 								<td>{$list.add_time}</td>
 								<td>
 									{if $list.status eq 1}
@@ -64,7 +70,7 @@
 				</section>
 			</div>
 		</section>
-      <!-- {$data.page} -->
+		<!-- {$data.page} -->
 	</div>
 </div>
 <!-- {/block} -->

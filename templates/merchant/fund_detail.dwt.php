@@ -45,13 +45,13 @@
 						</tr>
 						<tr>
 							<td><div align="right"><strong>提现金额：</strong></div></td>
-							<td>{$data.amount}</td>
+							<td class="amount_price">{$data.amount}</td>
 							<td><div align="right"><strong>提现方式：</strong></div></td>
-							<td></td>
+							<td>{if $data.account_type eq 'bank'}银行卡{else if $data.account_type eq 'alipay'}支付宝{/if}</td>
 						</tr>
 						<tr>
 							<td><div align="right"><strong>收款账号：</strong></div></td>
-							<td></td>
+							<td>{$data.bank_name} ({$data.account_number})</td>
 							<td><div align="right"><strong>申请时间：</strong></div></td>
 							<td>{$data.add_time}</td>
 						</tr>

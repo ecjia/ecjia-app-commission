@@ -81,3 +81,8 @@
 	color: #F0CA99;
 	text-decoration: none;
 }
+
+.accordion-body .amount_price {
+	color: #ff3434;
+	font-size: 15px;
+}
