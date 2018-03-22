@@ -1,0 +1,83 @@
+.fund-title {
+	background-color: #f9f9f9;
+	margin: 15px;
+	line-height: 50px;
+	border-radius: 4px;
+}
+
+.fund-title .panel-item {
+	display: block;
+	float: left;
+	max-width: 500px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	margin-right: 20px;
+}
+
+.fund-title .panel-item .price, .form-group .price {
+	font-size: 24px;
+	color: #ff3434;
+}
+
+.fund-list-header {
+	padding-left: 20px;
+	font-weight: 600;
+	font-size: 15px;
+}
+
+.th-striped {
+	background-color: #f9f9f9;
+}
+
+.col-lg-6.bank_account {
+	padding: 20px 15px;
+	margin-left: 15px;
+	border-radius: 4px;
+	background-color: #FDF9EB;
+	border: 1px solid #F0CA99;
+	width: 47.3%;
+}
+
+.bank_account .bank_name {
+	float: left;
+	max-width: 200px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	margin-right: 10px;
+}
+
+.bank_account .bank_account_number {
+	float: left;
+	margin-right: 10px;
+}
+
+.bank_account .change_bank {
+	color: #F0CA99;
+}
+
+.add_bank_card {
+	background-color: #FDF9EB;
+	border: 1px solid #F0CA99;
+	width: auto;
+	margin-left: 15px;
+	line-height: 50px;
+	border-radius: 4px;
+	color: #F0CA99;
+	position: relative;
+	padding-left: 40px;
+	cursor: pointer;
+}
+
+.add_bank_card .plus {
+	font-size: 40px;
+	position: absolute;
+	left: 10px;
+	top: 0;
+}
+
+.add_bank_card a {
+	color: #F0CA99;
+	text-decoration: none;
+}

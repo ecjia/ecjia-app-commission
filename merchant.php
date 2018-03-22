@@ -75,8 +75,11 @@ class merchant extends ecjia_merchant {
 		RC_Script::enqueue_script('bootstrap-datepicker', RC_Uri::admin_url('statics/lib/datepicker/bootstrap-datepicker.min.js'));
 		RC_Style::enqueue_style('datepicker', RC_Uri::admin_url('statics/lib/datepicker/datepicker.css'));
 		
-        /*自定义js*/
+        /*自定义js/css*/
         RC_Script::enqueue_script('bill-init', RC_App::apps_url('statics/js/bill.js',__FILE__), array('ecjia-merchant'), false, 1);
+        RC_Style::enqueue_style('mh_fund', RC_App::apps_url('statics/css/mh_fund.css',__FILE__));
+        RC_Script::enqueue_script('mh_fund', RC_App::apps_url('statics/js/mh_fund.js',__FILE__), array('ecjia-merchant'), false, 1);
+        
         ecjia_merchant_screen::get_current_screen()->set_parentage('commission');
 	}
 	
@@ -227,6 +230,117 @@ class merchant extends ecjia_merchant {
 	    $this->assign('bill_day_list', $bill_day_list);
 	     
 	    $this->display('bill_count.dwt');
+	}
+	
+	//资金管理
+	public function fund() {
+		/* 检查权限 */
+		$this->admin_priv('fund_manage');
+		
+		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('商家结算'), RC_Uri::url('commission/merchant/init')));
+		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('资金管理')));
+		
+		$this->assign('title', '资金明细');
+		$this->assign('ur_here', '资金管理');
+		$this->assign('action_link', array('href' => RC_Uri::url('commission/merchant/fund_record'), 'text' => '提现记录'));
+		
+		$account = $this->get_store_account();
+		$this->assign('account', $account);
+		
+		$data = $this->get_account_order();
+		$this->assign('data', $data);
+		
+		$this->display('fund_list.dwt');
+	}
+	
+	//申请提现
+	public function reply_fund() {
+		$this->admin_priv('fund_update');
+		
+		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('商家结算'), RC_Uri::url('commission/merchant/init')));
+		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('资金管理'), RC_Uri::url('commission/merchant/fund')));
+		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('申请提现')));
+		
+		$this->assign('ur_here', '申请提现');
+		$this->assign('action_link', array('href' => RC_Uri::url('commission/merchant/fund'), 'text' => '资金管理'));
+		
+		$data = $this->get_store_account();
+		$this->assign('data', $data);
+		
+		$bank_info = RC_DB::table('store_franchisee')
+			->where('store_id', $_SESSION['store_id'])
+			->select('bank_name', 'bank_branch_name', 'bank_account_name', 'bank_account_number','bank_address')
+			->first();
+		
+		if (!empty($bank_info['bank_account_number'])) {
+			$bank_account_number = $this->substr_cut($bank_info['bank_account_number']);
+			$bank_info['bank_account_number'] = ' ( '.$bank_account_number.' ) ';
+		}
+		$this->assign('bank_info', $bank_info);
+		$this->assign('form_action', RC_Uri::url('commission/merchant/add_reply'));
+		
+		$this->display('reply_fund.dwt');
+	}
+	
+	//添加申请
+	public function add_reply() {
+		$this->admin_priv('fund_update', ecjia::MSGTYPE_JSON);
+		
+		return $this->showmessage('', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
+	}
+	
+	//提现记录
+	public function fund_record() {
+		
+	}
+	
+	//获取店铺账户信息
+	private function get_store_account() {
+		$data = RC_DB::table('store_account')->where('store_id', $_SESSION['store_id'])->first();
+		if (empty($data)) {
+			$data['formated_amount_available'] = $data['formated_money'] = $data['formated_frozen_money'] = $data['formated_deposit'] = '￥0.00';
+			$data['amount_available'] = $data['money'] = $data['frozen_money'] = $data['deposit'] = '0.00';
+		} else {
+			$amount_available = $data['money'] - $data['deposit'];//可用余额=money-保证金
+			$data['formated_amount_available'] = price_format($amount_available);
+			$data['amount_available'] = $amount_available;
+			
+			$money = $data['money'] + $data['frozen_money'];//总金额=money+冻结
+			$data['formated_money'] = price_format($money);
+			$data['money'] = $money;
+			
+			$data['formated_frozen_money'] = price_format($data['frozen_money']);
+			$data['formated_deposit'] = price_format($data['deposit']);
+		}
+		return $data;
+	}
+	
+	//获取资金明细
+	private function get_account_order() {
+		$db = RC_DB::table('store_account_order');
+		
+		$db->where('store_id', $_SESSION['store_id']);
+		$count = $db->count();
+		$page = new ecjia_page($count, 10, 5);
+		$data = $db->select('order_sn', 'add_time', 'process_type', 'bill_order_type', 'amount')->take(10)->skip($page->start_id - 1)->orderBy('add_time', 'desc')->get();
+		
+		return array('item' => $data, 'page' => $page->show(2), 'desc' => $page->page_desc());
+	}
+	
+	//截取字符串
+	private function substr_cut($str = ''){
+		//获取字符串长度
+		$strlen = mb_strlen($str);
+		//如果字符串长度小于2，不做任何处理
+		if ($strlen < 2) {
+			return $str;
+		} else {
+			//mb_substr — 获取字符串的部分
+			$firstStr = mb_substr($str, 0, 4);
+			$lastStr = mb_substr($str, -4, 4);
+			//str_repeat — 重复一个字符串
+			return $strlen == 2 ? $firstStr . str_repeat('*', mb_strlen($str) - 1) : $firstStr . str_repeat("*", $strlen - 8) . $lastStr;
+		}
 	}
 }
 
