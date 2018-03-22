@@ -363,6 +363,8 @@ class merchant extends ecjia_merchant {
 		
 		$data = $this->get_account_order();
 		$this->assign('data', $data);
+		$this->assign('type_count', $data['count']);
+		$this->assign('filter', $data['filter']);
 		
 		$this->display('fund_record_list.dwt');
 	}
@@ -418,7 +420,7 @@ class merchant extends ecjia_merchant {
 		
 		$db->where('store_id', $_SESSION['store_id']);
 		$count = $db->count();
-		$page = new ecjia_page($count, 10, 5);
+		$page = new ecjia_merchant_page($count, 10, 5);
 		$data = $db->take(10)->skip($page->start_id - 1)->orderBy('change_time', 'desc')->get();
 		
 		return array('item' => $data, 'page' => $page->show(2), 'desc' => $page->page_desc());
@@ -428,10 +430,46 @@ class merchant extends ecjia_merchant {
 	private function get_account_order() {
 		$db = RC_DB::table('store_account_order');
 	
+		$filter['keywords'] = !empty($_GET['keywords']) ? trim($_GET['keywords']) : '';
+		$filter['start_time'] = !empty($_GET['start_time']) ? trim($_GET['start_time']) : '';
+		$filter['end_time'] = !empty($_GET['end_time']) ? trim($_GET['end_time']) : '';
+		
 		$db->where('store_id', $_SESSION['store_id'])->where('process_type', 'withdraw');
+		
+		if (!empty($filter['keywords'])) {
+			$db->where('order_sn', 'like', '%'.mysql_like_quote($filter['keywords']).'%');
+		}
+		if (!empty($filter['start_time'])) {
+			$db->where('add_time', '>=', RC_Time::local_strtotime($filter['start_time']));
+		}
+		if (!empty($filter['end_time'])) {
+			$db->where('add_time', '<', RC_Time::local_strtotime($filter['end_time']));
+		}
+
+		$type_count = $db->select(
+			RC_DB::raw('count(*) as count_all'), 
+			RC_DB::raw('SUM(IF(status = 1, 1, 0)) as wait_check'), 
+			RC_DB::raw('SUM(IF(status != 1, 1, 0)) as checked'))
+			->first();
+		if (empty($type_count['wait_check'])) {
+			$type_count['wait_check'] = 0;
+		}
+		if (empty($type_count['checked'])) {
+			$type_count['checked'] = 0;
+		}
+		
+		$type = trim($_GET['type']);
+		if ($type == 'checked') {
+			$db->where('status', '>', 1);
+		}
+		if ($type == 'wait_check') {
+			$db->where('status', 1);
+		}
+		
 		$count = $db->count();
-		$page = new ecjia_page($count, 10, 5);
-		$data = $db->take(10)->skip($page->start_id - 1)->orderBy('add_time', 'desc')->get();
+		$page = new ecjia_merchant_page($count, 10, 5);
+		$data = $db->select('*')->take(10)->skip($page->start_id - 1)->orderBy('add_time', 'desc')->get();
+		
 		if (!empty($data)) {
 			foreach ($data as $k => $v) {
 				$data[$k]['amount'] = price_format($v['amount']);
@@ -441,8 +479,7 @@ class merchant extends ecjia_merchant {
 				$data[$k]['account_number'] = $bank_account_number;
 			}
 		}
-		
-		return array('item' => $data, 'page' => $page->show(2), 'desc' => $page->page_desc());
+		return array('item' => $data, 'page' => $page->show(2), 'desc' => $page->page_desc(), 'count' => $type_count, 'filter' => $filter);
 	}
 	
 	//截取字符串

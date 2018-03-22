@@ -5,6 +5,8 @@
 		init : function() {
 			app.fund.set_value();
 			app.fund.subForm();
+			app.fund.time();
+			app.fund.search();
 		},
 		set_value: function() {
 			$('.set_value').off('click').on('click', function(e) {
@@ -45,6 +47,42 @@
 			}
 			var options = $.extend(ecjia.merchant.defaultOptions.validate, option);
 			$form.validate(options);
+		},
+		
+		time: function() {
+			$(".fund_time").datepicker({
+                format: "yyyy-mm-dd",
+			});
+		},
+		
+		search : function() {
+			$("form[name='searchForm']").on('submit', function(e) {
+				e.preventDefault();
+				var start_time = $("input[name='start_time']").val();
+				var end_time = $("input[name='end_time']").val();
+				var keywords = $("input[name='keywords']").val();
+				var url = $("form[name='searchForm']").attr('action'); 
+				if (start_time != '') {
+					url += '&start_time=' + start_time;
+				}
+				if (end_time != '') {
+					url += '&end_time=' + end_time;
+				}
+				if (start_time != '' && end_time != '') {
+					if (start_time > end_time) {
+						var mesObj = {
+							message : "开始时间不能超于结束时间",
+							state : "error",
+						};
+						ecjia.merchant.showmessage(mesObj);
+						return false;
+					}
+				}
+				if (keywords != '') {
+					url += '&keywords=' + keywords;
+				}
+				ecjia.pjax(url);
+			});
 		},
 	};
 })(ecjia.merchant, jQuery);
