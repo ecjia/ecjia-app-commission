@@ -24,7 +24,9 @@
       	<section class="panel">
       		<div class="panel-body fund-title">
       			<span class="panel-item">账户余额：<span class="price">{$account.formated_money}</span></span>
+      			{if $account.frozen_money neq 0}
       			<span class="panel-item">冻结资金：<span class="price">{$account.formated_frozen_money}</span></span>
+      			{/if}
       			<span class="panel-item">保证金：<span class="price">{$account.formated_deposit}</span></span>
       			<span class="panel-item">可用余额：<span class="price">{$account.formated_amount_available}</span></span>
       			<span class="panel-item"><a class="btn btn-info data-pjax" href='{url path="commission/merchant/reply_fund"}'>申请提现</a></span>
