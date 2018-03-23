@@ -36,7 +36,9 @@
 				<div class="{if $status eq 2 || $status eq 3}step-cur{/if}">
 					<div class="{if $status eq 3}step-failed{else}step-no{/if}">2</div>
 					<div class="m_t5">
-						{if $status eq 1 || $status eq 2}
+						{if $status eq 1}
+						等待平台审核
+						{else if $status eq 2}
 						平台审核，打款完成
 						{else if $status eq 3}
 						已拒绝

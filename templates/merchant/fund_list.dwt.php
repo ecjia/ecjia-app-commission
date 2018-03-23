@@ -24,6 +24,7 @@
       	<section class="panel">
       		<div class="panel-body fund-title">
       			<span class="panel-item">账户余额：<span class="price">{$account.formated_money}</span></span>
+      			<span class="panel-item">冻结资金：<span class="price">{$account.formated_frozen_money}</span></span>
       			<span class="panel-item">保证金：<span class="price">{$account.formated_deposit}</span></span>
       			<span class="panel-item">可用余额：<span class="price">{$account.formated_amount_available}</span></span>
       			<span class="panel-item"><a class="btn btn-info data-pjax" href='{url path="commission/merchant/reply_fund"}'>申请提现</a></span>
@@ -38,17 +39,25 @@
 	        					<th>类型/单号</th>
 	        					<th>收支金额（元）</th>
 	        					<th>账户余额（元）</th>
-	        					<th>状态</th>
 	        				</tr>
 	        			</thead>
 	        			<tbody>
 	        				<!-- {foreach from=$data.item key=key item=list} -->
 	        				<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
+								<td>{$list.change_time}</td>
+								<td>
+									{if $list.change_type eq 'charge'}
+									充值
+									{else if $list.change_type eq 'withdraw'}
+									提现
+									{else if $list.change_type eq 'bill'}
+									结算
+									{/if}
+									&nbsp;
+									{$list.change_desc}									
+								</td>
+								<td>{$list.money}</td>
+								<td>{$list.store_money}</td>
 	        				</tr>
 	        				<!-- {foreachelse} -->
 	        		    	<tr><td class="dataTables_empty" colspan="5">没有找到任何记录</td></tr>

@@ -7,6 +7,13 @@
 </script>
 <!-- {/block} -->
 <!-- {block name="home-content"} -->
+{if $replying}
+<div class="alert alert-danger">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="fa fa-times"></i></button>
+	<strong>注：</strong>提现订单还未审核的情况下，不能再申请提现，只有审核通过，才可以进行第二次提现。
+</div>
+{/if}
+
 <div class="page-header">
 	<div class="pull-left">
 		<h3><!-- {if $ur_here}{$ur_here}{/if} --></h3>
@@ -66,7 +73,7 @@
 						
 						<div class="form-group">
 							<div class="col-lg-offset-2 col-lg-6">
-								<input type="submit" value="提交" class="btn btn-info"/>
+								<input type="submit" value="提交" class="btn btn-info" {if $replying}disabled{/if} />
 							</div>
 						</div>
 					</form>
