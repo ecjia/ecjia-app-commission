@@ -65,6 +65,8 @@ class merchant extends ecjia_merchant {
 		$this->db_store_bill_detail = RC_Model::model('commission/store_bill_detail_model');
 		$this->db_store_bill_paylog = RC_Model::model('commission/store_bill_paylog_model');
 		
+		Ecjia\App\Commission\Helper::assign_adminlog_content();
+		
 		/* 加载所全局 js/css */
 		RC_Script::enqueue_script('jquery-validate');
 		RC_Script::enqueue_script('jquery-form');
@@ -340,6 +342,7 @@ class merchant extends ecjia_merchant {
 		
 		$id = RC_DB::table('store_account_order')->insertGetId($data);
 		if ($id > 0) {
+			ecjia_merchant::admin_log('提现金额为：'.$amount, 'apply', 'withdraw');
 			//修改用户余额
 			$this->update_store_money($amount);
 			return $this->showmessage('申请成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('commission/merchant/fund_detail', array('id' => $id))));
