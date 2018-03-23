@@ -58,6 +58,8 @@ class admin extends ecjia_admin {
 	public function __construct() {
 		parent::__construct();
 
+		Ecjia\App\Commission\Helper::assign_adminlog_content();
+		
 		$this->db_user				= RC_Model::model('user/users_model');
 		$this->db_store_bill        = RC_Model::model('commission/store_bill_model');
 		$this->db_store_bill_day    = RC_Model::model('commission/store_bill_day_model');
@@ -495,7 +497,7 @@ class admin extends ecjia_admin {
 		$id = intval($_GET['id']);
 		$data = RC_DB::table('store_account_order')->where('id', $id)->first();
 		if (!empty($data)) {
-			$data['amount'] = price_format($data['amount']);
+			$data['format_amount'] = price_format($data['amount']);
 			$data['add_time'] = RC_Time::local_date('Y-m-d H:i:s', $data['add_time']);
 			$data['audit_time'] = RC_Time::local_date('Y-m-d H:i:s', $data['audit_time']);
 		}
@@ -506,6 +508,9 @@ class admin extends ecjia_admin {
 	}
 	
 	public function withdraw_update() {
+		/* 检查权限 */
+		$this->admin_priv('commission_withdraw_update', ecjia::MSGTYPE_JSON);
+		
 		$id = intval($_POST['id']);
 		$admin_note = trim($_POST['admin_note']);
 		if (empty($admin_note)) {
@@ -521,12 +526,42 @@ class admin extends ecjia_admin {
 		} elseif (isset($_POST['refuse'])) {
 			$data['status'] = 3;
 		}
-		RC_DB::table('store_account_order')->where('id', $id)->update($data);
-		
+		$update = RC_DB::table('store_account_order')->where('id', $id)->update($data);
+		if ($update) {
+			$info = RC_DB::table('store_account_order')->where('id', $id)->first();
+			if ($data['status'] == 2) {
+				RC_DB::table('store_account')->where('store_id', $info['store_id'])->decrement('frozen_money', $info['amount']);
+				$store_account = RC_DB::table('store_account')->where('store_id', $info['store_id'])->first();
+				$log = array(
+					'store_id' 		=> $info['store_id'],
+					'store_money' 	=> $store_account['money'],
+					'money'			=> '-'.$info['amount'],
+					'frozen_money'  => $store_account['frozen_money'],
+					'points'		=> $store_account['points'],
+					'change_time'   => RC_Time::gmtime(),
+					'change_desc'   => $info['order_sn'],
+					'change_type'   => 'withdraw'
+ 				);
+				RC_DB::table('store_account_log')->insert($log);
+				
+				ecjia_admin::admin_log('同意，提现金额为：'.$info['amount'], 'audit', 'withdraw');
+			} elseif ($data['status'] == 3) {
+				$money = RC_DB::table('store_account')->where('store_id', $info['store_id'])->pluck('money');
+				RC_DB::table('store_account')->where('store_id', $info['store_id'])->update(array('money_before' => $money));
+				
+				RC_DB::table('store_account')->where('store_id', $info['store_id'])->increment('money', $info['amount']);
+				RC_DB::table('store_account')->where('store_id', $info['store_id'])->decrement('frozen_money', $info['amount']);
+				
+				ecjia_admin::admin_log('拒绝，提现金额为：'.$info['amount'], 'audit', 'withdraw');
+			}
+		}
 		return $this->showmessage('操作成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('commission/admin/withdraw_detail', array('id' => $id))));
 	}
 	
 	public function withdraw_export() {
+		/* 检查权限 */
+		$this->admin_priv('commission_withdraw_update', ecjia::MSGTYPE_JSON);
+		
 		$filter['start_time'] = empty($_GET['start_time']) ? '' : RC_Time::local_date('Y-m-d', RC_Time::local_strtotime($_GET['start_time']));
 		$filter['end_time']   = empty($_GET['end_time']) ? '' : RC_Time::local_date('Y-m-d', RC_Time::local_strtotime($_GET['end_time']));
 		$filter['keywords'] 		 = empty ($_GET['keywords']) 		  ? '' : trim($_GET['keywords']);
