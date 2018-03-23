@@ -157,9 +157,8 @@ class store_account {
         );
         if($change_type == 'withdraw') {
             $data['frozen_money'] = $info['frozen_money'] + $money;
+            $data['frozen_money'] = $data['frozen_money'] ? $data['frozen_money'] : 0;
         }
-        $data['frozen_money'] = $data['frozen_money'] ? $data['frozen_money'] : 0;
-        
         
         if(RC_DB::table('store_account')->where('store_id', $store_id)->update($data)) {
             $log = array(
