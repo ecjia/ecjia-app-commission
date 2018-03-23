@@ -509,9 +509,12 @@ class merchant extends ecjia_merchant {
 		return date('Ymd') . str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT);
 	}
 	
-	private function update_store_money($money = 0) {
-		RC_DB::table('store_account')->where('store_id', $_SESSION['store_id'])->increment('frozen_money', $money);
-		RC_DB::table('store_account')->where('store_id', $_SESSION['store_id'])->decrement('money', $money);
+	private function update_store_money($amount = 0) {
+		$money = RC_DB::table('store_account')->where('store_id', $_SESSION['store_id'])->pluck('money');
+		RC_DB::table('store_account')->where('store_id', $_SESSION['store_id'])->update(array('money_before' => $money));
+		
+		RC_DB::table('store_account')->where('store_id', $_SESSION['store_id'])->increment('frozen_money', $amount);
+		RC_DB::table('store_account')->where('store_id', $_SESSION['store_id'])->decrement('money', $amount);
 		
 		return true;
 	}
