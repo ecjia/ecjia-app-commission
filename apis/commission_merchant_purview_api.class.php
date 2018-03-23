@@ -59,6 +59,9 @@ class commission_merchant_purview_api extends Component_Event_Api {
             array('action_name' => __('每日账单'), 'action_code' => 'commission_day', 'relevance'   => ''),
             array('action_name' => __('订单分成'), 'action_code' => 'commission_order', 'relevance'   => ''),
             array('action_name' => __('结算统计'), 'action_code' => 'commission_count', 'relevance'   => ''),
+        	//资金管理权限
+        	array('action_name' => __('资金管理'), 'action_code' => 'commission_fund', 'relevance'   => ''),
+        	array('action_name' => __('申请提现'), 'action_code' => 'commission_fund_update', 'relevance'   => ''),
         );
         return $purviews;
     }
