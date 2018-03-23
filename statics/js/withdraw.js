@@ -1,11 +1,11 @@
 // JavaScript Document
 ;
 (function(app, $) {
-	app.fund = {
+	app.withdraw = {
 		init : function() {
-			app.fund.subForm();
-			app.fund.time();
-			app.fund.search();
+			app.withdraw.subForm();
+			app.withdraw.time();
+			app.withdraw.search();
 		},
 
 		subForm : function () {

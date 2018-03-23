@@ -3,7 +3,7 @@
 
 <!-- {block name="footer"} -->
 <script type="text/javascript">
-	ecjia.admin.fund.init();
+	ecjia.admin.withdraw.init();
 </script>
 <!-- {/block} -->
 
@@ -11,7 +11,7 @@
 <div>
 	<h3 class="heading">
 		<!-- {if $ur_here}{$ur_here}{/if} -->
-		<a class="btn plus_or_reply" id="sticky_a" href='{RC_Uri::url("commission/admin/fund_export", "{if $smarty.get.type}&type={$smarty.get.type}{/if}{$url_parames}")}'><i class="fontello-icon-download"></i>导出Excel</a>
+		<a class="btn plus_or_reply" id="sticky_a" href='{RC_Uri::url("commission/admin/withdraw_export", "{if $smarty.get.type}&type={$smarty.get.type}{/if}{$url_parames}")}'><i class="fontello-icon-download"></i>导出Excel</a>
 	</h3>
 </div>
 
@@ -19,23 +19,23 @@
 	<div class="span12">
 		<ul class="nav nav-pills">
 		    <li class="{if !$smarty.get.type}active{/if}">
-				<a class="data-pjax" href='{RC_Uri::url("commission/admin/fund", "{$url_parames}")}'>待审核
+				<a class="data-pjax" href='{RC_Uri::url("commission/admin/withdraw", "{$url_parames}")}'>待审核
 					<span class="badge badge-info">{$type_count.wait_check}</span>
 				</a>
 			</li>
 			<li class="{if $smarty.get.type eq 1}active{/if}">
-				<a class="data-pjax" href='{RC_Uri::url("commission/admin/fund", "type=1{$url_parames}")}'>已通过
+				<a class="data-pjax" href='{RC_Uri::url("commission/admin/withdraw", "type=1{$url_parames}")}'>已通过
 					<span class="badge badge-info">{$type_count.passed}</span>
 				</a>
 			</li>
 			<li class="{if $smarty.get.type eq 2}active{/if}">
-				<a class="data-pjax" href='{RC_Uri::url("commission/admin/fund", "type=2{$url_parames}")}'>已拒绝
+				<a class="data-pjax" href='{RC_Uri::url("commission/admin/withdraw", "type=2{$url_parames}")}'>已拒绝
 					<span class="badge badge-info">{$type_count.refused}</span>
 				</a>
 			</li>
 		</ul>
 		<ul class="nav nav-pills choose_list " style="border:none;">
-			<form class="f_r form-inline" action='{RC_Uri::url("commission/admin/fund")}{if $smarty.get.type}&type={$smarty.get.type}{/if}' method="post" name="searchForm">
+			<form class="f_r form-inline" action='{RC_Uri::url("commission/admin/withdraw")}{if $smarty.get.type}&type={$smarty.get.type}{/if}' method="post" name="searchForm">
     			<input class="date f_l w120" name="start_time" type="text" value="{$smarty.get.start_time}" placeholder="开始时间">
              	<input class="date f_l w120" name="end_time" type="text" value="{$smarty.get.end_time}" placeholder="结束时间">
     			<input type="text" name="merchant_keywords" value="{$smarty.get.merchant_keywords}" placeholder="请输入商家关键字" size="15" />
@@ -63,7 +63,7 @@
 						<td class="hide-edit-area">
 							{$list.order_sn}
 							<div class="edit-list">
-								<a href='{url path="commission/admin/fund_detail" args="id={$list.id}"}' class="data-pjax" title="查看详情">{t}查看详情{/t}</a>
+								<a href='{url path="commission/admin/withdraw_detail" args="id={$list.id}"}' class="data-pjax" title="查看详情">{t}查看详情{/t}</a>
 							</div>
 						</td>
 						<td>{$list.merchants_name}</td>
