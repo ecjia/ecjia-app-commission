@@ -83,7 +83,7 @@ class admin extends ecjia_admin {
         RC_Script::enqueue_script('bill-order', RC_App::apps_url('statics/js/order.js', __FILE__));
         RC_Script::enqueue_script('bill-update', RC_App::apps_url('statics/js/bill_update.js', __FILE__));
         
-        RC_Script::enqueue_script('admin_fund', RC_App::apps_url('statics/js/admin_fund.js', __FILE__));
+        RC_Script::enqueue_script('withdraw', RC_App::apps_url('statics/js/withdraw.js', __FILE__));
         RC_Style::enqueue_style('mh_fund', RC_App::apps_url('statics/css/mh_fund.css',__FILE__));
 	}
 	
@@ -449,13 +449,13 @@ class admin extends ecjia_admin {
 	    $this->display('order_list.dwt');
 	}
 	
-	public function fund() {
+	public function withdraw() {
 		/* 检查权限 */
-		$this->admin_priv('commission_fund');
+		$this->admin_priv('commission_withdraw');
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('商家提现'));
 		
 		$this->assign('ur_here', '商家提现');
-		$this->assign('search_action', RC_Uri::url('commission/admin/fund'));
+		$this->assign('search_action', RC_Uri::url('commission/admin/withdraw'));
 		
 		$data = $this->get_account_order();
 
@@ -478,19 +478,19 @@ class admin extends ecjia_admin {
 		}
 		$this->assign('url_parames', $url_parames);
 		
-		$this->display('fund_list.dwt');
+		$this->display('withdraw_list.dwt');
 	}
 	
-	public function fund_detail() {
+	public function withdraw_detail() {
 		/* 检查权限 */
-		$this->admin_priv('commission_fund');
+		$this->admin_priv('commission_withdraw');
 		
-		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('商家提现'), RC_Uri::url('commission/admin/fund')));
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('商家提现'), RC_Uri::url('commission/admin/withdraw')));
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('提现详情')));
 		
 		$this->assign('ur_here', '提现详情');
-		$this->assign('action_link', array('href' => RC_Uri::url('commission/admin/fund'), 'text' => '商家提现'));
-		$this->assign('form_action', RC_Uri::url('commission/admin/fund_update'));
+		$this->assign('action_link', array('href' => RC_Uri::url('commission/admin/withdraw'), 'text' => '商家提现'));
+		$this->assign('form_action', RC_Uri::url('commission/admin/withdraw_update'));
 		
 		$id = intval($_GET['id']);
 		$data = RC_DB::table('store_account_order')->where('id', $id)->first();
@@ -502,10 +502,10 @@ class admin extends ecjia_admin {
 		$this->assign('data', $data);
 		$this->assign('status', $data['status']);
 		
-		$this->display('fund_detail.dwt');
+		$this->display('withdraw_detail.dwt');
 	}
 	
-	public function fund_update() {
+	public function withdraw_update() {
 		$id = intval($_POST['id']);
 		$admin_note = trim($_POST['admin_note']);
 		if (empty($admin_note)) {
@@ -523,10 +523,10 @@ class admin extends ecjia_admin {
 		}
 		RC_DB::table('store_account_order')->where('id', $id)->update($data);
 		
-		return $this->showmessage('操作成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('commission/admin/fund_detail', array('id' => $id))));
+		return $this->showmessage('操作成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('commission/admin/withdraw_detail', array('id' => $id))));
 	}
 	
-	public function fund_export() {
+	public function withdraw_export() {
 		$filter['start_time'] = empty($_GET['start_time']) ? '' : RC_Time::local_date('Y-m-d', RC_Time::local_strtotime($_GET['start_time']));
 		$filter['end_time']   = empty($_GET['end_time']) ? '' : RC_Time::local_date('Y-m-d', RC_Time::local_strtotime($_GET['end_time']));
 		$filter['keywords'] 		 = empty ($_GET['keywords']) 		  ? '' : trim($_GET['keywords']);
@@ -581,7 +581,7 @@ class admin extends ecjia_admin {
 				$arr[$k]['status'] = $status;
 			}
 		}
-		RC_Excel::load(RC_APP_PATH . 'commission' . DIRECTORY_SEPARATOR .'statics/fund.xls', function($excel) use ($arr){
+		RC_Excel::load(RC_APP_PATH . 'commission' . DIRECTORY_SEPARATOR .'statics/withdraw.xls', function($excel) use ($arr){
 			$excel->sheet('First sheet', function($sheet) use ($arr) {
 				foreach ($arr as $key => $item) {
 					$sheet->appendRow($key+2, $item);

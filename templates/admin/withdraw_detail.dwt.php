@@ -3,7 +3,7 @@
 
 <!-- {block name="footer"} -->
 <script type="text/javascript">
-	ecjia.admin.fund.init();
+	ecjia.admin.withdraw.init();
 </script>
 <!-- {/block} -->
 
