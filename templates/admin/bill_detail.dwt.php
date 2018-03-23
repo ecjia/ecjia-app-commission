@@ -108,6 +108,7 @@ ecjia.admin.bill_list.init();
         					<th class="w80">{t}佣金比例{/t}</th>
         					<th class="w110">{t}佣金金额{/t}</th>
         					<th class="w120">{t}入账时间{/t}</th>
+        					<th class="w110">{t}结算状态{/t}</th>
         				</tr>
         			</thead>
         			<tbody>
@@ -133,9 +134,10 @@ ecjia.admin.bill_list.init();
         					{if $list.order_type eq 'refund'}<span class="ecjiafc-red">￥{$list.brokerage_amount}</span>{/if}
         					</td>
         					<td>{$list.add_time}</td>
+        					<td>{if $list.bill_status eq 0}未结算{else}已结算{/if}</td>
         				</tr>
         			<!-- {foreachelse} -->
-        		    	<tr><td class="dataTables_empty" colspan="8">没有找到任何记录</td></tr>
+        		    	<tr><td class="dataTables_empty" colspan="9">没有找到任何记录</td></tr>
         		  	<!-- {/foreach} -->
         			</tbody>
         		</table>

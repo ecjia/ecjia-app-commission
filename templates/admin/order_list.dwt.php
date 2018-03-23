@@ -41,6 +41,7 @@
 						    <th>{t}佣金比例{/t}</th>
 						    <th>{t}佣金金额{/t}</th>
 						    <th>{t}入账时间{/t}</th>
+						    <th>{t}结算状态{/t}</th>
 						 </tr>
 					</thead>
 
@@ -53,7 +54,6 @@
 						{else if $list.order_type eq 'quickpay'}
 							{assign var=order_url value=RC_Uri::url('quickpay/admin_order/order_info',"order_id={$list.order_id}")}
 						{/if}
-						
 						     <a href="{$order_url}" target="_blank">{$list.order_sn}</a>
 						</td>
 					    <td>
@@ -68,6 +68,11 @@
 							{if $list.order_type eq 'buy' || $list.order_type eq 'quickpay'}￥{$list.brokerage_amount}{/if}{if $list.order_type eq 'refund'}<span class="ecjiafc-red">￥{$list.brokerage_amount}</span>{/if}
 						</td>
 						<td>{$list.add_time}</td>
+						<!-- {if $list.bill_status eq 0} -->
+						<td><a class="label btn-warning">未结算</a></td>
+						<!-- {else} -->
+						<td class="ok_color"><a class="label btn-success hint--left" data-hint="结算时间 {$list.bill_time}" title="" data-content="{$list.bill_time}">已结算</a></td>
+					    <!-- {/if} -->
 					</tr>
 					<!-- {foreachelse} -->
 				   	<tr><td class="no-records" colspan="8">{t}没有找到任何记录{/t}</td></tr>

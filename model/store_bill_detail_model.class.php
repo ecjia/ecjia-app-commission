@@ -309,6 +309,7 @@ class store_bill_detail_model extends Component_Model_Model {
 	        	}
 	        	$row[$key]['order_add_time'] = RC_Time::local_date('Y-m-d H:i', $row[$key]['order_add_time']);
 	        	$row[$key]['add_time'] = RC_Time::local_date('Y-m-d H:i', $row[$key]['add_time']);
+	        	$row[$key]['bill_time'] = RC_Time::local_date('Y-m-d H:i:s', $row[$key]['bill_time']);
 
 	        	if($val['order_type'] == 'buy') {
 	        		$row[$key]['order_type_name'] = '购物订单';
