@@ -47,13 +47,14 @@ ecjia.merchant.bill.record()
 	        					<th class="w80">{t}佣金比例{/t}</th>
 	        					<th class="w110">{t}佣金金额{/t}</th>
 	        					<th class="w120">{t}入账时间{/t}</th>
+	        					<th class="w110">{t}结算时间{/t}</th>
 	        				</tr>
 	        			</thead>
 	        			<tbody>
 	        				<!-- {foreach from=$record_list.item key=key item=list} -->
 	        				<tr>
 	            				<td>
-	        						{if $list.order_type eq 1 || $list.order_type eq 11}收入{/if}{if $list.order_type eq 2}支出{/if}
+	        						{if $list.order_type eq 'buy' || $list.order_type eq 'quickpay'}收入{/if}{if $list.order_type eq 'refund'}支出{/if}
 	        					</td>
 	        					<td>
 	        					{if $list.order_type_name eq '购物订单'} 
@@ -66,7 +67,7 @@ ecjia.merchant.bill.record()
 	        					</td>
 	        					<td>{$list.order_add_time}</td>
 	        					<td>￥{$list.total_fee}</td>
-	        					{if $list.order_type eq 11}
+	        					{if $list.order_type eq 'quickpay'}
 	        						<td>{$lang_os_quickpay[$list.order_status]},{$lang_ps_quickpay[$list.pay_status]},{$lang_vs_quickpay[$list.verification_status]}</td>
 	        					{else}
 	        						<td>{$lang_os[$list.order_status]},{$lang_ps[$list.pay_status]},{$lang_ss[$list.shipping_status]}</td>
@@ -74,6 +75,13 @@ ecjia.merchant.bill.record()
 	        					<td>{$list.percent_value}%</td>
 	        					<td>￥{$list.brokerage_amount}</td>
 	        					<td>{$list.add_time}</td>
+	        					<td>
+	        					{if $list.bill_status eq 0}
+	        					<a class="label btn-warning">未结算</a>
+	        					{else if $list.bill_status eq 1}
+	        					<a class="label btn-success tooltip_ecjia" rel="popover" data-placement="bottom" title="结算时间" data-content="{$list.bill_time}">已结算</a>
+	        					{/if}
+	        					</td>
 	        				</tr>
 	        				<!-- {foreachelse} -->
 	        		    	<tr><td class="dataTables_empty" colspan="8">没有找到任何记录</td></tr>
