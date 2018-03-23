@@ -47,25 +47,54 @@
 defined('IN_ECJIA') or exit('No permission resources.');
 
 /**
- * ECJIA 商家结算菜单API
- * @author royalwang
+ * 订单结算队列表
  */
-class commission_admin_menu_api extends Component_Event_Api {
-	
-	public function call(&$options) {
-	
-		$menus = ecjia_admin::make_admin_menu('07_commission', __('商家结算'), '', 7);
-		
-		$submenus = array(
-			ecjia_admin::make_admin_menu('01_commission_list', __('资金管理'), RC_Uri::url('commission/admin/fund'), 1)->add_purview('commission_fund'),
-			ecjia_admin::make_admin_menu('02_commission_list', __('月账单'), RC_Uri::url('commission/admin/init'), 2)->add_purview('commission_manage'),
-		    ecjia_admin::make_admin_menu('03_commission_list_day', __('日账单'), RC_Uri::url('commission/admin/day'), 3)->add_purview('commission_day_manage'), 
-		    ecjia_admin::make_admin_menu('04_commission_order_list', __('订单分成'), RC_Uri::url('commission/admin/order'), 4)->add_purview('commission_order'),
-		);
-		$menus->add_submenu($submenus);
-		
-		return $menus;
+class store_bill_queue_model extends Component_Model_Model {
+	public $table_name = '';
+	public $view = array();
+	public function __construct() {
+		$this->table_name = 'store_bill_queue';
+		parent::__construct();
 	}
+	
+	
+	/**
+	 * 处理订单结算队列
+	 * priority 优先级  越大越优先
+	 */
+	
+	public function bill_queue() {
+	    $list = RC_DB::table('store_bill_queue')->orderBy('priority', 'desc')->get();
+	    if ($list) {
+	        foreach ($list as $row) {
+	            RC_Api::api('commission', 'add_bill_detail', array('order_type' => $row['order_type'], 'order_id' => $row['order_id']));
+	        }
+	    }
+	}
+	
+	/**
+	 * 
+	 * @param array $data
+	 * string $data['order_type']
+	 * int $data['order_id']
+	 */
+	public function add_bill_queue($data = array()) {
+
+	    $detail = RC_DB::table('store_bill_detail')->where('order_type', $data['order_type'])->where('order_id', $data['order_id'])
+	       ->where('bill_status', 1)->count();
+	    if($detail) {
+	        return false;
+	    }
+	    
+	    $option = array(
+	        'order_type' => $data['order_type'],
+	        'order_id' => $data['order_id'],
+	        'priority' => $data['order_type'] == 'refund' ? 1 : 0,
+	        'add_time' => RC_Time::gmtime()
+	    );
+	    return RC_DB::table('store_bill_queue')->insert($option);
+	}
+	
 }
 
 // end

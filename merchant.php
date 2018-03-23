@@ -84,15 +84,15 @@ class merchant extends ecjia_merchant {
 	}
 	
 	/**
-	 * 结算账单列表
+	 * 月账单列表
 	 */
 	public function init() {
 		/* 检查权限 */
 		$this->admin_priv('commission_manage');
 	    ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('商家结算'), RC_Uri::url('commission/merchant/init')));
-		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('结算账单')));
+		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('月账单')));
 		
-		$this->assign('ur_here', '结算账单');
+		$this->assign('ur_here', '月账单');
 		$this->assign('search_action', RC_Uri::url('commission/merchant/init'));
 		
 		/* 时间参数 */

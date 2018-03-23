@@ -49,7 +49,7 @@ ecjia.merchant.bill.init()
 	        					<th class="w120">{t}退款金额{/t}</th>
 	        					<th class="w120">{t}佣金比例{/t}</th>
 	        					<th class="w110">{t}账单金额{/t}</th>
-	        					<th class="w110">{t}打款状态{/t}</th>
+	        					<th class="w110">{t}结算状态{/t}</th>
 	        				</tr>
 	        			</thead>
 	        			<tbody>

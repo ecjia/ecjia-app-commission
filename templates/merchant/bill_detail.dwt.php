@@ -50,14 +50,7 @@ ecjia.merchant.bill.init()
 								<td align="right">佣金百分比：</td>
 								<td>{$bill_info.percent_value}%&nbsp;<a title="以订单入账比例为准"><i class="fa fa-question-circle"></i></a></td>
 								<td align="right"><h4>本月账单金额：</h4></td>
-								<td><h4 class="ecjiaf-ib"><b>￥{$bill_info.bill_amount}</b></h4>&nbsp;
-								{if $bill_info.pay_status eq 1}
-	        					<a class="label btn-warning">未打款</a>
-	        					{else if $bill_info.pay_status eq 2}
-	        					<a class="label btn-info tooltip_ecjia" rel="popover" data-placement="bottom" title="打款时间" data-content="{$bill_info.pay_time_formate}">第{$bill_info.pay_count}笔打款</a>
-	        					{else if $bill_info.pay_status eq 3}
-	        					<a class="label btn-success tooltip_ecjia" rel="popover" data-placement="bottom" title="打款时间" data-content="{$bill_info.pay_time_formate}">已打款</a>
-	        					{/if}
+								<td><h4 class="ecjiaf-ib"><b>￥{$bill_info.bill_amount}</b></h4>
 								</td>{if 0} = {$bill_info.available_amount} * {$bill_info.percent_value}%{/if}
 							</tr>
 						</tbody>
@@ -94,7 +87,7 @@ ecjia.merchant.bill.init()
     							<td>
     							{$commission.day}
     							</td>
-    						    <td class="ecjiaf-tar">￥{$commission.order_amount}</td>
+    						    <td class="">￥{$commission.order_amount}</td>
     						    <td class="ecjiafc-red">￥{$commission.refund_amount}</td>
     						    <!-- {if $commission.percent_value} -->
     						    <td>{$commission.percent_value}%</td>

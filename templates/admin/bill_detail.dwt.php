@@ -45,25 +45,8 @@ ecjia.admin.bill_list.init();
     					</tr>
     					<tr>
     						<td align="right"><h4 align="right">本月账单金额：</h4></td>
-    						<td><b class="ecjiaf-fs3">￥{$bill_info.bill_amount}</b><span class="m_l10 m_r10">({$bill_info.percent_value}%，以订单入账比例为准)</span>
+    						<td colspan="3"><b class="ecjiaf-fs3">￥{$bill_info.bill_amount}</b><span class="m_l10 m_r10">({$bill_info.percent_value}%，以订单入账比例为准)</span>
     						</td>
-    						<td align="right"><div align="right"><strong>打款状态：</strong></div></td>
-    						<td>
-    						 {if $bill_info.pay_status eq 1}
-        					<a class="label btn-warning">未打款</a>
-        					<a class="ecjiaf-tdn m_l10" target="_blank" href='{url path="commission/admin/pay" args="bill_id={$bill_info.bill_id}"}'>
-								<button class="btn btn-gebo" type="button">去打款</button>
-							</a>
-        					{else if $bill_info.pay_status eq 2}
-        					<a class="label btn-info hint--top" title="点击查看打款日志" href='{url path="commission/admin/pay_log" args="bill_id={$bill_info.bill_id}"}' data-hint="打款时间:{$bill_info.pay_time_formate}">第{$bill_info.pay_count}笔打款</a>
-        					<a class="ecjiaf-tdn m_l10" target="_blank" href='{url path="commission/admin/pay" args="bill_id={$bill_info.bill_id}"}'>
-								<button class="btn btn-gebo" type="button">去打款</button>
-							</a>
-        					{else if $bill_info.pay_status eq 3}
-        					<a class="label btn-success hint--top" title="点击查看打款日志" href='{url path="commission/admin/pay_log" args="bill_id={$bill_info.bill_id}"}' data-hint="打款时间:{$bill_info.pay_time_formate}">已打款</a>&nbsp;(共{$bill_info.pay_count}笔)
-        					{/if}
-        					<!-- <a class="label btn-success hint--top" data-hint="打款时间:2015-25-65 14:12{$bill_info.pay_time_formate}">已打款</a> -->
-    						 </td>
     					</tr>
     					<tr>
     						<td align="right"><div align="right"><strong>操作：</strong></div></td>
