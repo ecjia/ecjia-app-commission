@@ -82,6 +82,9 @@ class admin extends ecjia_admin {
         RC_Script::enqueue_script('bill-pay', RC_App::apps_url('statics/js/bill_pay.js', __FILE__));
         RC_Script::enqueue_script('bill-order', RC_App::apps_url('statics/js/order.js', __FILE__));
         RC_Script::enqueue_script('bill-update', RC_App::apps_url('statics/js/bill_update.js', __FILE__));
+        
+        RC_Script::enqueue_script('admin_fund', RC_App::apps_url('statics/js/admin_fund.js', __FILE__));
+        RC_Style::enqueue_style('mh_fund', RC_App::apps_url('statics/css/mh_fund.css',__FILE__));
 	}
 	
 	/**
@@ -119,7 +122,10 @@ class admin extends ecjia_admin {
 		    ecjia_screen::get_current_screen()->set_sidebar_display(false);
 		    ecjia_screen::get_current_screen()->add_option('store_name', $store['merchants_name']);
 		    ecjia_screen::get_current_screen()->add_option('current_code', 'store_admin_commission');
+		} else {
+			ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('账单列表'));
 		}
+		
 		if ($store_id) {
 		    $merchants_name = RC_DB::table('store_franchisee')->where('store_id', $store_id)->pluck('merchants_name');
 		    $this->assign('merchants_name', $merchants_name);
@@ -546,19 +552,6 @@ class admin extends ecjia_admin {
         })->download('xls');
 	}
 	
-	private function bill_and_log($bill_id) {
-	    //账单信息
-	    $bill_info = $this->db_store_bill->get_bill($bill_id);
-	    if (empty($bill_info)) {
-	        return $this->showmessage('没有数据', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
-	    }
-	    $bill_info['merchants_name'] = RC_Model::model('commission/store_franchisee_model')->get_merchants_name($bill_info['store_id']);
-	    $this->assign('bill_info', $bill_info);
-	    //打款流水
-	    $log_list = RC_Model::model('commission/store_bill_paylog_model')->get_bill_paylog_list($bill_info['bill_id'], 1, 100);
-	    $this->assign('log_list', $log_list);
-	}
-	
 	//订单分成列表
 	public function order() {
 	    /* 检查权限 */
@@ -586,6 +579,241 @@ class admin extends ecjia_admin {
 	    $this->assign('lang_ss', RC_Lang::get('orders::order.ss'));
 	    $this->assign('record_list', $record_list);
 	    $this->display('order_list.dwt');
+	}
+	
+	public function fund() {
+		/* 检查权限 */
+		$this->admin_priv('commission_fund');
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('商家提现'));
+		
+		$this->assign('ur_here', '商家提现');
+		$this->assign('search_action', RC_Uri::url('commission/admin/fund'));
+		
+		$data = $this->get_account_order();
+
+		$this->assign('data', $data);
+		$this->assign('type_count', $data['count']);
+		$this->assign('filter', $data['filter']);
+		
+		$url_parames = '';
+		if (!empty($_GET['keywords'])) {
+			$url_parames .= '&keywords='.$_GET['keywords'];
+		}
+		if (!empty($_GET['merchant_keywords'])) {
+			$url_parames .= '&merchant_keywords='.$_GET['merchant_keywords'];
+		}
+		if (!empty($_GET['start_time'])) {
+			$url_parames .= '&start_time='.$_GET['start_time'];
+		}
+		if (!empty($_GET['end_time'])) {
+			$url_parames .= '&end_time='.$_GET['end_time'];
+		}
+		$this->assign('url_parames', $url_parames);
+		
+		$this->display('fund_list.dwt');
+	}
+	
+	public function fund_detail() {
+		/* 检查权限 */
+		$this->admin_priv('commission_fund');
+		
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('商家提现'), RC_Uri::url('commission/admin/fund')));
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('提现详情')));
+		
+		$this->assign('ur_here', '提现详情');
+		$this->assign('action_link', array('href' => RC_Uri::url('commission/admin/fund'), 'text' => '商家提现'));
+		$this->assign('form_action', RC_Uri::url('commission/admin/fund_update'));
+		
+		$id = intval($_GET['id']);
+		$data = RC_DB::table('store_account_order')->where('id', $id)->first();
+		if (!empty($data)) {
+			$data['amount'] = price_format($data['amount']);
+			$data['add_time'] = RC_Time::local_date('Y-m-d H:i:s', $data['add_time']);
+			$data['audit_time'] = RC_Time::local_date('Y-m-d H:i:s', $data['audit_time']);
+		}
+		$this->assign('data', $data);
+		$this->assign('status', $data['status']);
+		
+		$this->display('fund_detail.dwt');
+	}
+	
+	public function fund_update() {
+		$id = intval($_POST['id']);
+		$admin_note = trim($_POST['admin_note']);
+		if (empty($admin_note)) {
+			return $this->showmessage('备注信息不能为空', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+		}
+		$data['admin_id'] = $_SESSION['admin_id'];
+		$data['admin_name'] = $_SESSION['admin_name'];
+		$data['admin_note'] = $admin_note;
+		$data['audit_time'] = RC_Time::gmtime();
+		if (isset($_POST['agree'])) {
+			//同意
+			$data['status'] = 2;	
+		} elseif (isset($_POST['refuse'])) {
+			$data['status'] = 3;
+		}
+		RC_DB::table('store_account_order')->where('id', $id)->update($data);
+		
+		return $this->showmessage('操作成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('commission/admin/fund_detail', array('id' => $id))));
+	}
+	
+	public function fund_export() {
+		$filter['start_time'] = empty($_GET['start_time']) ? '' : RC_Time::local_date('Y-m-d', RC_Time::local_strtotime($_GET['start_time']));
+		$filter['end_time']   = empty($_GET['end_time']) ? '' : RC_Time::local_date('Y-m-d', RC_Time::local_strtotime($_GET['end_time']));
+		$filter['keywords'] 		 = empty ($_GET['keywords']) 		  ? '' : trim($_GET['keywords']);
+		$filter['merchant_keywords'] = empty ($_GET['merchant_keywords']) ? '' : trim($_GET['merchant_keywords']);
+		 
+		$db = RC_DB::table('store_account_order as s')->leftJoin('store_franchisee as sf', RC_DB::raw('s.store_id'), '=', RC_DB::raw('sf.store_id'));
+		
+		if (!empty($filter['keywords'])) {
+			$db->where(RC_DB::raw('s.order_sn'), 'like', '%'.mysql_like_quote($filter['keywords']).'%');
+		}
+		if (!empty($filter['start_time'])) {
+			$db->where(RC_DB::raw('s.add_time'), '>=', RC_Time::local_strtotime($filter['start_time']));
+		}
+		if (!empty($filter['end_time'])) {
+			$db->where(RC_DB::raw('s.add_time'), '<', RC_Time::local_strtotime($filter['end_time']));
+		}
+		if (!empty($filter['merchant_keywords'])) {
+			$db->where(RC_DB::raw('sf.merchants_name'), '<', RC_Time::local_strtotime($filter['merchant_keywords']));
+		}
+		
+		$type = trim($_GET['type']);
+		if (empty($type)) {
+			$db->where(RC_DB::raw('s.status'), 1);
+		}
+		if ($type == 1) {
+			$db->where(RC_DB::raw('s.status'), 2);
+		}
+		if ($type == 2) {
+			$db->where(RC_DB::raw('s.status'), 3);
+		}
+		$data = $db->select(RC_DB::raw('s.*'), RC_DB::raw('sf.merchants_name'))->orderBy(RC_DB::raw('s.add_time'), 'desc')->get();
+
+		$arr = [];
+		if (!empty($data)) {
+			foreach ($data as $k => $v) {
+				$arr[$k]['order_sn'] = price_format($v['amount']);
+				$arr[$k]['merchants_name'] = $v['merchants_name'];
+				$arr[$k]['account_type'] = $v['account_type'] == 'bank' ? '银行卡' : ($v['account_type'] == 'alipay' ? '支付宝' : '');
+				$arr[$k]['amount'] = price_format($v['amount']);
+				$bank_name = !empty($v['bank_name']) ? '（'.$v['bank_name'].'）' : '';
+				$arr[$k]['bank_info'] = $bank_name.$v['account_number'];
+				$arr[$k]['add_time'] = RC_Time::local_date('Y-m-d H:i:s', $v['add_time']);
+				if ($v['status'] == 1) {
+					$status = '待审核';
+				}
+				if ($v['status'] == 2) {
+					$status = '已通过';
+				}
+				if ($v['status'] == 3) {
+					$status = '已拒绝';
+				}
+				$arr[$k]['status'] = $status;
+			}
+		}
+		RC_Excel::load(RC_APP_PATH . 'commission' . DIRECTORY_SEPARATOR .'statics/fund.xls', function($excel) use ($arr){
+			$excel->sheet('First sheet', function($sheet) use ($arr) {
+				foreach ($arr as $key => $item) {
+					$sheet->appendRow($key+2, $item);
+				}
+			});
+		})->download('xls');
+	}
+	
+	private function bill_and_log($bill_id) {
+		//账单信息
+		$bill_info = $this->db_store_bill->get_bill($bill_id);
+		if (empty($bill_info)) {
+			return $this->showmessage('没有数据', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+		}
+		$bill_info['merchants_name'] = RC_Model::model('commission/store_franchisee_model')->get_merchants_name($bill_info['store_id']);
+		$this->assign('bill_info', $bill_info);
+		//打款流水
+		$log_list = RC_Model::model('commission/store_bill_paylog_model')->get_bill_paylog_list($bill_info['bill_id'], 1, 100);
+		$this->assign('log_list', $log_list);
+	}
+	
+	private function get_account_order() {
+		$db = RC_DB::table('store_account_order as s')->leftJoin('store_franchisee as sf', RC_DB::raw('s.store_id'), '=', RC_DB::raw('sf.store_id'));
+	
+		$filter['keywords'] = !empty($_GET['keywords']) ? trim($_GET['keywords']) : '';
+		$filter['start_time'] = !empty($_GET['start_time']) ? trim($_GET['start_time']) : '';
+		$filter['end_time'] = !empty($_GET['end_time']) ? trim($_GET['end_time']) : '';
+		$filter['merchant_keywords'] = !empty($_GET['merchant_keywords']) ? trim($_GET['merchant_keywords']) : '';
+		
+		$db->where('process_type', 'withdraw');
+	
+		if (!empty($filter['keywords'])) {
+			$db->where(RC_DB::raw('s.order_sn'), 'like', '%'.mysql_like_quote($filter['keywords']).'%');
+		}
+		if (!empty($filter['start_time'])) {
+			$db->where(RC_DB::raw('s.add_time'), '>=', RC_Time::local_strtotime($filter['start_time']));
+		}
+		if (!empty($filter['end_time'])) {
+			$db->where(RC_DB::raw('s.add_time'), '<', RC_Time::local_strtotime($filter['end_time']));
+		}
+		if (!empty($filter['merchant_keywords'])) {
+			$db->where(RC_DB::raw('sf.merchants_name'), '<', RC_Time::local_strtotime($filter['merchant_keywords']));
+		}
+	
+		$type_count = $db->select(
+				RC_DB::raw('SUM(IF(s.status = 1, 1, 0)) as wait_check'),
+				RC_DB::raw('SUM(IF(s.status = 2, 1, 0)) as passed'),
+				RC_DB::raw('SUM(IF(s.status = 3, 1, 0)) as refused'))
+				->first();
+		if (empty($type_count['wait_check'])) {
+			$type_count['wait_check'] = 0;
+		}
+		if (empty($type_count['passed'])) {
+			$type_count['passed'] = 0;
+		}
+		if (empty($type_count['refused'])) {
+			$type_count['refused'] = 0;
+		}
+	
+		$type = trim($_GET['type']);
+		if (empty($type)) {
+			$db->where(RC_DB::raw('s.status'), 1);
+		}
+		if ($type == 1) {
+			$db->where(RC_DB::raw('s.status'), 2);
+		}
+		if ($type == 2) {
+			$db->where(RC_DB::raw('s.status'), 3);
+		}
+	
+		$count = $db->count();
+		$page = new ecjia_page($count, 10, 5);
+		$data = $db->select(RC_DB::raw('s.*'), RC_DB::raw('sf.merchants_name'))->take(10)->skip($page->start_id - 1)->orderBy(RC_DB::raw('s.add_time'), 'desc')->get();
+	
+		if (!empty($data)) {
+			foreach ($data as $k => $v) {
+				$data[$k]['amount'] = price_format($v['amount']);
+				$data[$k]['add_time'] = RC_Time::local_date('Y-m-d H:i:s', $v['add_time']);
+				$data[$k]['bank_name'] = !empty($v['bank_name']) ? '（'.$v['bank_name'].'）' : '';
+				$bank_account_number = $this->substr_cut($v['account_number']);
+				$data[$k]['account_number'] = $bank_account_number;
+			}
+		}
+		return array('item' => $data, 'page' => $page->show(2), 'desc' => $page->page_desc(), 'count' => $type_count, 'filter' => $filter);
+	}
+	
+	//截取字符串
+	private function substr_cut($str = ''){
+		//获取字符串长度
+		$strlen = mb_strlen($str);
+		//如果字符串长度小于2，不做任何处理
+		if ($strlen < 2) {
+			return $str;
+		} else {
+			//mb_substr — 获取字符串的部分
+			$firstStr = mb_substr($str, 0, 4);
+			$lastStr = mb_substr($str, -4, 4);
+			//str_repeat — 重复一个字符串
+			return $strlen == 2 ? $firstStr . str_repeat('*', mb_strlen($str) - 1) : $firstStr . str_repeat("*", $strlen - 8) . $lastStr;
+		}
 	}
 }
 

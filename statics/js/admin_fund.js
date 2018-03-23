@@ -3,54 +3,39 @@
 (function(app, $) {
 	app.fund = {
 		init : function() {
-			app.fund.set_value();
 			app.fund.subForm();
 			app.fund.time();
 			app.fund.search();
 		},
-		set_value: function() {
-			$('.set_value').off('click').on('click', function(e) {
-				e.preventDefault();
-				var $this = $(this),
-					val = $this.attr('data-money');
-				$("input[name='money']").val(val);
-			})
-		},
-		
+
 		subForm : function () {
 			var $form = $("form[name='fundForm']");
 			var option = {
 				rules: {
-					money: {
-                        required: true
-                    },
-                    desc: {
+					admin_note: {
                         required: true
                     }
                 },
                 messages: {
-                	money: {
-                        required: '提现金额不能为空'
-                    },
-                    desc: {
-                        required: '备注内容不能为空'
+                	admin_note: {
+                        required: '备注信息不能为空'
                     }
                 },
 				submitHandler : function() {
 					$form.ajaxSubmit({
 						dataType : "json",
 						success : function(data) {
-							ecjia.merchant.showmessage(data);
+							ecjia.admin.showmessage(data);
 						}
 					});
 				}
 			}
-			var options = $.extend(ecjia.merchant.defaultOptions.validate, option);
+			var options = $.extend(ecjia.admin.defaultOptions.validate, option);
 			$form.validate(options);
 		},
 		
 		time: function() {
-			$(".fund_time").datepicker({
+			$(".date").datepicker({
                 format: "yyyy-mm-dd",
 			});
 		},
@@ -61,6 +46,8 @@
 				var start_time = $("input[name='start_time']").val();
 				var end_time = $("input[name='end_time']").val();
 				var keywords = $("input[name='keywords']").val();
+				var merchant_keywords = $("input[name='merchant_keywords']").val();
+				
 				var url = $("form[name='searchForm']").attr('action'); 
 				if (start_time != '') {
 					url += '&start_time=' + start_time;
@@ -74,17 +61,20 @@
 							message : "开始时间不能超于或等于结束时间",
 							state : "error",
 						};
-						ecjia.merchant.showmessage(mesObj);
+						ecjia.admin.showmessage(mesObj);
 						return false;
 					}
 				}
 				if (keywords != '') {
 					url += '&keywords=' + keywords;
 				}
+				if (merchant_keywords != '') {
+					url += '&merchant_keywords=' + merchant_keywords;
+				}
 				ecjia.pjax(url);
 			});
 		},
 	};
-})(ecjia.merchant, jQuery);
+})(ecjia.admin, jQuery);
 
 // end
