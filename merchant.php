@@ -427,7 +427,6 @@ class merchant extends ecjia_merchant {
 				$data[$k]['change_time'] = RC_Time::local_date('Y-m-d H:i:s', $v['change_time']);
 			}
 		}
-		
 		return array('item' => $data, 'page' => $page->show(2), 'desc' => $page->page_desc());
 	}
 	

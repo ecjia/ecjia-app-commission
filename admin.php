@@ -495,7 +495,7 @@ class admin extends ecjia_admin {
 		$id = intval($_GET['id']);
 		$data = RC_DB::table('store_account_order')->where('id', $id)->first();
 		if (!empty($data)) {
-			$data['amount'] = price_format($data['amount']);
+			$data['format_amount'] = price_format($data['amount']);
 			$data['add_time'] = RC_Time::local_date('Y-m-d H:i:s', $data['add_time']);
 			$data['audit_time'] = RC_Time::local_date('Y-m-d H:i:s', $data['audit_time']);
 		}
@@ -521,8 +521,31 @@ class admin extends ecjia_admin {
 		} elseif (isset($_POST['refuse'])) {
 			$data['status'] = 3;
 		}
-		RC_DB::table('store_account_order')->where('id', $id)->update($data);
-		
+		$update = RC_DB::table('store_account_order')->where('id', $id)->update($data);
+		if ($update) {
+			$info = RC_DB::table('store_account_order')->where('id', $id)->first();
+			if ($data['status'] == 2) {
+				RC_DB::table('store_account')->where('store_id', $info['store_id'])->decrement('frozen_money', $info['amount']);
+				$store_account = RC_DB::table('store_account')->where('store_id', $info['store_id'])->first();
+				$log = array(
+					'store_id' 		=> $info['store_id'],
+					'store_money' 	=> $store_account['money'],
+					'money'			=> '-'.$info['amount'],
+					'frozen_money'  => $store_account['frozen_money'],
+					'points'		=> $store_account['points'],
+					'change_time'   => RC_Time::gmtime(),
+					'change_desc'   => $info['order_sn'],
+					'change_type'   => 'withdraw'
+ 				);
+				RC_DB::table('store_account_log')->insert($log);
+			} elseif ($data['status'] == 3) {
+				$money = RC_DB::table('store_account')->where('store_id', $info['store_id'])->pluck('money');
+				RC_DB::table('store_account')->where('store_id', $info['store_id'])->update(array('money_before' => $money));
+				
+				RC_DB::table('store_account')->where('store_id', $info['store_id'])->increment('money', $info['amount']);
+				RC_DB::table('store_account')->where('store_id', $info['store_id'])->decrement('frozen_money', $info['amount']);
+			}
+		}
 		return $this->showmessage('操作成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('commission/admin/withdraw_detail', array('id' => $id))));
 	}
 	
