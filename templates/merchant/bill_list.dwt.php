@@ -9,7 +9,7 @@ ecjia.merchant.bill.init()
 <!-- {block name="home-content"} -->
 <div class="alert alert-info">
 	<button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="fa fa-times" data-original-title="" title=""></i></button>
-	<strong>温馨提示：</strong>{t}当月账单未出请查看结算记录{/t}
+	<strong>温馨提示：</strong>{t}当月账单未出请查看日账单和订单分成{/t}
 </div>
 <div class="page-header">
 	<div class="pull-left">
@@ -49,7 +49,6 @@ ecjia.merchant.bill.init()
 	        					<th class="w120">{t}退款金额{/t}</th>
 	        					<th class="w120">{t}佣金比例{/t}</th>
 	        					<th class="w110">{t}账单金额{/t}</th>
-	        					<th class="w110">{t}结算状态{/t}</th>
 	        				</tr>
 	        			</thead>
 	        			<tbody>
@@ -64,15 +63,6 @@ ecjia.merchant.bill.init()
 	        					<td>￥{$list.refund_amount}</td>
 	        					<td>{$list.percent_value}%</td>
 	        					<td>￥{$list.bill_amount}</td>
-	        					<td>
-	        					{if $list.pay_status eq 1}
-	        					<a class="label btn-warning">未打款</a>
-	        					{else if $list.pay_status eq 2}
-	        					<a class="label btn-info tooltip_ecjia" rel="popover" data-placement="bottom" title="打款时间" data-content="{$list.pay_time_formate}">第{$list.pay_count}笔打款</a>
-	        					{else if $list.pay_status eq 3}
-	        					<a class="label btn-success tooltip_ecjia" rel="popover" data-placement="bottom" title="打款时间" data-content="{$list.pay_time_formate}">已打款</a>
-	        					{/if}
-	        					</td>
 	        				</tr>
 	        				<!-- {foreachelse} -->
 	        		    	<tr><td class="dataTables_empty" colspan="8">没有找到任何记录</td></tr>
