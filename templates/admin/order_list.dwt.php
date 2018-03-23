@@ -48,9 +48,9 @@
 					<tr>
 						<td>{if $list.order_type_name_style}{$list.order_type_name_style}{else}{$list.order_type_name}{/if}</td>
 						<td>
-						{if $list.order_type eq 1 || $list.order_type eq 2} 
+						{if $list.order_type eq 'buy' || $list.order_type eq 'refund'} 
 							{assign var=order_url value=RC_Uri::url('orders/admin/info',"order_id={$list.order_id}")}
-						{else if $list.order_type eq 11}
+						{else if $list.order_type eq 'quickpay'}
 							{assign var=order_url value=RC_Uri::url('quickpay/admin_order/order_info',"order_id={$list.order_id}")}
 						{/if}
 						
@@ -65,7 +65,7 @@
 					    <td>￥{$list.total_fee}</td>
 					    <td>{$list.percent_value}%</td>
 						<td>
-							{if $list.order_type eq 1 || $list.order_type eq 11}￥{$list.brokerage_amount}{/if}{if $list.order_type eq 2}<span class="ecjiafc-red">￥{$list.brokerage_amount}</span>{/if}
+							{if $list.order_type eq 'buy' || $list.order_type eq 'quickpay'}￥{$list.brokerage_amount}{/if}{if $list.order_type eq 'refund'}<span class="ecjiafc-red">￥{$list.brokerage_amount}</span>{/if}
 						</td>
 						<td>{$list.add_time}</td>
 					</tr>

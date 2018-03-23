@@ -114,7 +114,7 @@ ecjia.admin.bill_list.init();
         			<!-- {foreach from=$record_list.item key=key item=list} -->
         				<tr>
             				<td>
-        						{if $list.order_type eq 1}订单{elseif $list.order_type eq 2}<span class="ecjiafc-red">退款</span>{elseif $list.order_type eq 11}闪惠订单{/if}
+        						{if $list.order_type eq 'buy'}订单{elseif $list.order_type eq 'refund'}<span class="ecjiafc-red">退款</span>{elseif $list.order_type eq 'quickpay'}优惠买单{/if}
         					</td>
         					<td>
         						{assign var=order_url value=RC_Uri::url('orders/admin/info',"order_id={$list.order_id}")}
@@ -122,15 +122,15 @@ ecjia.admin.bill_list.init();
         					</td>
         					<td>{$list.order_add_time}</td>
         					<td>￥{$list.total_fee}</td>
-        					{if $list.order_type eq 11}
+        					{if $list.order_type eq 'quickpay'}
         						<td>{$lang_os_quickpay[$list.order_status]},{$lang_ps_quickpay[$list.pay_status]},{$lang_vs_quickpay[$list.verification_status]}</td>
         					{else}
         						<td>{$lang_os[$list.order_status]},{$lang_ps[$list.pay_status]},{$lang_ss[$list.shipping_status]}</td>
         					{/if}
         					<td>{$list.percent_value}%</td>
         					<td>
-        					{if $list.order_type eq 1}￥{$list.brokerage_amount}{/if}
-        					{if $list.order_type eq 2}<span class="ecjiafc-red">￥{$list.brokerage_amount}</span>{/if}
+        					{if $list.order_type eq 'buy'}￥{$list.brokerage_amount}{/if}
+        					{if $list.order_type eq 'refund'}<span class="ecjiafc-red">￥{$list.brokerage_amount}</span>{/if}
         					</td>
         					<td>{$list.add_time}</td>
         				</tr>

@@ -47,7 +47,7 @@
 namespace Ecjia\App\Commission;
 
 /**
- * 闪惠订单状态处理（订单状态、支付状态、审核状态）
+ * 优惠买单订单状态处理（订单状态、支付状态、审核状态）
  */
 class Constant
 {
@@ -66,7 +66,7 @@ class Constant
     
     
     /**
-     * 闪惠订单
+     * 优惠买单订单
      * @var integer
      */
     const ORDER_QUICKYPAY = 11;
