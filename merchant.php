@@ -278,7 +278,6 @@ class merchant extends ecjia_merchant {
 			->where('store_id', $_SESSION['store_id'])
 			->select('bank_name', 'bank_branch_name', 'bank_account_name', 'bank_account_number','bank_address')
 			->first();
-		
 		if (!empty($bank_info['bank_account_number'])) {
 			$bank_account_number = $this->substr_cut($bank_info['bank_account_number']);
 			$bank_info['bank_account_number'] = ' ( '.$bank_account_number.' ) ';
