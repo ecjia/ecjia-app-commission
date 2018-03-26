@@ -51,7 +51,7 @@
 
 						<div class="form-group">
 							<label class="control-label col-lg-2">提现银行卡：</label>
-							{if $bank_info && $bank_ino.bank_account_number neq ''}
+							{if $bank_info && $bank_info.bank_account_number neq ''}
 								<div class="col-lg-6 bank_account">
 									<div class="bank_name">{$bank_info.bank_name}</div>
 									<div class="bank_account_number">{$bank_info.bank_account_number}</div>
