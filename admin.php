@@ -597,7 +597,7 @@ class admin extends ecjia_admin {
 		$arr = [];
 		if (!empty($data)) {
 			foreach ($data as $k => $v) {
-				$arr[$k]['order_sn'] = price_format($v['amount']);
+				$arr[$k]['order_sn'] = $v['order_sn'];
 				$arr[$k]['merchants_name'] = $v['merchants_name'];
 				$arr[$k]['account_type'] = $v['account_type'] == 'bank' ? '银行卡' : ($v['account_type'] == 'alipay' ? '支付宝' : '');
 				$arr[$k]['amount'] = price_format($v['amount']);
