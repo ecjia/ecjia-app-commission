@@ -454,19 +454,26 @@ class merchant extends ecjia_merchant {
 
 		$type_count = $db->select(
 			RC_DB::raw('count(*) as count_all'), 
-			RC_DB::raw('SUM(IF(status = 1, 1, 0)) as wait_check'), 
-			RC_DB::raw('SUM(IF(status != 1, 1, 0)) as checked'))
+			RC_DB::raw('SUM(IF(status = 2, 1, 0)) as passed'), 
+			RC_DB::raw('SUM(IF(status = 3, 1, 0)) as refused'),
+			RC_DB::raw('SUM(IF(status = 1, 1, 0)) as wait_check'))
 			->first();
+		if (empty($type_count['passed'])) {
+			$type_count['passed'] = 0;
+		}
+		if (empty($type_count['refused'])) {
+			$type_count['refused'] = 0;
+		}
 		if (empty($type_count['wait_check'])) {
 			$type_count['wait_check'] = 0;
 		}
-		if (empty($type_count['checked'])) {
-			$type_count['checked'] = 0;
-		}
 		
 		$type = trim($_GET['type']);
-		if ($type == 'checked') {
-			$db->where('status', '>', 1);
+		if ($type == 'passed') {
+			$db->where('status', 2);
+		}
+		if ($type == 'refused') {
+			$db->where('status', 3);
 		}
 		if ($type == 'wait_check') {
 			$db->where('status', 1);

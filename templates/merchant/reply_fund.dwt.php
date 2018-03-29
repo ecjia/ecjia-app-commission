@@ -55,10 +55,10 @@
 								<div class="col-lg-6 bank_account">
 									<div class="bank_name">{$bank_info.bank_name}</div>
 									<div class="bank_account_number">{$bank_info.bank_account_number}</div>
-									<a class="change_bank" href='{url path="merchant/mh_franchisee/receipt"}' target="__blank">更改</a>
+									<a class="change_bank" href='{url path="merchant/mh_franchisee/receipt_edit"}' target="__blank">更改</a>
 								</div>
 							{else}
-								<div class="col-lg-6 add_bank_card"><a href='{url path="merchant/mh_franchisee/receipt"}' target="__blank"><span class="plus">+</span>添加银行卡</a></div>		
+								<div class="col-lg-6 add_bank_card"><a href='{url path="merchant/mh_franchisee/receipt_edit"}' target="__blank"><span class="plus">+</span>添加银行卡</a></div>		
 							{/if}
 						</div>
 						

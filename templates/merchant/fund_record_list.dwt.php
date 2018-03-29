@@ -28,11 +28,19 @@
     					<span class="badge badge-info">{$type_count.count_all}</span>
     				</a>
     			</li>
-    			<li class="{if $smarty.get.type eq 'checked'}active{/if}">
-    				<a class="data-pjax" href="{RC_uri::url('commission/merchant/fund_record')}&type=checked{if $filter.start_time}&start_time={$filter.start_time}{/if}{if $filter.end_time}&end_time={$filter.end_time}{/if}{if $filter.keywords}&keywords={$filter.keywords}{/if}">已审核
-    					<span class="badge badge-info use-plugins-num">{$type_count.checked}</span>
+    			
+    			<li class="{if $smarty.get.type eq 'passed'}active{/if}">
+    				<a class="data-pjax" href="{RC_uri::url('commission/merchant/fund_record')}&type=passed{if $filter.start_time}&start_time={$filter.start_time}{/if}{if $filter.end_time}&end_time={$filter.end_time}{/if}{if $filter.keywords}&keywords={$filter.keywords}{/if}">已通过
+    					<span class="badge badge-info use-plugins-num">{$type_count.passed}</span>
     				</a>
     			</li>
+    			
+    			<li class="{if $smarty.get.type eq 'refused'}active{/if}">
+    				<a class="data-pjax" href="{RC_uri::url('commission/merchant/fund_record')}&type=refused{if $filter.start_time}&start_time={$filter.start_time}{/if}{if $filter.end_time}&end_time={$filter.end_time}{/if}{if $filter.keywords}&keywords={$filter.keywords}{/if}">已拒绝
+    					<span class="badge badge-info use-plugins-num">{$type_count.refused}</span>
+    				</a>
+    			</li>
+
     			<li class="{if $smarty.get.type eq 'wait_check'}active{/if}">
     				<a class="data-pjax" href="{RC_uri::url('commission/merchant/fund_record')}&type=wait_check{if $filter.start_time}&start_time={$filter.start_time}{/if}{if $filter.end_time}&end_time={$filter.end_time}{/if}{if $filter.keywords}&keywords={$filter.keywords}{/if}">待审核
     					<span class="badge badge-info unuse-plugins-num">{$type_count.wait_check}</span>
