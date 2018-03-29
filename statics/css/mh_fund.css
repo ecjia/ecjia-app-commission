@@ -17,7 +17,7 @@
 
 .fund-title .panel-item .price, .form-group .price {
 	font-size: 24px;
-	color: #ff3434;
+	color: #e62129;
 }
 
 .fund-list-header {
@@ -54,7 +54,7 @@
 }
 
 .bank_account .change_bank {
-	color: #F0CA99;
+	color: #ca862e;
 }
 
 .add_bank_card {
@@ -83,7 +83,7 @@
 }
 
 .accordion-body .amount_price {
-	color: #ff3434;
+	color: #e62129;
 	font-size: 15px;
 }
 
