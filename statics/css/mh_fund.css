@@ -59,30 +59,32 @@
 
 .add_bank_card {
 	background-color: #FDF9EB;
-	border: 1px solid #F0CA99;
-	width: auto;
-	margin-left: 15px;
-	height: 50px;
-	line-height: 50px;
-	border-radius: 4px;
-	color: #ca862e;
-	position: relative;
-	padding-left: 40px;
-	cursor: pointer;
+    border: 1px solid #F0CA99;
+    width: auto;
+    margin-left: 15px;
+    height: 50px;
+    line-height: 50px;
+    border-radius: 4px;
+    color: #ca862e;
+    position: relative;
+    padding-left: 15px;
+    cursor: pointer;
 }
 
 .add_bank_card .plus {
-	font-size: 40px;
+    font-size: 40px;
     position: absolute;
-    left: 10px;
-    top: 0;
+    left: 0px;
     height: 48px;
     bottom: 0;
+    top: -17px;
 }
 
 .add_bank_card a {
 	color: #ca862e;
-	text-decoration: none;
+    text-decoration: none;
+    position: relative;
+    padding-left: 25px;
 }
 
 .accordion-body .amount_price {
