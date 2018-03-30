@@ -286,7 +286,7 @@ class store_bill_detail_model extends Component_Model_Model {
 	        $db_bill_detail->whereRaw("s.merchants_name like'%".$filter['merchant_keywords']."%'");
 	    }
 	    if (!empty($filter['start_date']) && !empty($filter['end_date'])) {
-	        $db_bill_detail->whereRaw("bd.add_time BETWEEN ".$filter['start_date']." AND ".$filter['end_date']);
+	        $db_bill_detail->whereRaw("(bd.add_time BETWEEN ".$filter['start_date']." AND ".$filter['end_date'].')');
 	    } else {
 	        if (!empty($filter['start_date']) && empty($filter['end_date'])) {
 	            $db_bill_detail->whereRaw('bd.add_time >= '.$filter['start_date']);
