@@ -139,3 +139,7 @@
     line-height: 34px;
     background: url(../images/order-time-base-red-admin.png) no-repeat scroll 50% -102px;
 }
+
+.withdraw-price {
+	color: #e62129;
+}

@@ -58,7 +58,7 @@
 									&nbsp;
 									{$list.change_desc}									
 								</td>
-								<td>{$list.money}</td>
+								<td {if $list.change_type eq 'withdraw'}class="withdraw-price"{/if}>{$list.money}</td>
 								<td>{$list.store_money}</td>
 	        				</tr>
 	        				<!-- {foreachelse} -->

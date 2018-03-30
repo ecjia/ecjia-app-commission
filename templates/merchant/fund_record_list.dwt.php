@@ -98,8 +98,10 @@
 								<td>
 									{if $list.status eq 1}
 										待审核
-									{else}
-										已审核
+									{else if $list.status eq 2}
+										已通过
+									{else if $list.status eq 3}
+										已拒绝
 									{/if}
 								</td>
 	        				</tr>
