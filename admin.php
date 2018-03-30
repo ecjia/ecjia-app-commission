@@ -294,6 +294,12 @@ class admin extends ecjia_admin {
 	    if (empty($start_date) || empty($end_date)) {
 	        return $this->showmessage('请选择时间', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 	    }
+	    if ($start_date > RC_Time::local_date('Y-m-d')) {
+	        return $this->showmessage('不能选择未来时间', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+	    }
+	    if ($start_date == RC_Time::local_date('Y-m-d') || $end_date >= RC_Time::local_date('Y-m-d')) {
+	        return $this->showmessage('今日交易未完成，账单暂不能生成', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+	    }
 	    $seconds_end = RC_Time::local_strtotime($_POST['end_date']);
 	    $seconds_start = RC_Time::local_strtotime($_POST['start_date']);
 	    if ($_POST['end_date'] > RC_Time::local_date('Y-m-d', RC_Time::gmtime())) {
