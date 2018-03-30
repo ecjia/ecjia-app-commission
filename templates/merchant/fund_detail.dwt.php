@@ -44,7 +44,7 @@
 						已拒绝
 						{/if}
 					</div>
-					{if $status eq 3}
+					{if $status eq 2 || $status eq 3}
 					<div class="m_t5 ecjiafc-blue">{$data.audit_time}</div>
 					{/if}
 				</div>
