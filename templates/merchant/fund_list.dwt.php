@@ -37,7 +37,7 @@
 					<table class="table table-striped table-advance table-hover">
 	        			<thead>
 	        				<tr class="th-striped">
-	        					<th>交易时间</th>
+	        					<th>结算时间</th>
 	        					<th>类型/单号</th>
 	        					<th>收支金额（元）</th>
 	        					<th>账户余额（元）</th>
