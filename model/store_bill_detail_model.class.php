@@ -72,9 +72,14 @@ class store_bill_detail_model extends Component_Model_Model {
 
         if($data['order_type'] == 'quickpay') {
             $order_info = RC_DB::table('quickpay_orders')->where('order_id', $data['order_id'])->first();
+            $data['order_sn'] = $order_info['order_sn'];
+        } else if($data['order_type'] == 'refund') {
+            $order_info = RC_DB::table('refund_order')->where('refund_id', $data['order_id'])->first();
+            $data['order_sn'] = $order_info['refund_sn'];//退款单号
         } else {
             RC_Loader::load_app_func('admin_order', 'orders');
             $order_info = order_info($data['order_id']);
+            $data['order_sn'] = $order_info['order_sn'];
         }
         
         if (empty($order_info)) {
@@ -90,7 +95,7 @@ class store_bill_detail_model extends Component_Model_Model {
         if (!isset($data['store_id'])) {
             $data['store_id'] = $order_info['store_id'];
         }
-        $data['order_sn'] = $order_info['order_sn'];
+        
         $data['goods_amount'] = $order_info['goods_amount'];
         $data['shipping_fee'] = $order_info['shipping_fee'] ? $order_info['shipping_fee'] : 0;
         $data['insure_fee'] = $order_info['insure_fee'] ? $order_info['insure_fee'] : 0;
@@ -116,30 +121,38 @@ class store_bill_detail_model extends Component_Model_Model {
                 $data['percent_value'] = 100; //未设置分成比例，默认100
             }
             $data['brokerage_amount'] = $data['order_amount'] * $data['percent_value'] / 100;
+            $data['platform_profit'] = $data['order_amount'] - $data['brokerage_amount'];
         } else if ($data['order_type'] == 'refund') {
+            //退款时 $data['order_id']是 refund_id
             if ($data['brokerage_amount']) {
                 //退货时 结算比例使用当时入账比例
-                $data['percent_value'] = $this->get_bill_percent($data['order_id']);
-                if (!$data['percent_value']) {
-                    RC_Logger::getLogger('bill_order')->error('退货未找到原入账订单，订单号：'.$data['order_id']);
-                    RC_Logger::getLogger('bill_order')->error($data);
-                    return false;
-                }
-                if (($data['brokerage_amount'] = $data['order_amount'] * $data['percent_value'] / 100) > 0) {
-                    $data['brokerage_amount'] *= -1;
-                }
+//                 $data['percent_value'] = $this->get_bill_percent($data['order_id']);
+//                 if (!$data['percent_value']) {
+//                     RC_Logger::getLogger('bill_order')->error('退货未找到原入账订单，订单号：'.$data['order_id']);
+//                     RC_Logger::getLogger('bill_order')->error($data);
+//                     return false;
+//                 }
+//                 if (($data['brokerage_amount'] = $data['order_amount'] * $data['percent_value'] / 100) > 0) {
+//                     $data['brokerage_amount'] *= -1;
+//                 }
             } else {
-                $datail = $this->get_bill_detail($data['order_id']);
+                $datail = $this->get_bill_detail($order_info['order_id']);
                 if (empty($datail)) {
-                    RC_Logger::getLogger('bill_order')->info('order_id:'.$data['order_id'].'，未收货，未入账，结算无需退款');
+                    //删除队列表数据
+                    RC_DB::table('store_bill_queue')->where('order_type', $data['order_type'])->where('order_id', $data['order_id'])->delete();
+                    RC_Logger::getLogger('bill_order')->info('退款refund_id:'.$data['order_id'].'，未收货，未入账，结算无需退款');
                     return false;
                 }
+                $back_money_total = RC_DB::table('refund_payrecord')->where('refund_id', $data['order_id'])->pluck('back_money_total');
                 $data['percent_value'] = $datail['percent_value'];
-                $data['brokerage_amount'] = $datail['brokerage_amount'] * -1;
+                //退款结算：平台得-用户退=商家得
+                $data['brokerage_amount'] = $datail['platform_profit'] - $back_money_total;
+                $data['platform_profit'] = $datail['platform_profit'] * -1;
             }
         } else if ($data['order_type'] == 'quickpay') {
             $data['percent_value'] = 100 - ecjia::config('quickpay_fee');
             $data['brokerage_amount'] = $data['order_amount'] * $data['percent_value'] / 100;
+            $data['platform_profit'] = $data['order_amount'] - $data['brokerage_amount'];
         }
 
         $data['add_time'] = RC_Time::gmtime();

@@ -55,7 +55,7 @@ class commission_add_bill_queue_api extends Component_Event_Api {
     /*
      * 必填参数
      * order_type buy订单,quickpay买单,refund退款
-     * order_id
+     * order_id 订单是order_id，退款是refund_id
      */
     public function call(&$options) {
         if (!is_array($options) || !isset($options['order_type']) || !in_array($options['order_type'], array('buy','quickpay','refund'))
