@@ -109,8 +109,8 @@ class store_bill_detail_model extends Component_Model_Model {
         $data['discount'] = $order_info['discount'];
         $data['inv_tax'] = $order_info['tax'] ? $order_info['tax'] : 0;
         $data['money_paid'] = $order_info['money_paid'] ? $order_info['money_paid'] : 0;
-        $data['pay_code'] = $order_info['pay_code'];
-        $data['pay_name'] = $order_info['pay_name'];
+        $data['pay_code'] = $order_info['pay_code'] ? $order_info['pay_code'] : '';
+        $data['pay_name'] = $order_info['pay_name'] ? $order_info['pay_name'] : '';
         //订单金额 付款+余额消耗+积分抵钱
         if($data['order_type'] == 'quickpay') {
             $data['order_amount'] = $order_info['order_amount'];
@@ -207,7 +207,10 @@ class store_bill_detail_model extends Component_Model_Model {
 
 	    $rs_order = RC_DB::table('store_bill_detail')->groupBy('store_id')->select("store_id", RC_DB::raw("'".$options['day']."' as day"), RC_DB::raw('COUNT(store_id) as order_count'), RC_DB::raw('SUM(brokerage_amount) as order_amount'),
 	        RC_DB::raw('0 as refund_count'), RC_DB::raw('0.00 as refund_amount'), 'percent_value')
-	    ->whereBetween('add_time', array($day_time, $day_time + 86399))->where('order_type', 'buy')->get();
+	    ->whereBetween('add_time', array($day_time, $day_time + 86399))
+	    ->where('order_type', 'buy')
+	    ->orWhere('order_type', 'quickpay')
+	    ->get();
 
 	    $rs_refund = RC_DB::table('store_bill_detail')->groupBy('store_id')->select("store_id", RC_DB::raw("'".$options['day']."' as day"),RC_DB::raw('COUNT(store_id) as refund_count'), RC_DB::raw('SUM(brokerage_amount) as refund_amount'),
 	        RC_DB::raw('0 as order_count'), RC_DB::raw('0.00 as order_amount'), 'percent_value')
