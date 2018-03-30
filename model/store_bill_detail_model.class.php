@@ -109,6 +109,8 @@ class store_bill_detail_model extends Component_Model_Model {
         $data['discount'] = $order_info['discount'];
         $data['inv_tax'] = $order_info['tax'] ? $order_info['tax'] : 0;
         $data['money_paid'] = $order_info['money_paid'] ? $order_info['money_paid'] : 0;
+        $data['pay_code'] = $order_info['pay_code'];
+        $data['pay_name'] = $order_info['pay_name'];
         //订单金额 付款+余额消耗+积分抵钱
         if($data['order_type'] == 'quickpay') {
             $data['order_amount'] = $order_info['order_amount'];
@@ -120,8 +122,14 @@ class store_bill_detail_model extends Component_Model_Model {
             if (empty($data['percent_value'])) {
                 $data['percent_value'] = 100; //未设置分成比例，默认100
             }
-            $data['brokerage_amount'] = $data['order_amount'] * $data['percent_value'] / 100;
-            $data['platform_profit'] = $data['order_amount'] - $data['brokerage_amount'];
+            
+            if(in_array($data['pay_code'], array('pay_cod', 'pay_cash'))) {
+                $data['brokerage_amount'] = $data['order_amount'] * (100 - $data['percent_value']) / 100 * -1;
+                $data['platform_profit'] = $data['brokerage_amount'] * -1;
+            } else {
+                $data['brokerage_amount'] = $data['order_amount'] * $data['percent_value'] / 100;
+                $data['platform_profit'] = $data['order_amount'] - $data['brokerage_amount'];
+            }
         } else if ($data['order_type'] == 'refund') {
             //退款时 $data['order_id']是 refund_id
             if ($data['brokerage_amount']) {
@@ -151,8 +159,13 @@ class store_bill_detail_model extends Component_Model_Model {
             }
         } else if ($data['order_type'] == 'quickpay') {
             $data['percent_value'] = 100 - ecjia::config('quickpay_fee');
-            $data['brokerage_amount'] = $data['order_amount'] * $data['percent_value'] / 100;
-            $data['platform_profit'] = $data['order_amount'] - $data['brokerage_amount'];
+            if(in_array($data['pay_code'], array('pay_cod', 'pay_cash'))) {
+                $data['brokerage_amount'] = $data['order_amount'] * (100 - $data['percent_value']) / 100 * -1;
+                $data['platform_profit'] = $data['brokerage_amount'] * -1;
+            } else {
+                $data['brokerage_amount'] = $data['order_amount'] * $data['percent_value'] / 100;
+                $data['platform_profit'] = $data['order_amount'] - $data['brokerage_amount'];
+            }
         }
 
         $data['add_time'] = RC_Time::gmtime();
