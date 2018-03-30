@@ -27,7 +27,7 @@ ecjia.admin.bill_list.init();
     				<tbody class="first-td-no-leftbd">
     					<tr>
     						<td align="right" width="30%"><div align="right"><strong>账单编号：</strong></div></td>
-    						<td width="20%">{$bill_info.bill_sn} <a href='{url path="store/admin/preview" args="store_id={$bill_info.store_id}"}' class="ecjiafc-red m_l10">{$bill_info.merchants_name}</a></td>
+    						<td width="20%">{$bill_info.bill_sn} <a href='{url path="store/admin/preview" args="store_id={$bill_info.store_id}"}' class=" m_l10">{$bill_info.merchants_name}</a></td>
     						<td align="right" width="30%"><div align="right"><strong>月份：</strong></div></td>
     						<td width="20%">{$bill_info.bill_month}</td>
     					</tr>
@@ -41,7 +41,7 @@ ecjia.admin.bill_list.init();
     						<td align="right"><div align="right"><strong>退款订单数：</strong></div></td>
     						<td>{$bill_info.refund_count}</td>
     						<td align="right"><div align="right"><strong>退款总金额：</strong></div></td>
-    						<td class="ecjiafc-red">￥{$bill_info.refund_amount}</td>
+    						<td class="">￥{$bill_info.refund_amount}</td>
     					</tr>
     					<tr>
     						<td align="right"><h4 align="right">本月账单金额：</h4></td>
@@ -82,7 +82,7 @@ ecjia.admin.bill_list.init();
     							{$commission.day}
     							</td>
     						    <td class="ecjiaf-tar">￥{$commission.order_amount}</td>
-    						    <td class="ecjiafc-red">￥{$commission.refund_amount}</td>
+    						    <td class="">￥{$commission.refund_amount}</td>
     						    <!-- {if $commission.percent_value} -->
     						    <td>{$commission.percent_value}%</td>
     						    <!-- {else} -->
@@ -115,7 +115,7 @@ ecjia.admin.bill_list.init();
         			<!-- {foreach from=$record_list.item key=key item=list} -->
         				<tr>
             				<td>
-        						{if $list.order_type eq 'buy'}订单{elseif $list.order_type eq 'refund'}<span class="ecjiafc-red">退款</span>{elseif $list.order_type eq 'quickpay'}优惠买单{/if}
+        						{if $list.order_type eq 'buy'}订单{elseif $list.order_type eq 'refund'}<span class="">退款</span>{elseif $list.order_type eq 'quickpay'}优惠买单{/if}
         					</td>
         					<td>
         						{assign var=order_url value=RC_Uri::url('orders/admin/info',"order_id={$list.order_id}")}
@@ -131,7 +131,7 @@ ecjia.admin.bill_list.init();
         					<td>{$list.percent_value}%</td>
         					<td>
         					{if $list.order_type eq 'buy'}￥{$list.brokerage_amount}{/if}
-        					{if $list.order_type eq 'refund'}<span class="ecjiafc-red">￥{$list.brokerage_amount}</span>{/if}
+        					{if $list.order_type eq 'refund'}<span class="">￥{$list.brokerage_amount}</span>{/if}
         					</td>
         					<td>{$list.add_time}</td>
         					<td>{if $list.bill_status eq 0}未结算{else}已结算{/if}</td>

@@ -333,15 +333,15 @@ class store_bill_detail_model extends Component_Model_Model {
 	        	    RC_Logger::getLogger('info')->info($val);
 	        	    continue;
 	        	}
-	        	$row[$key]['order_add_time'] = RC_Time::local_date('Y-m-d H:i', $row[$key]['order_add_time']);
-	        	$row[$key]['add_time'] = RC_Time::local_date('Y-m-d H:i', $row[$key]['add_time']);
+	        	$row[$key]['order_add_time'] = RC_Time::local_date('Y-m-d H:i:s', $row[$key]['order_add_time']);
+	        	$row[$key]['add_time'] = RC_Time::local_date('Y-m-d H:i:s', $row[$key]['add_time']);
 	        	$row[$key]['bill_time'] = RC_Time::local_date('Y-m-d H:i:s', $row[$key]['bill_time']);
 
 	        	if($val['order_type'] == 'buy') {
 	        		$row[$key]['order_type_name'] = '购物订单';
 	        	} elseif ($val['order_type'] == 'refund') {
 	        		$row[$key]['order_type_name'] = '退款';
-	        		$row[$key]['order_type_name_style'] = '<span class="ecjiafc-red">退款</span>';
+// 	        		$row[$key]['order_type_name_style'] = '<span class="ecjiafc-red">退款</span>';
 	        	} elseif ($val['order_type'] == 'quickpay'){
 	        		$row[$key]['order_type_name'] = '优惠买单';
 	        	} else {

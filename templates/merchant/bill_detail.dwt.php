@@ -75,6 +75,8 @@ ecjia.merchant.bill.init()
         			<thead>
         				<tr>
         					<th>{t}账单日期{/t}</th>
+        					<th class="">{t}订单数量{/t}</th>
+        					<th class="">{t}退款数量{/t}</th>
 						    <th>{t}入账金额{/t}</th>
 						    <th>{t}退款金额{/t}</th>
 						    <th>{t}佣金比例{/t}</th>
@@ -87,8 +89,10 @@ ecjia.merchant.bill.init()
     							<td>
     							{$commission.day}
     							</td>
+    							<td>{$commission.order_count}</td>
+	        					<td>{$commission.refund_count}</td>
     						    <td class="">￥{$commission.order_amount}</td>
-    						    <td class="ecjiafc-red">￥{$commission.refund_amount}</td>
+    						    <td class="">￥{$commission.refund_amount}</td>
     						    <!-- {if $commission.percent_value} -->
     						    <td>{$commission.percent_value}%</td>
     						    <!-- {else} -->

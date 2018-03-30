@@ -44,7 +44,8 @@ ecjia.merchant.bill.init()
 	        			<thead>
 	        				<tr>
 	        					<th>{t}账单周期{/t}</th>
-	        					<th class="w200">{t}订单数量{/t}</th>
+	        					<th class="w120">{t}订单数量{/t}</th>
+	        					<th class="w120">{t}退款数量{/t}</th>
 	        					<th class="w120">{t}入账金额{/t}</th>
 	        					<th class="w120">{t}退款金额{/t}</th>
 	        					<th class="w120">{t}佣金比例{/t}</th>
@@ -58,7 +59,8 @@ ecjia.merchant.bill.init()
 	        						{assign var=goods_url value=RC_Uri::url('commission/merchant/detail',"id={$list.bill_id}")}
 	        						<a href="{$goods_url}" target="_blank">{$list.bill_month}</a>
 	        					</td>
-	        					<td>订单({$list.order_count}) 退货({$list.refund_count})</td>
+	        					<td>{$list.order_count}</td>
+	        					<td>{$list.refund_count}</td>
 	        					<td>￥{$list.order_amount}</td>
 	        					<td>￥{$list.refund_amount}</td>
 	        					<td>{$list.percent_value}%</td>

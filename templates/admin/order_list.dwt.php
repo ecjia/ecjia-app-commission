@@ -65,7 +65,7 @@
 					    <td>￥{$list.total_fee}</td>
 					    <td>{$list.percent_value}%</td>
 						<td>
-							{if $list.order_type eq 'buy' || $list.order_type eq 'quickpay'}￥{$list.brokerage_amount}{/if}{if $list.order_type eq 'refund'}<span class="ecjiafc-red">￥{$list.brokerage_amount}</span>{/if}
+							{if $list.order_type eq 'buy' || $list.order_type eq 'quickpay'}￥{$list.brokerage_amount}{/if}{if $list.order_type eq 'refund'}<span class="">￥{$list.brokerage_amount}</span>{/if}
 						</td>
 						<td>{$list.add_time}</td>
 						<!-- {if $list.bill_status eq 0} -->
