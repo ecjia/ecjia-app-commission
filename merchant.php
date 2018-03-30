@@ -200,38 +200,10 @@ class merchant extends ecjia_merchant {
 	    $filter['end_date'] = empty($_GET['end_date']) ? null : RC_Time::local_strtotime($_GET['end_date']) + 86399;
 	    
 	    $record_list = $this->db_store_bill_detail->get_bill_record($_SESSION['store_id'], $_GET['page'], 15, $filter);
-	    $this->assign('lang_os', RC_Lang::get('orders::order.os'));
-	    $this->assign('lang_ps', RC_Lang::get('orders::order.ps'));
-	    $this->assign('lang_ss', RC_Lang::get('orders::order.ss'));
-	    
-	    $this->assign('lang_os_quickpay', RC_Lang::get('quickpay::order.os'));
-	    $this->assign('lang_ps_quickpay', RC_Lang::get('quickpay::order.ps'));
-	    $this->assign('lang_vs_quickpay', RC_Lang::get('quickpay::order.vs'));
 	    
 	    $this->assign('record_list', $record_list);
 	    
 	    $this->display('bill_record.dwt');
-	}
-	
-	//结算统计
-	public function count() {
-	    /* 检查权限 */
-	    $this->admin_priv('commission_count');
-	    
-	    ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('商家结算'), RC_Uri::url('commission/merchant/init')));
-	    ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('结算统计')));
-	     
-	    $this->assign('ur_here', '结算统计');
-	    $this->assign('search_action', RC_Uri::url('commission/merchant/count'));
-	     
-	    /* 时间参数 */
-	    $filter['start_date'] = empty($_GET['start_date']) ? null : $_GET['start_date'];
-	    $filter['end_date'] = empty($_GET['end_date']) ? null : $_GET['end_date'];
-	    
-	    $bill_day_list = $this->db_store_bill_day->get_billday_list($_SESSION['store_id'], $_GET['page'], 31, $filter);
-	    $this->assign('bill_day_list', $bill_day_list);
-	     
-	    $this->display('bill_count.dwt');
 	}
 	
 	//资金管理
