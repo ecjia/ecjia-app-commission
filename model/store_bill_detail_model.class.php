@@ -216,7 +216,7 @@ class store_bill_detail_model extends Component_Model_Model {
 	    $rs_refund = RC_DB::table('store_bill_detail')->groupBy('store_id')->select("store_id", RC_DB::raw("'".$options['day']."' as day"),RC_DB::raw('COUNT(store_id) as refund_count'), RC_DB::raw('SUM(brokerage_amount) as refund_amount'),
 	        RC_DB::raw('0 as order_count'), RC_DB::raw('0.00 as order_amount'), 'percent_value')
 	    ->whereBetween('add_time', array($day_time, $day_time + 86399))->where('order_type', 'refund')->get();
-
+	    
 	    //获取结算店铺列表
 	    if ($rs_order) {
 	        foreach ($rs_order as $key => &$val) {
@@ -226,6 +226,8 @@ class store_bill_detail_model extends Component_Model_Model {
 	                        $val['refund_count'] = $val2['refund_count'];
 	                        $val['refund_amount'] = $val2['refund_amount'];
 	                        $val['brokerage_amount'] = $val['order_amount'] + $val2['refund_amount'];
+	                    } else {
+	                        $val['brokerage_amount'] = $val['order_amount'];
 	                    }
 	                }
 	            } else {
@@ -237,33 +239,7 @@ class store_bill_detail_model extends Component_Model_Model {
 	    }
         return $rs_order;
 	}
-	/* SELECT
-	store_id,
-	'2016-05-01' AS DAY,
-	count(store_id) AS order_count,
-	SUM(brokerage_amount)  AS order_amount
-	FROM
-	`ecjia_store_bill_detail`
-	WHERE
-	`add_time` BETWEEN 1476172800
-	AND 1476172800 + 86399
-	AND order_type = 1
-	GROUP BY
-	`store_id`;
-
-	SELECT
-	store_id,
-	'2016-05-01' AS DAY,
-	count(store_id) AS refund_count,
-	SUM(brokerage_amount) AS refund_amount
-	FROM
-	`ecjia_store_bill_detail`
-	WHERE
-	`add_time` BETWEEN 1476172800
-	AND 1476172800 + 86399
-	AND order_type = 2
-	GROUP BY
-	`store_id`; */
+	
 	public function get_bill_percent($order_id) {
 	    $rs = RC_DB::table('store_bill_detail')->where('order_id', $order_id)->where('order_type', 'buy')->first();
 	    return $rs['percent_value'];
