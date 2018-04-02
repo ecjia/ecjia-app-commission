@@ -180,6 +180,7 @@ class store_bill_detail_model extends Component_Model_Model {
 	            'bill_order_type' => $data['order_type'],
 	            'bill_order_id' => $data['order_id'],
 	            'bill_order_sn' => $data['order_sn'],
+	            'platform_profit' => $data['platform_profit'],
 	        );
 	        $rs_account = store_account::bill($account);
 	        if ($rs_account && !is_ecjia_error($rs_account)) {

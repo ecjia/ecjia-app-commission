@@ -98,6 +98,8 @@ class store_account {
         $data['pay_time'] = $data['add_time'] = RC_Time::gmtime();
         $data['pay_status'] = 1;
         $data['status'] = 2;
+        $platform_profit = $data['platform_profit'];//平台收益
+        unset($data['platform_profit']);
         
         if(self::insert_store_account_order($data)) {
             //改动账户
@@ -110,7 +112,7 @@ class store_account {
             }
             $change_desc .= ' ' . $data['bill_order_sn']; 
             
-            return self::update_store_account($data['store_id'], $data['amount'], $data['process_type'], $change_desc);
+            return self::update_store_account($data['store_id'], $data['amount'], $data['process_type'], $change_desc, $platform_profit);
         }
         
         return false;
@@ -138,7 +140,7 @@ class store_account {
         return RC_DB::table('store_account_order')->insert($data);
     }
     
-    public function update_store_account($store_id, $money = 0, $change_type = '', $change_desc = '') {
+    public function update_store_account($store_id, $money = 0, $change_type = '', $change_desc = '', $platform_profit = 0) {
         $info = RC_DB::table('store_account')->where('store_id', $store_id)->first();
         
         if(empty($info)) {
@@ -154,6 +156,7 @@ class store_account {
         $data = array(
             'money_before' => $info['money'] ? $info['money'] : 0,
             'money' => $info['money'] + $money,
+            'platform_profit' => $info['platform_profit'] + $platform_profit,
         );
         if($change_type == 'withdraw') {
             $data['frozen_money'] = $info['frozen_money'] + $money;
