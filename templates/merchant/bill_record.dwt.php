@@ -41,7 +41,6 @@ ecjia.merchant.bill.record()
 	        				<tr>
 	        				    <th class="w80">{t}类型{/t}</th>
 	        					<th class="w120">{t}订单编号{/t}</th>
-	        					<th class="w120">{t}下单时间{/t}</th>
 	        					<th class="w120">{t}金额{/t}</th>
 	        					<th class="w80">{t}佣金比例{/t}</th>
 	        					<th class="w110">{t}佣金金额{/t}</th>
@@ -64,7 +63,6 @@ ecjia.merchant.bill.record()
 	        						
 	    					       <a href="{$order_url}" target="_blank">{$list.order_sn}</a>
 	        					</td>
-	        					<td>{$list.order_add_time}</td>
 	        					<td>￥{$list.total_fee}</td>
 	        					<td>{$list.percent_value}%</td>
 	        					<td>￥{$list.brokerage_amount}</td>

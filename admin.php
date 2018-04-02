@@ -361,13 +361,6 @@ class admin extends ecjia_admin {
 	    $filter['end_date'] = RC_Time::local_strtotime(RC_Time::local_date('Y-m',$filter['start_date'] + 86400*31).'-01')-1;
 	    
 	    $record_list = $this->db_store_bill_detail->get_bill_record($bill_info['store_id'], $_GET['page'], 30, $filter, 1);
-	    $this->assign('lang_os', RC_Lang::get('orders::order.os'));
-	    $this->assign('lang_ps', RC_Lang::get('orders::order.ps'));
-	    $this->assign('lang_ss', RC_Lang::get('orders::order.ss'));
-	    
-   		$this->assign('lang_os_quickpay', RC_Lang::get('quickpay::order.os'));
-	    $this->assign('lang_ps_quickpay', RC_Lang::get('quickpay::order.ps'));
-	    $this->assign('lang_vs_quickpay', RC_Lang::get('quickpay::order.vs'));
 	    
 	    $this->assign('record_list', $record_list);
 	    $this->display('bill_detail.dwt');
@@ -450,10 +443,8 @@ class admin extends ecjia_admin {
 	    }
 	     
 	    $record_list = $this->db_store_bill_detail->get_bill_record($store_id, $_GET['page'], 20, $filter, 1);
-	    $this->assign('lang_os', RC_Lang::get('orders::order.os'));
-	    $this->assign('lang_ps', RC_Lang::get('orders::order.ps'));
-	    $this->assign('lang_ss', RC_Lang::get('orders::order.ss'));
 	    $this->assign('record_list', $record_list);
+
 	    $this->display('order_list.dwt');
 	}
 	

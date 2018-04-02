@@ -172,10 +172,6 @@ class merchant extends ecjia_merchant {
 	    $filter['end_date'] = RC_Time::local_strtotime(RC_Time::local_date('Y-m',$filter['start_date'] + 86400*31).'-01')-1;
 	    
 	    $record_list = $this->db_store_bill_detail->get_bill_record($_SESSION['store_id'], $_GET['page'], 30, $filter);
-	    
-	    $this->assign('lang_os', RC_Lang::get('orders::order.os'));
-	    $this->assign('lang_ps', RC_Lang::get('orders::order.ps'));
-	    $this->assign('lang_ss', RC_Lang::get('orders::order.ss'));
 	    $this->assign('record_list', $record_list);
 	    
 	    $this->display('bill_detail.dwt');

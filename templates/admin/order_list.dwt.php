@@ -36,7 +36,6 @@
 						    <th>{t}类型{/t}</th>
 						    <th>{t}订单号{/t}</th>
 						    <th>{t}商家名称{/t}</th>
-						    <th>{t}下单时间{/t}</th>
 						    <th>{t}订单金额{/t}</th>
 						    <th>{t}佣金比例{/t}</th>
 						    <th>{t}佣金金额{/t}</th>
@@ -61,14 +60,13 @@
 					     	<a href='{RC_Uri::url("commission/admin/order","store_id={$list.store_id}")}' title="查看此商家订单分成">{$list.merchants_name}</a>
 					     	<a href='{$store_url}' title="查看商家资料" target="_blank"><i class="fontello-icon-info-circled"></i></a>
 					    </td>
-					    <td>{$list.order_add_time}</td>
 					    <td>￥{$list.total_fee}</td>
 					    <td>{$list.percent_value}%</td>
 						<td>
 							{if $list.order_type eq 'buy' || $list.order_type eq 'quickpay'}￥{$list.brokerage_amount}{/if}{if $list.order_type eq 'refund'}<span class="">￥{$list.brokerage_amount}</span>{/if}
 						</td>
 						<td>{$list.add_time}</td>
-						<!-- {if $list.bill_status eq 0} -->
+						<!-- {if $list.bill_status eq '0'} -->
 						<td><a class="label btn-warning">未结算</a></td>
 						<!-- {else} -->
 						<td class="ok_color"><a class="label btn-success hint--left" data-hint="结算时间 {$list.bill_time}" title="" data-content="{$list.bill_time}">已结算</a></td>

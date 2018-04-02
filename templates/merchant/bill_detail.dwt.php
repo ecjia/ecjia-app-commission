@@ -112,12 +112,11 @@ ecjia.merchant.bill.init()
         				<tr>
         					<th class="w80">{t}类型{/t}</th>
         					<th class="w120">{t}订单编号{/t}</th>
-        					<th class="w120">{t}下单时间{/t}</th>
         					<th class="w120">{t}金额{/t}</th>
-        					<th class="w180">{t}订单状态{/t}</th>
         					<th class="w80">{t}佣金比例{/t}</th>
         					<th class="w110">{t}佣金金额{/t}</th>
         					<th class="w120">{t}入账时间{/t}</th>
+        					<th class="w110">{t}结算状态{/t}</th>
         				</tr>
         			</thead>
         			<tbody>
@@ -130,16 +129,11 @@ ecjia.merchant.bill.init()
         						{assign var=order_url value=RC_Uri::url('orders/merchant/info',"order_id={$list.order_id}")}
     					       <a href="{$order_url}" target="_blank">{$list.order_sn}</a>
         					</td>
-        					<td>{$list.order_add_time}</td>
         					<td>￥{$list.total_fee}</td>
-        					{if $list.order_type eq 'quickpay'}
-        						<td>{$lang_os_quickpay[$list.order_status]},{$lang_ps_quickpay[$list.pay_status]},{$lang_vs_quickpay[$list.verification_status]}</td>
-        					{else}
-        						<td>{$lang_os[$list.order_status]},{$lang_ps[$list.pay_status]},{$lang_ss[$list.shipping_status]}</td>
-        					{/if}
         					<td>{$list.percent_value}%</td>
         					<td>￥{$list.brokerage_amount}</td>
         					<td>{$list.add_time}</td>
+        					<td>{if $list.bill_status eq 0}未结算{else}已结算{/if}</td>
         				</tr>
         			<!-- {foreachelse} -->
         		    	<tr><td class="dataTables_empty" colspan="8">没有找到任何记录</td></tr>

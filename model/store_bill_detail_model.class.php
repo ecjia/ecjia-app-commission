@@ -305,7 +305,7 @@ class store_bill_detail_model extends Component_Model_Model {
 	    } else {
 	        $page = new ecjia_merchant_page($count, $page_size, 3);
 	    }
-	    $fields .= " bd.*,s.merchants_name";
+	    $fields .= " bd.*,bd.order_amount as total_fee,s.merchants_name";
 	    $row = $db_bill_detail
 		    ->select(RC_DB::raw($fields))
 		    ->take($page_size)
@@ -315,28 +315,28 @@ class store_bill_detail_model extends Component_Model_Model {
 	    
 	    if ($row) {
 	        foreach ($row as $key => $val) {
-	        	if($val['order_type'] == 'quickpay') {
-	        	    //优惠买单订单
-	        	    $order_info = RC_DB::table('quickpay_orders')->where('order_id', $val['order_id'])->
-	        	    select('user_id','order_sn','order_amount as total_fee','add_time as order_add_time', 'order_status','pay_status','verification_status')->first();
-	        	    $order_info['buyer'] = RC_DB::TABLE('users')->where('user_id', $order_info['user_id'])->pluck('user_name as buyer');
-	        	    $row[$key] = array_merge($row[$key], $order_info);
-	        	} elseif ($val['order_type'] == 'buy' || $val['order_type'] == 'refund') {
-	        	    //普通订单（含退款）
-	        		$db_order_info = RC_DB::table('order_info as oi');
-	        		$db_order_info->leftJoin('users as u', RC_DB::raw('u.user_id'), '=', RC_DB::raw('oi.user_id'));
-        			$fields = " oi.store_id, oi.order_id, oi.order_sn, oi.add_time as order_add_time, oi.order_status, oi.shipping_status, oi.order_amount, oi.money_paid, oi.is_delete,";
-        			$fields .= " (money_paid + surplus + integral_money) AS total_fee, ";
-        			$fields .= " oi.shipping_time, oi.auto_delivery_time, oi.pay_status,";
-        			$fields .= " IFNULL(u.user_name, '" . RC_Lang::get('store::store.anonymous'). "') AS buyer ";
-        			$order_info = $db_order_info->where('order_id', $val['order_id'])->select(RC_DB::raw($fields))->first();
-        			$row[$key] = array_merge($row[$key], $order_info);
-	        	} else {
-	        	    RC_Logger::getLogger('info')->info('store_bill_error:');
-	        	    RC_Logger::getLogger('info')->info($val);
-	        	    continue;
-	        	}
-	        	$row[$key]['order_add_time'] = RC_Time::local_date('Y-m-d H:i:s', $row[$key]['order_add_time']);
+	            if(empty($val['order_sn'])) {
+	                //原有数据做兼容
+	                if($val['order_type'] == 'quickpay') {
+	                    //优惠买单订单
+	                    $order_info = RC_DB::table('quickpay_orders')->where('order_id', $val['order_id'])->
+	                    select('order_sn','order_amount as total_fee')->first();
+	                    $order_info['buyer'] = RC_DB::TABLE('users')->where('user_id', $order_info['user_id'])->pluck('user_name as buyer');
+	                    $row[$key] = array_merge($row[$key], $order_info);
+	                } elseif ($val['order_type'] == 'buy' || $val['order_type'] == 'refund') {
+	                    //普通订单（含退款）
+	                    $db_order_info = RC_DB::table('order_info as oi');
+	                    $fields = " oi.order_sn, oi.order_amount, oi.money_paid,";
+	                    $fields .= " (money_paid + surplus + integral_money) AS total_fee ";
+	                    $order_info = $db_order_info->where('order_id', $val['order_id'])->select(RC_DB::raw($fields))->first();
+	                    $row[$key] = array_merge($row[$key], $order_info);
+	                } else {
+	                    RC_Logger::getLogger('info')->info('store_bill_error:');
+	                    RC_Logger::getLogger('info')->info($val);
+	                    continue;
+	                }
+	            }
+	        	
 	        	$row[$key]['add_time'] = RC_Time::local_date('Y-m-d H:i:s', $row[$key]['add_time']);
 	        	$row[$key]['bill_time'] = RC_Time::local_date('Y-m-d H:i:s', $row[$key]['bill_time']);
 
