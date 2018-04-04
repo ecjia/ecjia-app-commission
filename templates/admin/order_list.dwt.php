@@ -67,7 +67,7 @@
 						</td>
 						<td>{$list.add_time}</td>
 						<!-- {if $list.bill_status eq '0'} -->
-						<td><a class="label btn-warning">未结算</a></td>
+						<td><a class="label btn-warning" href='{RC_Uri::url("commission/admin/order_commission","detail_id={$list.detail_id}")}' title="点击进行结算" target="_blank">未结算</a></td>
 						<!-- {else} -->
 						<td class="ok_color"><a class="label btn-success hint--left" data-hint="结算时间 {$list.bill_time}" title="" data-content="{$list.bill_time}">已结算</a></td>
 					    <!-- {/if} -->
