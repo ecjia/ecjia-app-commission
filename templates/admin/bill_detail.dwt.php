@@ -45,7 +45,7 @@ ecjia.admin.bill_list.init();
     					</tr>
     					<tr>
     						<td align="right"><h4 align="right">本月账单金额：</h4></td>
-    						<td colspan="3"><b class="ecjiaf-fs3">￥{$bill_info.bill_amount}</b><span class="m_l10 m_r10">({$bill_info.percent_value}%，以订单入账比例为准)</span>
+    						<td colspan="3"><b class="ecjiaf-fs3 ecjiafc-red">￥{$bill_info.bill_amount}</b><span class="m_l10 m_r10">({$bill_info.percent_value}%，以订单入账比例为准)</span>
     						</td>
     					</tr>
     					<tr>

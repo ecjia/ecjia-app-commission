@@ -50,7 +50,7 @@ ecjia.merchant.bill.init()
 								<td align="right">佣金百分比：</td>
 								<td>{$bill_info.percent_value}%&nbsp;<a title="以订单入账比例为准"><i class="fa fa-question-circle"></i></a></td>
 								<td align="right"><h4>本月账单金额：</h4></td>
-								<td><h4 class="ecjiaf-ib"><b>￥{$bill_info.bill_amount}</b></h4>
+								<td><h4 class="ecjiaf-ib ecjiafc-red"><b>￥{$bill_info.bill_amount}</b></h4>
 								</td>{if 0} = {$bill_info.available_amount} * {$bill_info.percent_value}%{/if}
 							</tr>
 						</tbody>
