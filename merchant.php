@@ -385,13 +385,13 @@ class merchant extends ecjia_merchant {
 	}
 	
 	//获取资金明细
-	private function get_account_log() {
+	private function get_account_log($page_size = 20) {
 		$db = RC_DB::table('store_account_log');
 		
 		$db->where('store_id', $_SESSION['store_id']);
 		$count = $db->count();
-		$page = new ecjia_merchant_page($count, 10, 5);
-		$data = $db->take(10)->skip($page->start_id - 1)->orderBy('change_time', 'desc')->get();
+		$page = new ecjia_merchant_page($count, $page_size, 5);
+		$data = $db->take($page_size)->skip($page->start_id - 1)->orderBy('change_time', 'desc')->get();
 		if (!empty($data)) {
 			foreach ($data as $k => $v) {
 				$data[$k]['change_time'] = RC_Time::local_date('Y-m-d H:i:s', $v['change_time']);

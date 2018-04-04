@@ -137,6 +137,8 @@ class store_account {
 //         `bill_order_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '订单id',
 //         `bill_order_sn` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '订单编号',
 //         `add_time` int(10) NOT NULL DEFAULT '0',
+
+        $data['order_sn'] = empty($data['order_sn']) ? self::get_order_sn() : $data['order_sn'];
         return RC_DB::table('store_account_order')->insert($data);
     }
     
@@ -186,13 +188,11 @@ class store_account {
         return RC_DB::table('store_account_log')->insert($data);
     }
     
-    /**
-     * 计算店铺日账单
-     * 默认计算所有店铺前一天的账单，可传参数指定店铺和日期
-     * @param number $options store_id
-     * @param string $options day 2016-05-11
-     */
-    public function bill_day($options) {}
+    private function get_order_sn() {
+		/* 选择一个随机的方案 */
+		mt_srand((double) microtime() * 1000000);
+		return date('Ymd') . str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT);
+	}
     
     
     
