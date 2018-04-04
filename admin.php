@@ -596,8 +596,8 @@ class admin extends ecjia_admin {
 			foreach ($data as $k => $v) {
 				$arr[$k]['order_sn'] = $v['order_sn'];
 				$arr[$k]['merchants_name'] = $v['merchants_name'];
-				$arr[$k]['account_type'] = $v['account_type'] == 'bank' ? '银行卡' : ($v['account_type'] == 'alipay' ? '支付宝' : '');
 				$arr[$k]['amount'] = price_format($v['amount']);
+				$arr[$k]['account_type'] = $v['account_type'] == 'bank' ? '银行卡' : ($v['account_type'] == 'alipay' ? '支付宝' : '');
 				$bank_name = !empty($v['bank_name']) ? '（'.$v['bank_name'].'）' : '';
 				$arr[$k]['bank_info'] = $bank_name.$v['account_number'];
 				$arr[$k]['add_time'] = RC_Time::local_date('Y-m-d H:i:s', $v['add_time']);
