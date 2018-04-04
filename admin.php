@@ -687,9 +687,6 @@ class admin extends ecjia_admin {
 		}
 		RC_Excel::load(RC_APP_PATH . 'commission' . DIRECTORY_SEPARATOR .'statics/withdraw.xls', function($excel) use ($arr){
 			$excel->sheet('First sheet', function($sheet) use ($arr) {
-			    $sheet->setColumnFormat(array(
-			        'A' => 'String'
-			    ));
 				foreach ($arr as $key => $item) {
 					$sheet->appendRow($key+2, $item);
 				}
