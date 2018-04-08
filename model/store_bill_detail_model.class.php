@@ -198,14 +198,8 @@ class store_bill_detail_model extends Component_Model_Model {
 	//计算日账单,分批处理数据
 	public function count_bill_day($options) {
 	    
-// 	    $table = RC_DB::table('store_bill_detail')->groupBy('store_id');
-// 	    if (isset($options['store_id'])) {
-// 	        $table->having('store_id', $options['store_id']);
-// 	    }
         $day_time = RC_Time::local_strtotime($options['day']);
         
-// 	    $table->whereBetween('add_time', array($day_time, $day_time + 86399));
-
 	    $rs_order = RC_DB::table('store_bill_detail')->select("store_id", RC_DB::raw("'".$options['day']."' as day"), RC_DB::raw('COUNT(store_id) as order_count'), RC_DB::raw('SUM(brokerage_amount) as order_amount'),
 	        RC_DB::raw('0 as refund_count'), RC_DB::raw('0.00 as refund_amount'), 'percent_value')
 	    ->whereBetween('add_time', array($day_time, $day_time + 86399))
@@ -220,29 +214,34 @@ class store_bill_detail_model extends Component_Model_Model {
 	        RC_DB::raw('0 as order_count'), RC_DB::raw('0.00 as order_amount'), 'percent_value')
 	    ->whereBetween('add_time', array($day_time, $day_time + 86399))->where('order_type', 'refund')->get();
 	    
+	    $rs_refund = self::formate_array($rs_refund, 'store_id');
 // 	    _dump($rs_order);
 // 	    _dump($rs_refund,1);
+// 	    RC_Logger::getLogger('info')->info($val);
 	    //获取结算店铺列表
 	    if ($rs_order) {
-	        foreach ($rs_order as $key => &$val) {
-	            if ($rs_refund) {
-	                foreach ($rs_refund as $key2 => $val2) {
-	                    if ($val['store_id'] == $val2['store_id'] && $val['day'] == $val2['day']) {
-	                        $val['refund_count'] = $val2['refund_count'];
-	                        $val['refund_amount'] = $val2['refund_amount'];
-	                        $val['brokerage_amount'] = $val['order_amount'] + $val2['refund_amount'];
-	                    } else {
-	                        $val['brokerage_amount'] = $val['order_amount'];
-	                    }
-	                }
-	            } else {
-	                $val['brokerage_amount'] = $val['order_amount'];
-	            }
-	            $val['add_time'] = RC_Time::gmtime();
+	        foreach ($rs_order as $key => $val) {
+                if ($rs_refund && $rs_refund[$val['store_id']]) {
+                    $rs_order[$key]['refund_count'] = $rs_refund[$val['store_id']]['refund_count'];
+                    $rs_order[$key]['refund_amount'] = $rs_refund[$val['store_id']]['refund_amount'];
+                    $rs_order[$key]['brokerage_amount'] = $val['order_amount'] + $rs_refund[$val['store_id']]['refund_amount'];
+                } else {
+                    $rs_order[$key]['brokerage_amount'] = $val['order_amount'];
+                }
+	            $rs_order[$key]['add_time'] = RC_Time::gmtime();
 	        }
-
+	        return $rs_order;
+	    } else {
+	        if ($rs_refund) {
+	            foreach ($rs_refund as $key => $val) {
+                    $rs_refund[$key]['brokerage_amount'] = $val['refund_amount'];
+	                $rs_refund[$key]['add_time'] = RC_Time::gmtime();
+	            }
+	            return $rs_refund;
+	        }
+	        return array();
 	    }
-        return $rs_order;
+	   
 	}
 	
 	public function get_bill_percent($order_id) {
@@ -335,6 +334,17 @@ class store_bill_detail_model extends Component_Model_Model {
 	        }
 	    }
 	    return array('item' => $row, 'filter' => $filter, 'page' => $page->show(2), 'desc' => $page->page_desc());
+	}
+	
+	public function formate_array($data, $newKey) {
+	    $newArray = array();
+	    if($data) {
+	        foreach ($data as $val) {
+	            $newArray[$val[$newKey]] = $val;
+	        }
+	        return $newArray;
+	    }
+	    return $data;
 	}
 }
 
