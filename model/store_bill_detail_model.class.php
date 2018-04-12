@@ -174,7 +174,7 @@ class store_bill_detail_model extends Component_Model_Model {
         }
 
         $data['add_time'] = RC_Time::gmtime();
-        RC_Logger::getLogger('info')->info($data);
+//         RC_Logger::getLogger('info')->info($data);
         $datail_id = RC_DB::table('store_bill_detail')->insertGetId($data);
 	    if($datail_id) {
 	        //TODO每成功后结算一次
