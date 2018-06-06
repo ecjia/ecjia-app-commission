@@ -119,7 +119,13 @@ class store_bill_detail_model extends Component_Model_Model {
         if($data['order_type'] == 'quickpay') {
             $data['order_amount'] = $order_info['order_amount'];
         } else {
-            $data['order_amount'] = $order_info['money_paid'] + $order_info['surplus'] + $order_info['integral_money'];
+            //众包配送，运费不参与商家结算 @update 20180606
+            if($order_info['shipping_code'] == 'ship_ecjia_express') {
+                $data['order_amount'] = $order_info['money_paid'] + $order_info['surplus'] + $order_info['integral_money'] - $order_info['shipping_fee'];
+            } else {
+                $data['order_amount'] = $order_info['money_paid'] + $order_info['surplus'] + $order_info['integral_money'];
+            }
+            
         }
         if ($data['order_type'] == 'buy') {
             $data['percent_value'] = RC_Model::model('commission/store_franchisee_model')->get_store_commission_percent($data['store_id']);
