@@ -181,28 +181,34 @@ class store_bill_detail_model extends Component_Model_Model {
 
         $data['add_time'] = RC_Time::gmtime();
 //         RC_Logger::getLogger('info')->info($data);
-        $datail_id = RC_DB::table('store_bill_detail')->insertGetId($data);
-	    if($datail_id) {
-	        //TODO每成功后结算一次
-	        RC_Loader::load_app_class('store_account', 'commission');
-	        $account = array(
-	            'store_id' => $data['store_id'],
-	            'amount' => $data['brokerage_amount'],
-	            'bill_order_type' => $data['order_type'],
-	            'bill_order_id' => $data['order_id'],
-	            'bill_order_sn' => $data['order_sn'],
-	            'platform_profit' => $data['platform_profit'],
-	        );
-	        $rs_account = store_account::bill($account);
-	        if ($rs_account && !is_ecjia_error($rs_account)) {
-	            RC_DB::table('store_bill_detail')->where('detail_id', $datail_id)->update(array('bill_status' => 1, 'bill_time' => RC_Time::gmtime()));
-	            //删除队列表数据
-	            RC_DB::table('store_bill_queue')->where('order_type', $data['order_type'])->where('order_id', $data['order_id'])->delete();
-	        }
-	        return true;
-	    }
-	    return false;
-	    
+
+        $status = false;
+        RC_DB::transaction(function () use ($data, &$status){
+            
+            $datail_id = RC_DB::table('store_bill_detail')->insertGetId($data);
+            if($datail_id) {
+                //TODO每成功后结算一次
+                RC_Loader::load_app_class('store_account', 'commission');
+                $account = array(
+                    'store_id' => $data['store_id'],
+                    'amount' => $data['brokerage_amount'],
+                    'bill_order_type' => $data['order_type'],
+                    'bill_order_id' => $data['order_id'],
+                    'bill_order_sn' => $data['order_sn'],
+                    'platform_profit' => $data['platform_profit'],
+                );
+                $rs_account = store_account::bill($account);
+                if ($rs_account && !is_ecjia_error($rs_account)) {
+                    RC_DB::table('store_bill_detail')->where('detail_id', $datail_id)->update(array('bill_status' => 1, 'bill_time' => RC_Time::gmtime()));
+                    //删除队列表数据
+                    RC_DB::table('store_bill_queue')->where('order_type', $data['order_type'])->where('order_id', $data['order_id'])->delete();
+                }
+                $status = true;
+            }
+            $status = false;
+        });
+        
+	    return $status;
 	}
 
 	//计算日账单,分批处理数据
