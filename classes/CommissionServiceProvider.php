@@ -2,9 +2,9 @@
 
 namespace Ecjia\App\Commission;
 
-use Royalcms\Component\App\AppServiceProvider;
+use Royalcms\Component\App\AppParentServiceProvider;
 
-class CommissionServiceProvider extends  AppServiceProvider
+class CommissionServiceProvider extends  AppParentServiceProvider
 {
     
     public function boot()
