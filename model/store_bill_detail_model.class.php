@@ -209,6 +209,8 @@ class store_bill_detail_model extends Component_Model_Model {
                     RC_DB::table('store_bill_detail')->where('detail_id', $datail_id)->update(array('bill_status' => 1, 'bill_time' => RC_Time::gmtime()));
                     //删除队列表数据
                     RC_DB::table('store_bill_queue')->where('order_type', $data['order_type'])->where('order_id', $data['order_id'])->delete();
+                } else {
+                    RC_DB::rollBack();
                 }
                 $status = true;
             }
