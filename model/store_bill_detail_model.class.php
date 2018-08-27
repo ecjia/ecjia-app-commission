@@ -82,11 +82,13 @@ class store_bill_detail_model extends Component_Model_Model {
             $data['order_sn'] = $order_info['order_sn'];
         } else {
             //超出范围
-            RC_Logger::getLogger('commission/model/store_bill_detail_model-bill_order_error')->error('订单类型超出范围，order_id:'.$data['order_id']);
+            RC_Logger::getLogger('bill_order_error')->error("commission/model/store_bill_detail_model-line:".__LINE__);
+            RC_Logger::getLogger('bill_order_error')->error('订单类型超出范围，order_id:'.$data['order_id']);
             return false;
         }
         
         if (empty($order_info)) {
+            RC_Logger::getLogger('bill_order_error')->error('订单信息空:');
             RC_Logger::getLogger('bill_order_error')->error($data);
             return false;
         }
@@ -117,7 +119,7 @@ class store_bill_detail_model extends Component_Model_Model {
         $data['pay_name'] = $order_info['pay_name'] ? $order_info['pay_name'] : '';
         //订单金额 付款+余额消耗+积分抵钱
         if($data['order_type'] == 'quickpay') {
-            $data['order_amount'] = $order_info['order_amount'];
+            $data['order_amount'] = $order_info['goods_amount'] - $order_info['discount'] - $order_info['integral_money'] - $order_info['bonus'];
         } else {
             //众包配送，运费不参与商家结算 @update 20180606
             if($order_info['shipping_code'] == 'ship_ecjia_express') {
@@ -170,6 +172,11 @@ class store_bill_detail_model extends Component_Model_Model {
             }
         } else if ($data['order_type'] == 'quickpay') {
             $data['percent_value'] = 100 - ecjia::config('quickpay_fee');
+            if ($data['percent_value'] > 100) {
+                RC_Logger::getLogger('bill_order_error')->error('quickpay_fee超出范围：');
+                RC_Logger::getLogger('bill_order_error')->error($data);
+                return false;
+            }
             if(in_array($data['pay_code'], array('pay_cod', 'pay_cash'))) {
                 $data['brokerage_amount'] = $data['order_amount'] * (100 - $data['percent_value']) / 100 * -1;
                 $data['platform_profit'] = $data['brokerage_amount'] * -1;
