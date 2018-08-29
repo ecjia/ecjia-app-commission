@@ -279,7 +279,7 @@ class store_bill_detail_model extends Component_Model_Model {
 	    return $rs;
 	}
 
-	public function get_bill_record($store_id, $page = 1, $page_size = 15, $filter, $is_admin = 0) {
+	public function get_bill_record($store_id = 0, $page = 1, $page_size = 15, $filter = array(), $is_admin = 0) {
 	    $db_bill_detail = RC_DB::table('store_bill_detail as bd')
 	    ->leftJoin('store_franchisee as s', RC_DB::raw('s.store_id'), '=', RC_DB::raw('bd.store_id'));
 // 	    ->leftJoin('order_info as oi', RC_DB::raw('oi.order_id'), '=', RC_DB::raw('bd.order_id'));
