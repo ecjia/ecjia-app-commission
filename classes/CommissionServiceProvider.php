@@ -9,7 +9,7 @@ class CommissionServiceProvider extends  AppParentServiceProvider
     
     public function boot()
     {
-        $this->package('ecjia/app-commission', null, dirname(__DIR__));
+        $this->package('ecjia/app-commission');
     }
     
     public function register()
