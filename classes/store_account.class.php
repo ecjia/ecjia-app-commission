@@ -138,7 +138,7 @@ class store_account {
 //         `bill_order_sn` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '订单编号',
 //         `add_time` int(10) NOT NULL DEFAULT '0',
 
-        $data['order_sn'] = empty($data['order_sn']) ? self::get_order_sn() : $data['order_sn'];
+        $data['order_sn'] = empty($data['order_sn']) ? ecjia_order_store_account_sn() : $data['order_sn'];
         return RC_DB::table('store_account_order')->insert($data);
     }
     

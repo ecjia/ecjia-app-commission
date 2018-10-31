@@ -288,7 +288,7 @@ class merchant extends ecjia_merchant {
 		/* 变量初始化 */
 		$data = array(
 			'store_id'     => $_SESSION['store_id'],
-			'order_sn'	   => $this->get_order_sn(),
+			'order_sn'	   => ecjia_order_store_account_sn(),
 			'amount'   	   => $amount,
 			'staff_note'   => $staff_note,
 			'process_type' => 'withdraw',
