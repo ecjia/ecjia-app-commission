@@ -481,12 +481,6 @@ class merchant extends ecjia_merchant {
 		}
 	}
 	
-	private function get_order_sn() {
-		/* 选择一个随机的方案 */
-		mt_srand((double) microtime() * 1000000);
-		return date('Ymd') . str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT);
-	}
-	
 	private function update_store_money($amount = 0) {
 		$money = RC_DB::table('store_account')->where('store_id', $_SESSION['store_id'])->pluck('money');
 		RC_DB::table('store_account')->where('store_id', $_SESSION['store_id'])->update(array('money_before' => $money));
