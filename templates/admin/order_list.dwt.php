@@ -18,7 +18,7 @@
 <div class="row-fluid batch">
 	<form method="post" action="{$search_action}" name="searchForm">
 		<div class="choose_list f_r">
-		    <input type="text" name="merchant_keywords" value="{$smarty.get.merchant_keywords}" placeholder="{lang key='goods::goods.enter_merchant_keywords'}" size="15" />
+		    <input type="text" name="merchant_keywords" value="{$smarty.get.merchant_keywords}" placeholder="{t domain="commission"}请输入商家关键字{/t}" size="15" />
 			<input type="text" name="order_sn" value="{$smarty.get.order_sn}" placeholder="{t domain="commission"}请输入订单号{/t}">
 			<button class="btn screen-btn" type="button">{t domain="commission"}搜索{/t}</button>
 		</div>

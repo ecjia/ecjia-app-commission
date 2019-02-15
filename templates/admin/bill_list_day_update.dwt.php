@@ -34,7 +34,7 @@ ecjia.admin.bill_update.init();
                             <input class="form-control start_date" name="start_date" type="text" placeholder="{t domain="commission"}开始时间{/t}" value="{$smarty.get.start_date}">
                     <span class="">-</span>
                     <input class="form-control end_date" name="end_date" type="text" placeholder="{t domain="commission"}结束时间{/t}" value="{$smarty.get.end_date}">
-                            <span class="input-must">{lang key='system::system.require_field'}</span>
+                            <span class="input-must">*</span>
                         </div>
                     </div>
                     
