@@ -52,8 +52,8 @@ defined('IN_ECJIA') or exit('No permission resources.');
 return array(
 	'identifier' 	=> 'ecjia.commission',
 	'directory' 	=> 'commission',
-	'name'			=> 'commission',
-	'description' 	=> 'commission_desc',		/* 描述对应的语言项 */
+	'name'			=> __('商家结算', 'commission'),
+	'description' 	=> __('商家查询结算账单和结算明细', 'commission'),		/* 描述对应的语言项 */
 	'author' 		=> 'ECJIA TEAM',			/* 作者 */
 	'website' 		=> 'http://www.ecjia.com',	/* 网址 */
 	'version' 		=> '1.25.0',					/* 版本号 */
