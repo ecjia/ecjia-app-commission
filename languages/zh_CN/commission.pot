@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Ecjia App commission 1.27.4\n"
 "Report-Msgid-Bugs-To: https://make.ecjia.com/polyglots/\n"
-"POT-Creation-Date: 2019-02-21 03:53:24+00:00\n"
+"POT-Creation-Date: 2019-03-01 01:42:37+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -116,7 +116,7 @@ msgstr ""
 msgid "订单分成"
 msgstr ""
 
-#: admin.php:436
+#: admin.php:436 admin.php:448
 msgid "订单分成列表"
 msgstr ""
 
@@ -864,11 +864,6 @@ msgstr ""
 
 #: content/apps/commission/templates/admin/bill_list_day.dwt.php:54
 msgid "部分结算"
-msgstr ""
-
-#: content/apps/commission/templates/admin/bill_list_day.dwt.php:104
-#: content/apps/commission/templates/merchant/bill_detail.dwt.php:99
-msgid "100%"
 msgstr ""
 
 #: content/apps/commission/templates/admin/bill_list_month_update.dwt.php:13
