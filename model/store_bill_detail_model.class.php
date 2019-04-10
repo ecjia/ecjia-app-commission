@@ -138,7 +138,7 @@ class store_bill_detail_model extends Component_Model_Model {
             //众包配送，运费不参与商家结算 @update 20180606
             //支付手续费平台收取 @update 20190410
             if($order_info['shipping_code'] == 'ship_ecjia_express') {
-                if(in_array($data['pay_code'], array('pay_cod', 'pay_cash'))) {
+                if(in_array($data['pay_code'], array('pay_cod', 'pay_cash', 'pay_wxpay_merchant'))) {
                     $data['brokerage_amount'] = $data['order_amount'] * (100 - $data['percent_value']) / 100 * -1 - $data['pay_fee'];
                     $data['platform_profit'] = $data['brokerage_amount'] * -1;
                 } else {
@@ -147,7 +147,7 @@ class store_bill_detail_model extends Component_Model_Model {
                 }
             } else {
                 //运费不参与分佣 @update 20181210
-                if(in_array($data['pay_code'], array('pay_cod', 'pay_cash'))) {
+                if(in_array($data['pay_code'], array('pay_cod', 'pay_cash', 'pay_wxpay_merchant'))) {
                     $data['brokerage_amount'] = (($data['order_amount'] - $data['shipping_fee'] - $data['insure_fee']) * (100 - $data['percent_value']) / 100 + $data['shipping_fee'] + $data['insure_fee']) * -1 - $data['pay_fee'];
                     $data['platform_profit'] = $data['brokerage_amount'] * -1;
                 } else {
@@ -198,7 +198,7 @@ class store_bill_detail_model extends Component_Model_Model {
                 RC_Logger::getLogger('bill_order_error')->error($data);
                 return false;
             }
-            if(in_array($data['pay_code'], array('pay_cod', 'pay_cash'))) {
+            if(in_array($data['pay_code'], array('pay_cod', 'pay_cash', 'pay_wxpay_merchant'))) {
                 $data['brokerage_amount'] = $data['order_amount'] * (100 - $data['percent_value']) / 100 * -1;
                 $data['platform_profit'] = $data['brokerage_amount'] * -1;
             } else {
