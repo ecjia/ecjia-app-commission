@@ -70,6 +70,15 @@ class store_bill_detail_model extends Component_Model_Model {
             return false;
         }
 
+        //判断重复记录清除队列
+        $is_exists = RC_DB::table('store_bill_detail')->where('order_type', $data['order_type'])->where('order_id', $data['order_id'])->count();
+        if($is_exists) {
+            RC_DB::table('store_bill_queue')->where('order_type', $data['order_type'])->where('order_id', $data['order_id'])->delete();
+            RC_Logger::getLogger('bill_order_error')->error('重复入账');
+            RC_Logger::getLogger('bill_order_error')->error($data);
+            return false;
+        }
+
         if($data['order_type'] == 'quickpay') {
             $order_info = RC_DB::table('quickpay_orders')->where('order_id', $data['order_id'])->first();
             $data['order_sn'] = $order_info['order_sn'];
@@ -332,7 +341,7 @@ class store_bill_detail_model extends Component_Model_Model {
 	    } else {
 	        $page = new ecjia_merchant_page($count, $page_size, 3);
 	    }
-	    $fields .= " bd.*,bd.order_amount as total_fee,s.merchants_name";
+	    $fields = " bd.*,bd.order_amount as total_fee,s.merchants_name";
 	    $row = $db_bill_detail
 		    ->select(RC_DB::raw($fields))
 		    ->take($page_size)
