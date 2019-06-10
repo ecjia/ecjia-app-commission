@@ -58,7 +58,9 @@ ecjia.merchant.bill.record()
 	        					<td>
 	        					{if $list.order_type eq 'buy'}
 	        						{assign var=order_url value=RC_Uri::url('orders/merchant/info',"order_id={$list.order_id}")}
-	        					{else} 
+                                {else if $list.order_type eq 'refund'}
+                                    {assign var=order_url value=RC_Uri::url('refund/merchant/refund_detail',"refund_id={$list.order_id}")}
+                                {else if $list.order_type eq 'quickpay'}
 	        						{assign var=order_url value=RC_Uri::url('quickpay/mh_order/order_info',"order_id={$list.order_id}")}
 	        					{/if}
 	        						

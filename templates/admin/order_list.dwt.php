@@ -49,8 +49,10 @@
 					<tr>
 						<td>{if $list.order_type_name_style}{$list.order_type_name_style}{else}{$list.order_type_name}{/if}</td>
 						<td>
-						{if $list.order_type eq 'buy' || $list.order_type eq 'refund'} 
+						{if $list.order_type eq 'buy'}
 							{assign var=order_url value=RC_Uri::url('orders/admin/info',"order_id={$list.order_id}")}
+                        {else if $list.order_type eq 'refund'}
+                            {assign var=order_url value=RC_Uri::url('refund/admin/refund_detail',"refund_id={$list.order_id}")}
 						{else if $list.order_type eq 'quickpay'}
 							{assign var=order_url value=RC_Uri::url('quickpay/admin_order/order_info',"order_id={$list.order_id}")}
 						{/if}
