@@ -66,10 +66,10 @@ ecjia.merchant.bill.record()
 	        						
 	    					       <a href="{$order_url}" target="_blank">{$list.order_sn}</a>
 	        					</td>
-	        					<td>￥{$list.total_fee}</td>
-	        					<td>￥{$list.commission_fee}</td>
+	        					<td>{$list.total_fee_formatted}</td>
+	        					<td>{$list.commission_fee_formatted}</td>
 	        					<td>{$list.percent_value}%</td>
-	        					<td>￥{$list.brokerage_amount}</td>
+	        					<td>{$list.brokerage_amount_formatted}</td>
 	        					<td>{$list.add_time}</td>
 	        					<td>
 	        					{if $list.bill_status eq 0}

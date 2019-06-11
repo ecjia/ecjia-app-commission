@@ -63,12 +63,10 @@
 					     	<a href='{RC_Uri::url("commission/admin/order","store_id={$list.store_id}")}' title="{t domain="commission"}查看此商家订单分成{/t}">{$list.merchants_name}</a>
 					     	<a href='{$store_url}' title="{t domain="commission"}查看商家资料{/t}" target="_blank"><i class="fontello-icon-info-circled"></i></a>
 					    </td>
-					    <td>￥{$list.total_fee}</td>
-					    <td>￥{$list.commission_fee}</td>
+					    <td>{$list.total_fee_formatted}</td>
+					    <td>{$list.commission_fee_formatted}</td>
 					    <td>{$list.percent_value}%</td>
-						<td>
-							{if $list.order_type eq 'buy' || $list.order_type eq 'quickpay'}￥{$list.brokerage_amount}{/if}{if $list.order_type eq 'refund'}<span class="">￥{$list.brokerage_amount}</span>{/if}
-						</td>
+						<td>{$list.brokerage_amount_formatted}</td>
 						<td>{$list.add_time}</td>
 						<!-- {if $list.bill_status eq '0'} -->
 						<td><a class="label btn-warning" href='{RC_Uri::url("commission/admin/order_commission","detail_id={$list.detail_id}")}' title="{t domain="commission"}点击进行结算{/t}" target="_blank">{t domain="commission"}未结算{/t}</a></td>

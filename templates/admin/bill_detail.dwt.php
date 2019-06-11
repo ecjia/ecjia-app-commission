@@ -119,12 +119,9 @@ ecjia.admin.bill_list.init();
         						{assign var=order_url value=RC_Uri::url('orders/admin/info',"order_id={$list.order_id}")}
     					       <a href="{$order_url}" target="_blank">{$list.order_sn}</a>
         					</td>
-        					<td>￥{$list.total_fee}</td>
+        					<td>{$list.total_fee_formatted}</td>
         					<td>{$list.percent_value}%</td>
-        					<td>
-        					{if $list.order_type eq 'buy'}￥{$list.brokerage_amount}{/if}
-        					{if $list.order_type eq 'refund'}<span class="">￥{$list.brokerage_amount}</span>{/if}
-        					</td>
+        					<td>{$list.brokerage_amount_formatted}</td>
         					<td>{$list.add_time}</td>
         					<td>{if $list.bill_status eq 0}{t domain="commission"}未结算{/t}{else}{t domain="commission"}已结算{/t}{/if}</td>
         				</tr>

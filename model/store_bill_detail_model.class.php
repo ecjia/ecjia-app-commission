@@ -374,7 +374,11 @@ class store_bill_detail_model extends Component_Model_Model {
 	            }
 	            //分成金额=订单金额-运费-保价费
 	            $row[$key]['commission_fee'] = $row[$key]['total_fee'] - $row[$key]['shipping_fee'] - $row[$key]['insure_fee'] - $row[$key]['pay_fee'];
-	            $row[$key]['commission_fee'] = number_format($row[$key]['commission_fee'], 2, '.', '');
+                $row[$key]['commission_fee_formatted'] = ecjia_price_format($row[$key]['commission_fee'], false);
+                $row[$key]['total_fee_formatted'] = ecjia_price_format($row[$key]['total_fee'], false);
+                $row[$key]['brokerage_amount_formatted'] = ecjia_price_format($row[$key]['brokerage_amount'], false);
+                $row[$key]['platform_profit_formatted'] = ecjia_price_format($row[$key]['platform_profit'], false);
+
 	        	$row[$key]['add_time'] = RC_Time::local_date('Y-m-d H:i:s', $row[$key]['add_time']);
 	        	$row[$key]['bill_time'] = RC_Time::local_date('Y-m-d H:i:s', $row[$key]['bill_time']);
 
