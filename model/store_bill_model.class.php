@@ -189,6 +189,12 @@ class store_bill_model extends Component_Model_Model {
 	    }
 	    
 	    $info = $db_store_bill->where('bill_id', $bill_id)->first();
+	    if($info) {
+            $info['order_amount_formatted'] = ecjia_price_format($info['order_amount'], false);
+            $info['refund_amount_formatted'] = ecjia_price_format($info['refund_amount'], false);
+            $info['available_amount_formatted'] = ecjia_price_format($info['available_amount'], false);
+            $info['bill_amount_formatted'] = ecjia_price_format($info['bill_amount'], false);
+        }
 	    if ($info['pay_time']) {
 	        $info['pay_time_formatted'] = RC_Time::local_date('Y-m-d H:i:s', $info['pay_time']);
 	    }

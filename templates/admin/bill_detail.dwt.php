@@ -35,17 +35,17 @@ ecjia.admin.bill_list.init();
     						<td align="right"><div align="right"><strong>{t domain="commission"}入账订单数：{/t}</strong></div></td>
     						<td>{$bill_info.order_count}</td>
     						<td align="right"><div align="right"><strong>{t domain="commission"}入账总金额：{/t}</strong></div></td>
-    						<td>￥{$bill_info.order_amount}</td>
+    						<td>{$bill_info.order_amount_formatted}</td>
     					</tr>
     					<tr>
     						<td align="right"><div align="right"><strong>{t domain="commission"}退款订单数：{/t}</strong></div></td>
     						<td>{$bill_info.refund_count}</td>
     						<td align="right"><div align="right"><strong>{t domain="commission"}退款总金额：{/t}</strong></div></td>
-    						<td class="">￥{$bill_info.refund_amount}</td>
+    						<td class="">{$bill_info.refund_amount_formatted}</td>
     					</tr>
     					<tr>
     						<td align="right"><h4 align="right">{t domain="commission"}本月账单金额：{/t}</h4></td>
-    						<td colspan="3"><b class="ecjiaf-fs3 ecjiafc-red">￥{$bill_info.bill_amount}</b><span class="m_l10 m_r10">({$bill_info.percent_value}%{t domain="commission"}，以订单入账比例为准{/t})</span>
+    						<td colspan="3"><b class="ecjiaf-fs3 ecjiafc-red">{$bill_info.bill_amount_formatted}</b><span class="m_l10 m_r10">({$bill_info.percent_value}%{t domain="commission"}，以订单入账比例为准{/t})</span>
     						</td>
     					</tr>
     					<tr>
@@ -81,14 +81,14 @@ ecjia.admin.bill_list.init();
     							<td>
     							{$commission.day}
     							</td>
-    						    <td class="ecjiaf-tar">￥{$commission.order_amount}</td>
-    						    <td class="">￥{$commission.refund_amount}</td>
+    						    <td class="ecjiaf-tar">{$commission.order_amount_formatted}</td>
+    						    <td class="">{$commission.refund_amount_formatted}</td>
     						    <!-- {if $commission.percent_value} -->
     						    <td>{$commission.percent_value}%</td>
     						    <!-- {else} -->
     						    <td>100%</td>
     						    <!-- {/if} -->
-    						    <td>￥{$commission.brokerage_amount}</td>
+    						    <td>{$commission.brokerage_amount_formatted}</td>
     						</tr>
     						<!-- {foreachelse} -->
     					   <tr><td class="no-records" colspan="7">{t domain="commission"}没有找到任何记录{/t}</td></tr>
