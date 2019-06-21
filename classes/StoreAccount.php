@@ -18,6 +18,7 @@ use ecjia_error;
 /*
  * 商家账户（余额）操作类
  * store_account_order -> store_account -> store_account_log
+ * 可用余额=money-保证金(deposit)
  * */
 class StoreAccount
 {
@@ -36,7 +37,8 @@ class StoreAccount
     }
 
     public function getBalance() {
-        return array_get($this->account_info, 'money', 0);
+        $balance = array_get($this->account_info, 'money', 0) - array_get($this->account_info, 'deposit', 0);
+        return $balance < 0 ? 0 : $balance;
     }
 
     public function getStoreAccount() {
