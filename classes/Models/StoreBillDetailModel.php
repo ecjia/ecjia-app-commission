@@ -44,7 +44,7 @@
 //
 //  ---------------------------------------------------------------------------------
 //
-namespace Ecjia\App\Adsense\Models;
+namespace Ecjia\App\Commission\Models;
 
 use Royalcms\Component\Database\Eloquent\Model;
 
