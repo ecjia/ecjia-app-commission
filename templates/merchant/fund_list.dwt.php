@@ -54,6 +54,8 @@
                                     {t domain="commission"}提现{/t}
 									{else if $list.change_type eq 'bill'}
                                     {t domain="commission"}结算{/t}
+                                    {else if $list.change_type eq 'order'}
+                                    {t domain="commission"}采购{/t}
 									{/if}
 									&nbsp;
 									{$list.change_desc}									
