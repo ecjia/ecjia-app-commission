@@ -383,6 +383,7 @@ class merchant extends ecjia_merchant {
 			
 			$data['formated_frozen_money'] = ecjia_price_format($data['frozen_money'], false);
 			$data['formated_deposit'] = ecjia_price_format($data['deposit'], false);
+
 		}
 		return $data;
 	}
