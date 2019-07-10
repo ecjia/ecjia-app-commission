@@ -77,6 +77,7 @@ class StoreAccount
     //订单表
     protected function insertStoreAccountOrder($data) {
 
+        $data['process_type'] = $this->process_type;
         $data['order_sn'] = empty($data['order_sn']) ? ecjia_order_store_account_sn() : $data['order_sn'];
         $data['store_id'] = $this->store_id;
         return StoreAccountOrderModel::insert($data);
