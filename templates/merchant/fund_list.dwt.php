@@ -54,7 +54,7 @@
                                     {t domain="commission"}提现{/t}
 									{else if $list.change_type eq 'bill'}
                                     {t domain="commission"}结算{/t}
-                                    {else if $list.change_type eq 'order'}
+                                    {else if $list.change_type eq 'order' || $list.change_type eq 'refund'}
                                     {t domain="commission"}采购{/t}
 									{/if}
 									&nbsp;
