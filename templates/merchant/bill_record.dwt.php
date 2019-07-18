@@ -39,14 +39,14 @@ ecjia.merchant.bill.record()
 	                <table class="table table-striped table-advance table-hover">
 	        			<thead>
 	        				<tr>
-	        				    <th class="w80">{t domain="commission"}类型{/t}</th>
+	        				    <th class="w80">{t domain="commission"}分成类型{/t}</th>
 	        					<th class="w120">{t domain="commission"}订单编号{/t}</th>
+                                <th class="w110">{t domain="commission"}店铺名称{/t}</th>
 	        					<th class="w120">{t domain="commission"}订单金额{/t}</th>
-	        					<th class="w120">{t domain="commission"}分佣金额{/t}</th>
-	        					<th class="w80">{t domain="commission"}佣金比例{/t}</th>
-	        					<th class="w110">{t domain="commission"}佣金金额{/t}</th>
+	        					<th class="w120">{t domain="commission"}商品类型{/t}</th>
+	        					<th class="w110">{t domain="commission"}获得佣金{/t}</th>
 	        					<th class="w120">{t domain="commission"}入账时间{/t}</th>
-	        					<th class="w110">{t domain="commission"}结算时间{/t}</th>
+	        					<th class="w80">{t domain="commission"}结算时间{/t}</th>
 	        				</tr>
 	        			</thead>
 	        			<tbody>
@@ -66,9 +66,9 @@ ecjia.merchant.bill.record()
 	        						
 	    					       <a href="{$order_url}" target="_blank">{$list.order_sn}</a>
 	        					</td>
+                                <td>{$list.merchants_name}</td>
 	        					<td>{$list.total_fee_formatted}</td>
-	        					<td>{$list.commission_fee_formatted}</td>
-	        					<td>{$list.percent_value}%</td>
+	        					<td>{$list.goods_type}</td>
 	        					<td>{$list.brokerage_amount_formatted}</td>
 	        					<td>{$list.add_time}</td>
 	        					<td>

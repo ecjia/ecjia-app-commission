@@ -181,15 +181,15 @@ class merchant extends ecjia_merchant {
 	}
 	
 	
-	//订单分成
+	//分成明细
 	public function record() {
 	    /* 检查权限 */
 	    $this->admin_priv('commission_order');
 	    
 	    ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('商家结算', 'commission'), RC_Uri::url('commission/merchant/init')));
-	    ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('订单分成', 'commission')));
+	    ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('分成明细', 'commission')));
 	    
-	    $this->assign('ur_here', __('订单分成', 'commission'));
+	    $this->assign('ur_here', __('分成明细', 'commission'));
 	    $this->assign('search_action', RC_Uri::url('commission/merchant/record'));
 	    
 	    /* 时间参数 */
@@ -197,7 +197,17 @@ class merchant extends ecjia_merchant {
 	    $filter['end_date'] = empty($_GET['end_date']) ? null : RC_Time::local_strtotime(remove_xss($_GET['end_date'])) + 86399;
 	    
 	    $record_list = $this->db_store_bill_detail->get_bill_record($_SESSION['store_id'], intval($_GET['page']), 15, $filter);
-	    
+	    if($record_list['item']) {
+	        $affiliate_grade_goods = RC_DB::table('affiliate_grade')->lists('goods_id');
+	        foreach($record_list['item'] as &$item){
+                $order_goods_ids = RC_DB::table('order_goods')->where('order_id', $item['order_id'])->lists('goods_id');
+	            $item['goods_type'] = '普通商品';
+                if(array_intersect($affiliate_grade_goods, $order_goods_ids)) {
+                    $item['goods_type'] = 'VIP商品';
+                }
+            }
+//	        _dump($record_list,1);
+        }
 	    $this->assign('record_list', $record_list);
 
         return $this->display('bill_record.dwt');
