@@ -126,6 +126,8 @@ class store_bill_detail_model extends Component_Model_Model {
         $data['money_paid'] = $order_info['money_paid'] ? $order_info['money_paid'] : 0;
         $data['pay_code'] = $order_info['pay_code'] ? $order_info['pay_code'] : '';
         $data['pay_name'] = $order_info['pay_name'] ? $order_info['pay_name'] : '';
+
+        $store_user_brokerage = $data;
         //订单金额 付款+余额消耗+积分抵钱
         if($data['order_type'] == 'quickpay') {
             $data['order_amount'] = $order_info['goods_amount'] - $order_info['discount'] - $order_info['integral_money'] - $order_info['bonus'];
@@ -164,6 +166,28 @@ class store_bill_detail_model extends Component_Model_Model {
                     $data['platform_profit'] = $data['order_amount'] - $data['brokerage_amount'];
                 }
             }
+
+            //他店分佣
+            $store_user = RC_DB::table('store_users')->where('user_id', $order_info['user_id'])->where('store_id', '<>', $order_info['store_id'])->first();
+            //他店推荐而来的用户，需要分佣
+            if($store_user) {
+                //查询订单下是否有店铺分佣商品，和金额
+                RC_DB::table('order_goods')->where('order_id', $order_info['order_id'])->lists('goods_id', 'goods_number');
+                $order_goods = Ecjia\App\Orders\Models\OrderGoodsModel::with([
+                    'affiliate_goods_brokerage_model'
+                ])->where('order_id', $order_info['order_id'])->get()->toArray();
+
+                $goods_brokerage = 0;
+                foreach ($order_goods as $goods) {
+                    if($goods['affiliate_goods_brokerage_model']['brokerage']) {
+                        $goods_brokerage += $goods['affiliate_goods_brokerage_model']['brokerage'] * $goods['goods_number'];
+                    }
+                }
+                $store_user_brokerage['store_id'] = $store_user['store_id'];
+                $store_user_brokerage['order_type'] = 'buy_affiliate';
+                $store_user_brokerage['brokerage_amount'] = $goods_brokerage;
+            }
+            //他店分佣 end
             
         } else if ($data['order_type'] == 'refund') {
             //退款时 $data['order_id']是 refund_id
@@ -200,6 +224,17 @@ class store_bill_detail_model extends Component_Model_Model {
 
                 $data['platform_profit'] = $datail['platform_profit'] * -1;
             }
+            //他店分佣
+            //查询之前是否有分佣记录
+            $affiliate_log = RC_DB::table('store_bill_detail')->where('order_type', 'buy_affiliate')->where('order_id', $order_info['order_id'])->first();
+            if($affiliate_log) {
+                //扣除之前分佣
+                $store_user_brokerage['store_id'] = $affiliate_log['store_id'];
+                $store_user_brokerage['order_type'] = 'refund_affiliate';
+                $store_user_brokerage['brokerage_amount'] = $affiliate_log['brokerage_amount'] * -1;
+            }
+            //他店分佣 end
+
         } else if ($data['order_type'] == 'quickpay') {
             $data['percent_value'] = 100 - ecjia::config('quickpay_fee');
             if ($data['percent_value'] > 100) {
@@ -220,12 +255,28 @@ class store_bill_detail_model extends Component_Model_Model {
 //         RC_Logger::getLogger('info')->info($data);
 
         $status = false;
-        RC_DB::transaction(function () use ($data, &$status){
+        RC_DB::transaction(function () use ($data, &$status, $store_user_brokerage){
             
             $datail_id = RC_DB::table('store_bill_detail')->insertGetId($data);
             if($datail_id) {
-                //TODO每成功后结算一次
                 RC_Loader::load_app_class('store_account', 'commission');
+
+                //他店分佣
+                if($store_user_brokerage) {
+                    $store_user_brokerage['add_time'] = RC_Time::gmtime();
+                    $datail_id_affiliate = RC_DB::table('store_bill_detail')->insertGetId($store_user_brokerage);
+                    $account = array(
+                        'store_id' => $store_user_brokerage['store_id'],
+                        'amount' => $store_user_brokerage['brokerage_amount'],
+                        'bill_order_type' => $store_user_brokerage['order_type'],
+                        'bill_order_id' => $store_user_brokerage['order_id'],
+                        'bill_order_sn' => $store_user_brokerage['order_sn'],
+                        'platform_profit' => $store_user_brokerage['platform_profit'],
+                    );
+                    $rs_account = store_account::affiliate($account);
+                }
+
+                //TODO每成功后结算一次
                 $account = array(
                     'store_id' => $data['store_id'],
                     'amount' => $data['brokerage_amount'],
@@ -237,6 +288,7 @@ class store_bill_detail_model extends Component_Model_Model {
                 $rs_account = store_account::bill($account);
                 if ($rs_account && !is_ecjia_error($rs_account)) {
                     RC_DB::table('store_bill_detail')->where('detail_id', $datail_id)->update(array('bill_status' => 1, 'bill_time' => RC_Time::gmtime()));
+                    RC_DB::table('store_bill_detail')->where('detail_id', $datail_id_affiliate)->update(array('bill_status' => 1, 'bill_time' => RC_Time::gmtime()));
                     //删除队列表数据
                     RC_DB::table('store_bill_queue')->where('order_type', $data['order_type'])->where('order_id', $data['order_id'])->delete();
                 } else {
@@ -334,6 +386,15 @@ class store_bill_detail_model extends Component_Model_Model {
 	            $db_bill_detail->whereRaw('bd.add_time <='.$filter['end_date']);
 	        }
 	    }
+	    if (!empty($filter['order_type'])) {
+	        if(is_array($filter['order_type'])) {
+                $db_bill_detail->whereIn('order_type', $filter['order_type']);
+            } else {
+                $db_bill_detail->where('order_type', $filter['order_type']);
+            }
+        } else {
+            $db_bill_detail->whereIn('order_type', ['buy', 'quick_pay', 'refund']);
+        }
   
 	    $count = $db_bill_detail->count('detail_id');
 	    if($is_admin) {
@@ -348,7 +409,7 @@ class store_bill_detail_model extends Component_Model_Model {
 		    ->orderBy(RC_DB::raw('bd.add_time'), 'desc')
 		    ->skip($page->start_id-1)
 		    ->get();
-	    
+
 	    if ($row) {
 	        foreach ($row as $key => $val) {
 	            if(empty($val['order_sn'])) {

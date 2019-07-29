@@ -98,6 +98,37 @@ class store_account {
         
         return false;
     }
+
+    //结算
+    public static function affiliate($data) {
+        if(empty($data['store_id']) || empty($data['amount']) || empty($data['bill_order_type']) || empty($data['bill_order_id']) || empty($data['bill_order_sn']) ) {
+            return new ecjia_error('invalid_parameter', __('参数无效', 'commission'));
+        }
+
+        $data['pay_time'] = $data['add_time'] = RC_Time::gmtime();
+        $data['pay_status'] = 1;
+        $data['status'] = 2;
+        $platform_profit = $data['platform_profit'];//平台收益
+        unset($data['platform_profit']);
+
+        //改动账户
+        if($data['bill_order_type'] == 'buy_affiliate') {
+            $data['process_type'] = Ecjia\App\Commission\StoreAccountOrder::PROCESS_TYPE_AFFILIATE;
+            $change_desc = __('分佣', 'commission');
+        } else if ($data['bill_order_type'] == 'refund_affiliate') {
+            $data['process_type'] = Ecjia\App\Commission\StoreAccountOrder::PROCESS_TYPE_AFFILIATE_REFUND;
+            $change_desc = __('分佣扣除', 'commission');
+        }
+
+        if(self::insert_store_account_order($data)) {
+
+            $change_desc .= ' ' . $data['bill_order_sn'];
+
+            return self::update_store_account($data['store_id'], $data['amount'], $data['process_type'], $change_desc, $platform_profit);
+        }
+
+        return false;
+    }
     
     //订单表
     public static function insert_store_account_order($data) {
