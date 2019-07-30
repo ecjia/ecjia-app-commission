@@ -56,6 +56,10 @@
                                     {t domain="commission"}结算{/t}
                                     {else if $list.change_type eq 'order' || $list.change_type eq 'refund'}
                                     {t domain="commission"}采购{/t}
+                                    {else if $list.change_type eq 'affiliate'}
+                                    {t domain="commission"}分佣{/t}
+                                    {else}
+                                    {t domain="commission"}其他{/t}
 									{/if}
 									&nbsp;
 									{$list.change_desc}									

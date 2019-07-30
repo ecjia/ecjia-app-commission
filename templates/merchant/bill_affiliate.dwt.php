@@ -56,14 +56,11 @@ ecjia.merchant.bill.record()
 	        						{if $list.order_type eq 'buy_affiliate'}{t domain="commission"}收入{/t}{/if}{if $list.order_type eq 'refund_affiliate'}{t domain="commission"}支出{/t}{/if}
 	        					</td>
 	        					<td>
-	        					{if $list.order_type eq 'buy'}
+	        					{if $list.order_type eq 'buy_affiliate'}
 	        						{assign var=order_url value=RC_Uri::url('orders/merchant/info',"order_id={$list.order_id}")}
-                                {else if $list.order_type eq 'refund'}
+                                {else if $list.order_type eq 'refund_affiliate'}
                                     {assign var=order_url value=RC_Uri::url('refund/merchant/refund_detail',"refund_id={$list.order_id}")}
-                                {else if $list.order_type eq 'quickpay'}
-	        						{assign var=order_url value=RC_Uri::url('quickpay/mh_order/order_info',"order_id={$list.order_id}")}
 	        					{/if}
-	        						
 	    					       <a href="{$order_url}" target="_blank">{$list.order_sn}</a>
 	        					</td>
                                 <td>{$list.merchants_name}</td>

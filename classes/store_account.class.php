@@ -114,10 +114,10 @@ class store_account {
         //改动账户
         if($data['bill_order_type'] == 'buy_affiliate') {
             $data['process_type'] = Ecjia\App\Commission\StoreAccountOrder::PROCESS_TYPE_AFFILIATE;
-            $change_desc = __('分佣', 'commission');
+            $change_desc = __('订单', 'commission');
         } else if ($data['bill_order_type'] == 'refund_affiliate') {
             $data['process_type'] = Ecjia\App\Commission\StoreAccountOrder::PROCESS_TYPE_AFFILIATE_REFUND;
-            $change_desc = __('分佣扣除', 'commission');
+            $change_desc = __('退款', 'commission');
         }
 
         if(self::insert_store_account_order($data)) {
