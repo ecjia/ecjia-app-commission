@@ -22,8 +22,6 @@ class StoreAccountOrder
     const PROCESS_TYPE_BILL     = 'bill';       //结算
     const PROCESS_TYPE_ORDER    = 'order';      //购买订单
     const PROCESS_TYPE_REFUND   = 'refund';     //退款
-    const PROCESS_TYPE_AFFILIATE     = 'affiliate';       //分佣
-    const PROCESS_TYPE_AFFILIATE_REFUND     = 'affiliate_refund';       //分佣
 
     const BILL_ORDER_TYPE_BUY      = 'buy'; //普通订单
     const BILL_ORDER_TYPE_QUICKPAY = 'quickpay'; //优惠买单
