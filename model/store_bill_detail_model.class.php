@@ -244,20 +244,20 @@ class store_bill_detail_model extends Component_Model_Model {
             ->where(RC_DB::raw('s.user_id'), $order_info['user_id']);
         $store_user = $db_store_user->first();
 
-        if (! empty($store_user))
-        {
-            $his_shop_data = array(
-                'order_id' => $order_info['order_id'],
-                'order_sn' => $order_info['order_sn'],
-                'user_id' =>  $order_info['user_id'],
-                'user_name' =>  $this->get_user_name($order_info['user_id']),
-                'store_id' => $store_user['store_id'],
-                'add_gmtime' => RC_Time::gmtime(),
-                'money' => $this->calculate_his_shop_percent($store_user['store_id'], $data['platform_profit'])
-            );
-
-            RC_DB::table('store_affiliate_log')->insert($his_shop_data);
-        }
+//        if (! empty($store_user))
+//        {
+//            $his_shop_data = array(
+//                'order_id' => $order_info['order_id'],
+//                'order_sn' => $order_info['order_sn'],
+//                'user_id' =>  $order_info['user_id'],
+//                'user_name' =>  $this->get_user_name($order_info['user_id']),
+//                'store_id' => $store_user['store_id'],
+//                'add_gmtime' => RC_Time::gmtime(),
+//                'money' => $this->calculate_his_shop_percent($store_user['store_id'], $data['platform_profit'])
+//            );
+//
+//            RC_DB::table('store_affiliate_log')->insert($his_shop_data);
+//        }
 
         $status = false;
         RC_DB::transaction(function () use ($data, &$status, $order_info){
