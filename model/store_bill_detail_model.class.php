@@ -46,11 +46,11 @@
 //
 defined('IN_ECJIA') or exit('No permission resources.');
 
-use Ecjia\App\Agencysale\AgencysaleStoreBill;
+//use Ecjia\App\Agencysale\AgencysaleStoreBill;
 use Ecjia\App\Quickpay\QuickpayIntegralActivity;
 use Ecjia\App\Store\Models\StoreFranchiseeModel;
-use Ecjia\App\Affiliate\AffiliateStoreCommission;
-use Ecjia\App\Agencysale\AgencysaleVipAffiliate;
+//use Ecjia\App\Affiliate\AffiliateStoreCommission;
+//use Ecjia\App\Agencysale\AgencysaleVipAffiliate;
 use Ecjia\App\Affiliate\AffiliateStoreCommissionIntegral;
 /**
  * 账单
@@ -268,8 +268,8 @@ class store_bill_detail_model extends Component_Model_Model {
                 with(new AffiliateStoreCommissionIntegral($data['order_type'], $data['store_id'], $order_info))->run();
 
                 //结算后代理分佣
-                $affiliate = array_merge($data, ['agencysale_store_id' => $order_info['agencysale_store_id']]);
-                with(new AffiliateStoreCommission($data['store_id'], $affiliate))->run();
+//                $affiliate = array_merge($data, ['agencysale_store_id' => $order_info['agencysale_store_id']]);
+//                with(new AffiliateStoreCommission($data['store_id'], $affiliate))->run();
 
                 //代销商家结算
 //                if($order_info['agencysale_store_id']) {
